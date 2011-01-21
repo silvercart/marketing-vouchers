@@ -1,2 +1,2 @@
 <?php
-
+ShoppingCart::registerModule('SilvercartVoucher');

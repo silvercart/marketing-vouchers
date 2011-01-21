@@ -1,6 +1,7 @@
 <?php
 /**
- * Extends the voucher class for natural rebates, i.e. articles.
+ * Extends the voucher class for relative rebates that are subtracted from
+ * the shoppingcart total sum (e.g. 10%).
  *
  * @package SilvercartVouchers
  * @author Sascha Koehler <skoehler@pixeltricks.de>
@@ -8,18 +9,21 @@
  * @since 20.01.2011
  * @license none
  */
-class NaturalRebateVoucher extends Voucher {
+class SilvercartRelativeRebateVoucher extends SilvercartVoucher {
+
+    public static $singular_name = 'Rabattgutschein';
+    public static $plural_name   = 'Rabattgutscheine';
 
     /**
-     * Has many relationships.
+     * Attributes.
      *
      * @var array
      *
      * @author Sascha Koehler <skoehler@pixeltricks.de>
      * @since 20.01.2011
      */
-    public static $has_many = array(
-        'Articles'                      => 'Article'
+    public static $db = array(
+        'valueInPercent'                    => 'Int'
     );
 
     // ------------------------------------------------------------------------
@@ -42,5 +46,22 @@ class NaturalRebateVoucher extends Voucher {
         $positions = new DataObjectSet;
 
         return $isValid;
+    }
+
+    /**
+     * Redefine input fields for the backend.
+     *
+     * @param array params Additional parameters
+     *
+     * @return FieldSet
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 21.01.2011
+     */
+    public function  getCMSFields($params = null) {
+        $fields = parent::getCMSFields($params);
+
+        return $fields;
     }
 }

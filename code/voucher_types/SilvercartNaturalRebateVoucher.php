@@ -1,6 +1,6 @@
 <?php
 /**
- * Extends the voucher class for absolute rebates, i.e. 50,00 Eur.
+ * Extends the voucher class for natural rebates, i.e. articles.
  *
  * @package SilvercartVouchers
  * @author Sascha Koehler <skoehler@pixeltricks.de>
@@ -8,18 +8,21 @@
  * @since 20.01.2011
  * @license none
  */
-class AbsoluteRebateVoucher extends Voucher {
+class SilvercartNaturalRebateVoucher extends SilvercartVoucher {
+
+    public static $singular_name = 'Warengutschein';
+    public static $plural_name   = 'Warengutscheine';
 
     /**
-     * Attributes.
+     * Has many relationships.
      *
      * @var array
      *
      * @author Sascha Koehler <skoehler@pixeltricks.de>
      * @since 20.01.2011
      */
-    public static $db = array(
-        'value'                         => 'Money'
+    public static $has_many = array(
+        'Articles'                      => 'Article'
     );
 
     // ------------------------------------------------------------------------
