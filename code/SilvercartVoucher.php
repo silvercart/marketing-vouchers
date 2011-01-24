@@ -42,7 +42,19 @@ class SilvercartVoucher extends DataObject {
         'RestrictToGroup'               => 'Group',
         'RestrictToArticleGroupPage'    => 'ArticleGroupPage',
         'RestrictToArticle'             => 'Article',
-        'VoucherHistory'                => 'VoucherHistory'
+        'VoucherHistory'                => 'SilvercartVoucherHistory',
+    );
+
+    /**
+     * Belongs-many-many Relationships.
+     *
+     * @var array
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @since 24.01.2011
+     */
+    public static $belongs_many_many = array(
+        'Customers' => 'Member'
     );
 
     // ------------------------------------------------------------------------
@@ -69,6 +81,110 @@ class SilvercartVoucher extends DataObject {
     }
 
     /**
+     * Performs all checks to make sure, that this voucher is allowed in the
+     * shopping cart. Returns an array with status and messages.
+     *
+     * @param string       $voucherCode  the vouchers code
+     * @param Member       $member       the member object to check against
+     * @param ShoppingCart $shoppingCart the shopping cart to check against
+     *
+     * @return array:
+     *  'error'     => bool,
+     *  'messages'  => array()
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 24.01.2011
+     */
+    public function checkifAllowedInShoppingCart($voucherCode, Member $member, ShoppingCart $shoppingCart) {
+        $status     = $this->areShoppingCartConditionsMet($shoppingCart);
+        $error      = $status['error'];
+        $messages   = $status['messages'];
+        
+        if (!$error && !$this->isCodeValid($voucherCode)) {
+            $error      = true;
+            $messages[] = 'Dieser Gutscheincode ist nicht gültig.';
+        }
+
+        if (!$error && !$this->isCustomerEligible($member)) {
+            $error      = true;
+            $messages[] = 'Sie dürfen diesen Gutschein nicht einlösen.';
+        }
+
+        if (!$error && !$this->isRedeemable()) {
+            $error      = true;
+            $messages[] = 'Der Gutschein kann nicht eingelöst werden.';
+        }
+
+        if (!$error && $this->isInShoppingCartAlready($shoppingCart, $voucherCode)) {
+            $error      = true;
+            $messages[] = 'Dieser Gutschein befindet sich schon in Ihrem Warenkorb.';
+        }
+
+        return array(
+            'error'     => $error,
+            'messages'  => $messages
+        );
+    }
+
+    /**
+     * Performs checks related to the shopping cart entries to ensure that
+     * the voucher is allowed to be placed in the cart.
+     * If the conditions are not met the voucher is removed from the cart.
+     *
+     * @param ShoppingCart $shoppingCart the shopping cart to check against
+     *
+     * @return array:
+     *  'error'     => bool,
+     *  'messages'  => array()
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 24.01.2011
+     */
+    public function performShoppingCartConditionsCheck(ShoppingCart $shoppingCart) {
+        $status = $this->areShoppingCartConditionsMet($shoppingCart);
+
+        if ($status['error']) {
+            $this->removeFromShoppingCart(Member::currentUser());
+        }
+    }
+
+    /**
+     * Performs checks related to the shopping cart entries to ensure that
+     * the voucher is allowed to be placed in the cart.
+     *
+     * @param ShoppingCart $shoppingCart the shopping cart to check against
+     *
+     * @return array:
+     *  'error'     => bool,
+     *  'messages'  => array()
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 24.01.2011
+     */
+    public function areShoppingCartConditionsMet(ShoppingCart $shoppingCart) {
+        $error      = false;
+        $messages   = array();
+
+        if (!$error && !$this->isShoppingCartAmountValid($shoppingCart->getPrice())) {
+            $error      = true;
+            $messages[] = 'Der Warenkorbwert ist nicht passend.';
+        }
+
+        if (!$error && !$this->isValidForShoppingCartItems($shoppingCart->positions())) {
+            $error      = true;
+            $messages[] = 'Dieser Gutschein kann nicht für die Waren eingelöst werden, die sich in Ihrem Warenkorb befinden.';
+        }
+
+        return array(
+            'error'     => $error,
+            'messages'  => $messages
+        );
+    }
+
+    /**
      * @param string $code the voucher code
      *
      * @return bool
@@ -85,6 +201,48 @@ class SilvercartVoucher extends DataObject {
         }
 
         return $isValid;
+    }
+
+    /**
+     * Checks if the given voucher code is already in the shopping cart.
+     *
+     * @param ShoppingCart $shoppingCart the shopping cart object
+     * @param string       $code         the code of the voucher
+     *
+     * @return bool
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 24.01.2011
+     */
+    public function isInShoppingCartAlready(ShoppingCart $shoppingCart, $code) {
+        $isInCart = false;
+
+        $voucherHistory = DataObject::get(
+            'SilvercartVoucherHistory',
+            sprintf(
+                "ShoppingCartID = '%d'",
+                $shoppingCart->ID
+            )
+        );
+
+        if ($voucherHistory) {
+            foreach ($voucherHistory as $voucherHistoryEntry) {
+                $voucher = DataObject::get_by_id(
+                    'SilvercartVoucher',
+                    $voucherHistoryEntry->VoucherID
+                );
+
+                if ($voucher) {
+                    if ($voucher->code == $code) {
+                        $isInCart = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $isInCart;
     }
 
     /**
@@ -329,7 +487,7 @@ class SilvercartVoucher extends DataObject {
         $isRedeemable = false;
 
         if ($this->isActive) {
-            if ($this->quantity == 0 ||
+            if ($this->quantity == -1 ||
                 $this->getRemainingVouchers() > 0) {
                 
                 $isRedeemable = true;
@@ -340,13 +498,87 @@ class SilvercartVoucher extends DataObject {
     }
 
     /**
+     * Redeem the voucher.
+     *
+     * @param Member $customer
+     *
      * @return void
      *
      * @author Sascha Koehler <skoehler@pixeltricks.de>
      * @copyright 2011 pixeltricks GmbH
      * @since 20.01.2011
      */
-    public function setRedeemed() {
+    public function redeem(Member $customer) {
+        if ($this->quantity > 0) {
+            $this->quantity -= 1;
+        }
+        $this->write();
+
+        // Write SilvercartVoucherHistory
+        $voucherHistory = new SilvercartVoucherHistory();
+        $voucherHistory->add($this, $customer, 'redeemed');
+
+        $customer->SilvercartVouchers()->add($this);
+    }
+
+    /**
+     * Remove the voucher from the shopping cart.
+     *
+     * @param Member $customer the customer object
+     *
+     * @return void
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 24.01.2011
+     *
+     */
+    public function removeFromShoppingCart(Member $customer) {
+        if ($this->quantity != -1) {
+            $this->quantity += 1;
+        }
+        $this->write();
+
+        // Write SilvercartVoucherHistory
+        $voucherHistory = new SilvercartVoucherHistory();
+        $voucherHistory->add($this, $customer, 'removed');
+
+        $customer->SilvercartVouchers()->remove($this);
+    }
+
+    /**
+     * Returns an instance of a silvercart voucher object for the given
+     * shopping cart.
+     *
+     * @param Shoppingcart $shoppingCart The shopping cart object
+     *
+     * @return SilvercartVoucher
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 24.01.2011
+     */
+    public function loadObjectForShoppingCart(Shoppingcart $shoppingCart) {
+        $voucherHistory = DataObject::get_one(
+            'SilvercartVoucherHistory',
+            sprintf(
+                "ShoppingCartID = '%d'",
+                $shoppingCart->ID
+            )
+        );
+
+        if ($voucherHistory) {
+            $voucher = DataObject::get_by_id(
+                'SilvercartVoucher',
+                $voucherHistory->VoucherID
+            );
+
+            if ($voucher) {
+                return $voucher;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -362,15 +594,19 @@ class SilvercartVoucher extends DataObject {
      */
     public function ShoppingCartPositions(ShoppingCart $shoppingCart) {
         $positions              = new DataObjectSet();
-        $shoppingCartPosition   = '';
+        $this->performShoppingCartConditionsCheck($shoppingCart);
 
-        $positions->push(
-            new ArrayData(
-                array(
-                    'moduleOutput' => $shoppingCartPosition
+        $shoppingCartPositions  = $this->getShoppingCartPositions($shoppingCart);
+
+        if ($shoppingCartPositions) {
+            $positions->push(
+                new ArrayData(
+                    array(
+                        'moduleOutput' => $shoppingCartPositions
+                    )
                 )
-            )
-        );
+            );
+        }
 
         return $positions;
     }
@@ -431,6 +667,94 @@ class SilvercartVoucher extends DataObject {
                 '.$javascriptSnippets['javascriptOnloadSnippets'].'
             });'
         );
+    }
+
+    /**
+     * Returns the amount to consider in the shopping cart total calculation.
+     *
+     * @return Money
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 24.01.2011
+     */
+    public function ShoppingCartTotal() {
+        // Implement in descendants
+    }
+
+    /**
+     * Define the backend administration masks.
+     *
+     * @param array $params Additional parameters
+     *
+     * @return FieldSet
+     */
+    public function  getCMSFields($params = null) {
+        $fields = parent::getCMSFields($params);
+
+        $memberTableField = new ManyManyComplexTableField(
+            $this,
+            'RestrictToMember',
+            'Member',
+            Member::$summary_fields,
+            'getCMSFields_forPopup',
+            'Member.Surname IS NOT NULL',
+            'Member.Surname ASC, Member.FirstName ASC'
+        );
+        $groupTableField = new ManyManyComplexTableField(
+            $this,
+            'RestrictToGroup',
+            'Group',
+            Group::$summary_fields,
+            'getCMSFields_forPopup',
+            null,
+            'Group.Title ASC'
+        );
+        $articleTableField = new ManyManyComplexTableField(
+            $this,
+            'RestrictToArticle',
+            'Article',
+            Article::$summary_fields,
+            'getCMSFields_forPopup',
+            null,
+            'Article.Title ASC'
+        );
+        $articleGroupPageTableField = new ManyManyComplexTableField(
+            $this,
+            'RestrictToArticleGroupPage',
+            'ArticleGroupPage',
+            ArticleGroupPage::$summary_fields,
+            'getCMSFields_forPopup',
+            null,
+            'SiteTree.Title ASC'
+        );
+
+        $fields->removeByName('RestrictToMember');
+        $fields->removeByName('RestrictToGroup');
+        $fields->removeByName('RestrictToArticle');
+        $fields->removeByName('RestrictToArticleGroupPage');
+
+        $fields->addFieldToTab('Root.RestrictToMember',             $memberTableField);
+        $fields->addFieldToTab('Root.RestrictToGroup',              $groupTableField);
+        $fields->addFieldToTab('Root.RestrictToArticle',            $articleTableField);
+        $fields->addFieldToTab('Root.RestrictToArticleGroupPage',   $articleGroupPageTableField);
+
+        return $fields;
+    }
+
+    /**
+     * Returns a dataobjectset for the display of the voucher positions in the
+     * shoppingcart.
+     *
+     * @param ShoppingCart $shoppingCart
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 24.01.2011
+     */
+    protected function getShoppingCartPositions(ShoppingCart $shoppingCart) {
+        // Implement in descendants
+        return false;
     }
 
     /**

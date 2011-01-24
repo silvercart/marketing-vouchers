@@ -10,8 +10,25 @@
  */
 class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
 
-    public static $singular_name = 'Wertgutschein';
-    public static $plural_name   = 'Wertgutscheine';
+    /**
+     * Singular name
+     *
+     * @var string
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @since 24.01.2011
+     */
+    public static $singular_name = 'Wertcoupon';
+
+    /**
+     * Plural name
+     *
+     * @var string
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @since 24.01.2011
+     */
+    public static $plural_name   = 'Wertcoupon';
 
     /**
      * Attributes.
@@ -67,10 +84,37 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
      * @copyright 2011 pixeltricks GmbH
      * @since 20.01.2011
      */
-    public function getShoppingCartPosition(ShoppingCart $shoppingCart) {
-        $positions = new DataObjectSet;
+    public function getShoppingCartPositions(ShoppingCart $shoppingCart) {
 
-        return $isValid;
+        $positions = new ArrayData(
+            array(
+                'Title'                 => self::$singular_name.'<br />(Code: '.$this->code.')',
+                'Price'                 => $this->value->getAmount() * -1,
+                'PriceFormatted'        => '-'.$this->value->Nice(),
+                'PriceTotal'            => $this->value->getAmount() * -1,
+                'PriceTotalFormatted'   => '-'.$this->value->Nice(),
+                'Quantity'              => '1'
+            )
+        );
+        
+        return $positions;
+    }
+
+    /**
+     * Returns the amount to consider in the shopping cart total calculation.
+     *
+     * @return Money
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 24.01.2011
+     */
+    public function ShoppingCartTotal() {
+        $amount = new Money();
+        $amount->setAmount($this->value->getAmount() * -1);
+        $amount->setCurrency($this->value->getCurrency());
+
+        return $amount;
     }
 
     /**
@@ -84,7 +128,7 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
      * @copyright 2011 pixeltricks GmbH
      * @since 21.01.2011
      */
-    public function  getCMSFields($params = null) {
+    public function getCMSFields($params = null) {
         $fields = parent::getCMSFields($params);
 
         $fields->removeByName('quantityRedeemed');

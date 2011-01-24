@@ -28,6 +28,16 @@ class SilvercartVoucherShoppingCartActionForm extends CustomHtmlForm {
     );
 
     /**
+     * The session id used for saving status messages specific to this form.
+     *
+     * @var string
+     * 
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @since 24.01.2011
+     */
+    protected $sessionStatusMessageId = 'SilvercartShoppingCartVoucher';
+
+    /**
      * form settings, mainly submit button´s name
      *
      * @var array
@@ -49,6 +59,20 @@ class SilvercartVoucherShoppingCartActionForm extends CustomHtmlForm {
      * @since 21.01.2011
      */
     protected function fillInFieldValues() {
+        parent::fillInFieldValues();
+
+        $sessionData = Session::get($this->sessionStatusMessageId);
+
+        if ($sessionData) {
+            if (isset($sessionData['Message'])) {
+                $this->addMessage($sessionData['Message']);
+            }
+
+            if (isset($sessionData['ErrorMessages'])) {
+                $this->errorMessages = $sessionData['ErrorMessages'];
+            }
+            Session::clear($this->sessionStatusMessageId);
+        }
     }
 
     /**
@@ -64,9 +88,8 @@ class SilvercartVoucherShoppingCartActionForm extends CustomHtmlForm {
      * @return void
      */
     protected function submitSuccess($data, $form, $formData) {
-        $error       = false;
-        $messages    = array();
-        $voucherCode = $formData['VoucherCode'];
+        $status      = array('error' => false, 'messages' => array());
+        $voucherCode = Convert::raw2sql($formData['VoucherCode']);
         $voucher     = DataObject::get_one(
             'SilvercartVoucher',
             sprintf(
@@ -78,37 +101,45 @@ class SilvercartVoucherShoppingCartActionForm extends CustomHtmlForm {
         $shoppingCart   = $member->shoppingCart();
 
         if ($voucher) {
-
-            if (!$error && !$voucher->isCustomerEligible($member)) {
-                $error      = true;
-                $messages[] = 'Sie dürfen diesen Gutschein nicht einlösen.';
-            }
-
-            if (!$error && !$voucher->isShoppingCartAmountValid($shoppingCart->getPrice())) {
-                $error      = true;
-                $messages[] = 'Der Warenkorbwert ist nicht passend.';
-            }
-
-            if (!$error && !$voucher->isRedeemable()) {
-                $error      = true;
-                $messages[] = 'Der Gutschein kann nicht eingelöst werden.';
-            }
-
-            if (!$error && !$voucher->isValidForShoppingCartItems($shoppingCart->positions())) {
-                $error      = true;
-                $messages[] = 'Dieser Gutschein kann nicht für die Waren eingelöst werden, die sich in Ihrem Warenkorb befinden.';
-            }
-
+            $status = $voucher->checkifAllowedInShoppingCart($voucherCode, $member, $shoppingCart);
         } else {
-            $error = true;
+            $status['error']        = true;
+            $status['messages'][]   = 'Dieser Gutscheincode ist nicht gültig.';
         }
 
-        if ($error) {
-            print "Gutschein kann nicht eingelöst werden.<br />";
-            print_r($messages);
+        if ($status['error']) {
+            $errorMessage = '';
+
+            foreach ($status['messages'] as $message) {
+                $errorMessage .= '<p>'.$message.'</p>';
+            }
+
+            $this->setSessionStatus($errorMessage);
         } else {
-            print "Gutschein kann eingelöst werden.";
+            $voucher->redeem($member);
         }
-        //Director::redirect($this->controller->Link());
+        Director::redirect($this->controller->Link());
+    }
+
+    /**
+     * Setzt eine Statusmeldung in der Session, die nach einem Reload der
+     * Seite im Formular angezeigt wird.
+     *
+     * @param string $text          Der Text der  Meldung, der angezeigt werden soll.
+     * @param bool   $bidSuccessful Gibt an, ob das Gebot erfolgreich war.
+     * @param bool   $bidGiven      Gibt an, ob das Gebot abgegeben wurde.
+     *
+     * @return void
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2010 pixeltricks GmbH
+     * @since 02.12.2010
+     */
+    protected function setSessionStatus($text) {
+        Session::set($this->sessionStatusMessageId,
+            array(
+                'Message' => $text
+            )
+        );
     }
 }

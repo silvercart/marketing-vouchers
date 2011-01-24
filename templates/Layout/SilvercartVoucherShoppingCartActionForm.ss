@@ -1,7 +1,7 @@
 <form class="yform" $FormAttributes >
 
       $CustomHtmlFormMetadata
-      $CustomHtmlErrormessages
+      $CustomHtmlFormErrormessages
 
       <fieldset>
         <legend>Gutschein einlösen</legend>
