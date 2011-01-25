@@ -19,7 +19,7 @@ class SilvercartVoucherHistory extends DataObject {
      * @since 24.01.2011
      */
     public static $db = array(
-        'action'            => "Enum('redeemed,removed,activated,deactivated','redeemed')"
+        'action'            => "Enum('redeemed,manuallyRedeemed,removed,manuallyRemoved,activated,deactivated','redeemed')"
     );
 
     /**

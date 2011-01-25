@@ -85,7 +85,12 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
      * @since 20.01.2011
      */
     public function getShoppingCartPositions(ShoppingCart $shoppingCart) {
+        //Controller::curr()->registeredCustomHtmlForms['SilvercartVoucherRemoveFromCartForm']->customParameters['code'] = $this->code;
+        $controller     = Controller::curr();
+        $removeCartForm = $controller->getRegisteredCustomHtmlForm('SilvercartVoucherRemoveFromCartForm');
+        $removeCartForm->setFormFieldValue('code', $this->code);
 
+        // Shopping cart position data
         $positions = new ArrayData(
             array(
                 'Title'                 => self::$singular_name.'<br />(Code: '.$this->code.')',
@@ -93,7 +98,8 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
                 'PriceFormatted'        => '-'.$this->value->Nice(),
                 'PriceTotal'            => $this->value->getAmount() * -1,
                 'PriceTotalFormatted'   => '-'.$this->value->Nice(),
-                'Quantity'              => '1'
+                'Quantity'              => '1',
+                'removeFromCartForm'    => Controller::curr()->InsertCustomHtmlForm('SilvercartVoucherRemoveFromCartForm')
             )
         );
         
@@ -111,8 +117,20 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
      */
     public function ShoppingCartTotal() {
         $amount = new Money();
-        $amount->setAmount($this->value->getAmount() * -1);
-        $amount->setCurrency($this->value->getCurrency());
+        $member = Member::currentUser();
+
+        $voucherHistory = $this->getLastHistoryEntry($member->shoppingCart());
+
+        if ($voucherHistory &&
+            $voucherHistory->action != 'removed' &&
+            $voucherHistory->action != 'manuallyRemoved') {
+
+            $amount->setAmount($this->value->getAmount() * -1);
+            $amount->setCurrency($this->value->getCurrency());
+        } else {
+            $amount->setAmount(0);
+            $amount->setCurrency($this->value->getCurrency());
+        }
 
         return $amount;
     }

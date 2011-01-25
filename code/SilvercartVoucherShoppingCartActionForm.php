@@ -15,8 +15,7 @@ class SilvercartVoucherShoppingCartActionForm extends CustomHtmlForm {
      *
      * @var array
      */
-    protected $formFields = array
-    (
+    protected $formFields = array(
         'VoucherCode' => array(
             'type'              => 'TextField',
             'title'             => 'Gutschein Code',
@@ -116,7 +115,7 @@ class SilvercartVoucherShoppingCartActionForm extends CustomHtmlForm {
 
             $this->setSessionStatus($errorMessage);
         } else {
-            $voucher->redeem($member);
+            $voucher->redeem($member, 'manuallyRedeemed');
         }
         Director::redirect($this->controller->Link());
     }

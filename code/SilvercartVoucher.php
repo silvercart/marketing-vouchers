@@ -142,11 +142,22 @@ class SilvercartVoucher extends DataObject {
      * @copyright 2011 pixeltricks GmbH
      * @since 24.01.2011
      */
-    public function performShoppingCartConditionsCheck(ShoppingCart $shoppingCart) {
+    public function performShoppingCartConditionsCheck(ShoppingCart $shoppingCart, Member $customer) {
         $status = $this->areShoppingCartConditionsMet($shoppingCart);
 
         if ($status['error']) {
             $this->removeFromShoppingCart(Member::currentUser());
+        } else {
+            $voucherHistory = $this->getLastHistoryEntry($shoppingCart);
+
+            if ($voucherHistory &&
+                $voucherHistory->action == 'removed') {
+
+                $voucherHistory = new SilvercartVoucherHistory();
+                $voucherHistory->add($this, $customer, 'redeemed');
+
+                $customer->SilvercartVouchers()->add($this);
+            }
         }
     }
 
@@ -168,7 +179,7 @@ class SilvercartVoucher extends DataObject {
         $error      = false;
         $messages   = array();
 
-        if (!$error && !$this->isShoppingCartAmountValid($shoppingCart->getPrice())) {
+        if (!$error && !$this->isShoppingCartAmountValid($shoppingCart->getPrice(true, array('SilvercartVoucher')))) {
             $error      = true;
             $messages[] = 'Der Warenkorbwert ist nicht passend.';
         }
@@ -218,15 +229,12 @@ class SilvercartVoucher extends DataObject {
     public function isInShoppingCartAlready(ShoppingCart $shoppingCart, $code) {
         $isInCart = false;
 
-        $voucherHistory = DataObject::get(
-            'SilvercartVoucherHistory',
-            sprintf(
-                "ShoppingCartID = '%d'",
-                $shoppingCart->ID
-            )
-        );
+        $voucherHistory = $this->getLastHistoryEntry($shoppingCart);
 
-        if ($voucherHistory) {
+        if ($voucherHistory &&
+            $voucherHistory->action != 'removed' &&
+            $voucherHistory->action != 'manuallyRemoved') {
+            
             foreach ($voucherHistory as $voucherHistoryEntry) {
                 $voucher = DataObject::get_by_id(
                     'SilvercartVoucher',
@@ -500,7 +508,8 @@ class SilvercartVoucher extends DataObject {
     /**
      * Redeem the voucher.
      *
-     * @param Member $customer
+     * @param Member $customer the customer object
+     * @param string $action   the action for commenting
      *
      * @return void
      *
@@ -508,7 +517,7 @@ class SilvercartVoucher extends DataObject {
      * @copyright 2011 pixeltricks GmbH
      * @since 20.01.2011
      */
-    public function redeem(Member $customer) {
+    public function redeem(Member $customer, $action = 'redeemed') {
         if ($this->quantity > 0) {
             $this->quantity -= 1;
         }
@@ -516,7 +525,7 @@ class SilvercartVoucher extends DataObject {
 
         // Write SilvercartVoucherHistory
         $voucherHistory = new SilvercartVoucherHistory();
-        $voucherHistory->add($this, $customer, 'redeemed');
+        $voucherHistory->add($this, $customer, $action);
 
         $customer->SilvercartVouchers()->add($this);
     }
@@ -525,6 +534,7 @@ class SilvercartVoucher extends DataObject {
      * Remove the voucher from the shopping cart.
      *
      * @param Member $customer the customer object
+     * @param string $action   the action for commenting
      *
      * @return void
      *
@@ -533,17 +543,24 @@ class SilvercartVoucher extends DataObject {
      * @since 24.01.2011
      *
      */
-    public function removeFromShoppingCart(Member $customer) {
+    public function removeFromShoppingCart(Member $customer, $action = 'removed') {
         if ($this->quantity != -1) {
             $this->quantity += 1;
         }
         $this->write();
 
-        // Write SilvercartVoucherHistory
-        $voucherHistory = new SilvercartVoucherHistory();
-        $voucherHistory->add($this, $customer, 'removed');
+        $voucherHistory = $this->getLastHistoryEntry($customer->shoppingCart());
+        
+        // Write SilvercartVoucherHistory if the voucher hasn't been already
+        // removed
+        if ($voucherHistory &&
+            $voucherHistory->action != 'removed') {
 
-        $customer->SilvercartVouchers()->remove($this);
+            $voucherHistory = new SilvercartVoucherHistory();
+            $voucherHistory->add($this, $customer, $action);
+
+            $customer->SilvercartVouchers()->remove($this);
+        }
     }
 
     /**
@@ -559,13 +576,7 @@ class SilvercartVoucher extends DataObject {
      * @since 24.01.2011
      */
     public function loadObjectForShoppingCart(Shoppingcart $shoppingCart) {
-        $voucherHistory = DataObject::get_one(
-            'SilvercartVoucherHistory',
-            sprintf(
-                "ShoppingCartID = '%d'",
-                $shoppingCart->ID
-            )
-        );
+        $voucherHistory = $this->getLastHistoryEntry($shoppingCart);
 
         if ($voucherHistory) {
             $voucher = DataObject::get_by_id(
@@ -592,23 +603,56 @@ class SilvercartVoucher extends DataObject {
      * @copyright 2011 pixeltricks GmbH
      * @since 21.01.2011
      */
-    public function ShoppingCartPositions(ShoppingCart $shoppingCart) {
-        $positions              = new DataObjectSet();
-        $this->performShoppingCartConditionsCheck($shoppingCart);
+    public function ShoppingCartPositions(ShoppingCart $shoppingCart, Member $customer) {
+        $positions = new DataObjectSet();
+        $this->performShoppingCartConditionsCheck($shoppingCart, $customer);
 
-        $shoppingCartPositions  = $this->getShoppingCartPositions($shoppingCart);
+        $voucherHistory = $this->getLastHistoryEntry($shoppingCart);
 
-        if ($shoppingCartPositions) {
-            $positions->push(
-                new ArrayData(
-                    array(
-                        'moduleOutput' => $shoppingCartPositions
+        if ($voucherHistory &&
+            $voucherHistory->action != 'removed' &&
+            $voucherHistory->action != 'manuallyRemoved') {
+
+            $shoppingCartPositions  = $this->getShoppingCartPositions($shoppingCart);
+
+            if ($shoppingCartPositions) {
+                $positions->push(
+                    new ArrayData(
+                        array(
+                            'moduleOutput' => $shoppingCartPositions
+                        )
                     )
-                )
-            );
+                );
+            }
         }
 
         return $positions;
+    }
+
+    /**
+     * Return the last history entry or false if none was found for the
+     * given shoppingcart object.
+     *
+     * @param Shoppingcart $shoppingCart the shoppingcart object
+     *
+     * @return mixed SilvercartVoucherHistory|bool false
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 25.01.2011
+     */
+    public function getLastHistoryEntry(Shoppingcart $shoppingCart) {
+        $voucherHistory = DataObject::get_one(
+            'SilvercartVoucherHistory',
+            sprintf(
+                "ShoppingCartID = '%d'",
+                $shoppingCart->ID
+            ),
+            false,
+            "Created DESC"
+        );
+
+        return $voucherHistory;
     }
 
     /**
@@ -651,21 +695,18 @@ class SilvercartVoucher extends DataObject {
      * @since 21.01.2011
      */
     public function ShoppingCartInit() {
-        $controller             = Controller::curr();
-        $actionForm             = new SilvercartVoucherShoppingCartActionForm($controller);
+        $controller         = Controller::curr();
+        $actionForm         = new SilvercartVoucherShoppingCartActionForm($controller);
+        $removeFromCartForm = new SilvercartVoucherRemoveFromCartForm($controller);
 
         $controller->registerCustomHtmlForm(
             'SilvercartVoucherShoppingCartActionForm',
             $actionForm
         );
 
-        $javascriptSnippets = $actionForm->getJavascriptValidatorInitialisation();
-
-        Requirements::customScript(
-            $javascriptSnippets['javascriptSnippets'].
-            '$(document).ready(function() {
-                '.$javascriptSnippets['javascriptOnloadSnippets'].'
-            });'
+        $controller->registerCustomHtmlForm(
+            'SilvercartVoucherRemoveFromCartForm',
+            $removeFromCartForm
         );
     }
 
