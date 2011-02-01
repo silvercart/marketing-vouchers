@@ -669,7 +669,7 @@ class SilvercartVoucher extends DataObject {
      */
     public function ShoppingCartActions(ShoppingCart $shoppingCart) {
         $actions                = new DataObjectSet();
-        $shoppingCartActions    = Controller::curr()->InsertCustomHtmlForm('SilvercartVoucherShoppingCartActionForm');
+        $shoppingCartActions    = Controller::curr()->getRegisteredCustomHtmlForm('SilvercartVoucherShoppingCartActionForm');
 
         $actions->push(
             new ArrayData(

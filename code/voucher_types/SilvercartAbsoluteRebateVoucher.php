@@ -85,21 +85,28 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
      * @since 20.01.2011
      */
     public function getShoppingCartPositions(ShoppingCart $shoppingCart) {
-        //Controller::curr()->registeredCustomHtmlForms['SilvercartVoucherRemoveFromCartForm']->customParameters['code'] = $this->code;
-        $controller     = Controller::curr();
-        $removeCartForm = $controller->getRegisteredCustomHtmlForm('SilvercartVoucherRemoveFromCartForm');
-        $removeCartForm->setFormFieldValue('code', $this->code);
+        $controller             = Controller::curr();
+        $removeCartFormRendered = '';
+
+        if ($removeCartForm = $controller->getRegisteredCustomHtmlForm('SilvercartVoucherRemoveFromCartForm')) {
+            $removeCartForm->setFormFieldValue('code', $this->code);
+            $removeCartFormRendered = Controller::curr()->InsertCustomHtmlForm('SilvercartVoucherRemoveFromCartForm');
+        }
 
         // Shopping cart position data
         $positions = new ArrayData(
             array(
+                'ID'                    => $this->ID,
                 'Title'                 => self::$singular_name.'<br />(Code: '.$this->code.')',
+                'ShortDescription'      => $this->code,
+                'LongDescription'       => $this->code,
+                'Currency'              => $this->value->getCurrency(),
                 'Price'                 => $this->value->getAmount() * -1,
                 'PriceFormatted'        => '-'.$this->value->Nice(),
                 'PriceTotal'            => $this->value->getAmount() * -1,
                 'PriceTotalFormatted'   => '-'.$this->value->Nice(),
                 'Quantity'              => '1',
-                'removeFromCartForm'    => Controller::curr()->InsertCustomHtmlForm('SilvercartVoucherRemoveFromCartForm')
+                'removeFromCartForm'    => $removeCartFormRendered
             )
         );
         
