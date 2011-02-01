@@ -48,7 +48,11 @@ class SilvercartVoucherRemoveFromCartForm extends CustomHtmlForm {
      * @since 25.01.2011
      */
     protected function fillInFieldValues() {
+        $this->preferences['submitButtonTitle'] = _t('SilvercartVoucher.LABEL-SHOPPINGCART_REMOVE', 'entfernen');
+        
         parent::fillInFieldValues();
+
+        
     }
 
     /**

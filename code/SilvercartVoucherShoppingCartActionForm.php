@@ -72,6 +72,8 @@ class SilvercartVoucherShoppingCartActionForm extends CustomHtmlForm {
             }
             Session::clear($this->sessionStatusMessageId);
         }
+
+        $this->preferences['submitButtonTitle'] = _t('SilvercartVoucher.LABEL-REDEEM', 'Einlösen');
     }
 
     /**
@@ -103,7 +105,7 @@ class SilvercartVoucherShoppingCartActionForm extends CustomHtmlForm {
             $status = $voucher->checkifAllowedInShoppingCart($voucherCode, $member, $shoppingCart);
         } else {
             $status['error']        = true;
-            $status['messages'][]   = 'Dieser Gutscheincode ist nicht gültig.';
+            $status['messages'][]   = _t('SilvercartVoucher.ERRORMESSAGE-CODE_NOT_VALID', 'Dieser Gutscheincode ist nicht gültig.');
         }
 
         if ($status['error']) {

@@ -103,22 +103,22 @@ class SilvercartVoucher extends DataObject {
         
         if (!$error && !$this->isCodeValid($voucherCode)) {
             $error      = true;
-            $messages[] = 'Dieser Gutscheincode ist nicht gültig.';
+            $messages[] = _t('ERRORMESSAGE-CODE_NOT_VALID', 'Dieser Gutscheincode ist nicht gültig.');
         }
 
         if (!$error && !$this->isCustomerEligible($member)) {
             $error      = true;
-            $messages[] = 'Sie dürfen diesen Gutschein nicht einlösen.';
+            $messages[] = _t('ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE', 'Sie dürfen diesen Gutschein nicht einlösen.');
         }
 
         if (!$error && !$this->isRedeemable()) {
             $error      = true;
-            $messages[] = 'Der Gutschein kann nicht eingelöst werden.';
+            $messages[] = _t('ERRORMESSAGE-NOT_REDEEMABLE', 'Der Gutschein kann nicht eingelöst werden.');
         }
 
         if (!$error && $this->isInShoppingCartAlready($shoppingCart, $voucherCode)) {
             $error      = true;
-            $messages[] = 'Dieser Gutschein befindet sich schon in Ihrem Warenkorb.';
+            $messages[] = _t('ERRORMESSAGE-ALREADY_IN_SHOPPINGCART', 'Dieser Gutschein befindet sich schon in Ihrem Warenkorb.');
         }
 
         return array(
@@ -181,12 +181,12 @@ class SilvercartVoucher extends DataObject {
 
         if (!$error && !$this->isShoppingCartAmountValid($shoppingCart->getPrice(true, array('SilvercartVoucher')))) {
             $error      = true;
-            $messages[] = 'Der Warenkorbwert ist nicht passend.';
+            $messages[] = _t('ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID', 'Der Warenkorbwert ist nicht passend.');
         }
 
         if (!$error && !$this->isValidForShoppingCartItems($shoppingCart->positions())) {
             $error      = true;
-            $messages[] = 'Dieser Gutschein kann nicht für die Waren eingelöst werden, die sich in Ihrem Warenkorb befinden.';
+            $messages[] = _t('ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID', 'Dieser Gutschein kann nicht für die Waren eingelöst werden, die sich in Ihrem Warenkorb befinden.');
         }
 
         return array(
