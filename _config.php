@@ -1,5 +1,6 @@
 <?php
 ShoppingCart::registerModule('SilvercartVoucher');
+CustomHtmlForm::registerModule('silvercart_vouchers', 50);
 
 // ----------------------------------------------------------------------------
 // Register extensions

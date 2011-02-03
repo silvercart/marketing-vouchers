@@ -2,7 +2,7 @@
 
     $CustomHtmlFormMetadata
     $CustomHtmlFormErrormessages
-    $CustomHtmlFormFieldByName(code)
+    $CustomHtmlFormFieldByName(VoucherID)
 
     <div class="action-remove">
         <% control Actions %>

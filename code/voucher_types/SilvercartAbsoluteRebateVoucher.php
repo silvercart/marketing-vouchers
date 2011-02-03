@@ -39,7 +39,7 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
      * @since 20.01.2011
      */
     public static $db = array(
-        'value'                         => 'Money'
+        'value' => 'Money'
     );
 
     /**
@@ -89,7 +89,7 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
         $removeCartFormRendered = '';
 
         if ($removeCartForm = $controller->getRegisteredCustomHtmlForm('SilvercartVoucherRemoveFromCartForm')) {
-            $removeCartForm->setFormFieldValue('code', $this->code);
+            $removeCartForm->setFormFieldValue('VoucherID', $this->ID);
             $removeCartFormRendered = Controller::curr()->InsertCustomHtmlForm('SilvercartVoucherRemoveFromCartForm');
         }
 
@@ -97,7 +97,7 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
         $positions = new ArrayData(
             array(
                 'ID'                    => $this->ID,
-                'Title'                 => self::$singular_name.'<br />(Code: '.$this->code.')',
+                'Title'                 => self::$singular_name.' (Code: '.$this->code.')',
                 'ShortDescription'      => $this->code,
                 'LongDescription'       => $this->code,
                 'Currency'              => $this->value->getCurrency(),
@@ -126,11 +126,10 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
         $amount = new Money();
         $member = Member::currentUser();
 
-        $voucherHistory = $this->getLastHistoryEntry($member->shoppingCart());
-
-        if ($voucherHistory &&
-            $voucherHistory->action != 'removed' &&
-            $voucherHistory->action != 'manuallyRemoved') {
+        $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::get($member->shoppingCart()->ID, $this->ID);
+        
+        if ($silvercartVoucherShoppingCartPosition &&
+            $silvercartVoucherShoppingCartPosition->implicatePosition) {
 
             $amount->setAmount($this->value->getAmount() * -1);
             $amount->setCurrency($this->value->getCurrency());

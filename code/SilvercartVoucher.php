@@ -42,7 +42,7 @@ class SilvercartVoucher extends DataObject {
         'RestrictToGroup'               => 'Group',
         'RestrictToArticleGroupPage'    => 'ArticleGroupPage',
         'RestrictToArticle'             => 'Article',
-        'VoucherHistory'                => 'SilvercartVoucherHistory',
+        'VoucherHistory'                => 'SilvercartVoucherHistory'
     );
 
     /**
@@ -116,7 +116,7 @@ class SilvercartVoucher extends DataObject {
             $messages[] = _t('ERRORMESSAGE-NOT_REDEEMABLE', 'Der Gutschein kann nicht eingelöst werden.');
         }
 
-        if (!$error && $this->isInShoppingCartAlready($shoppingCart, $voucherCode)) {
+        if (!$error && $this->isInShoppingCartAlready($shoppingCart)) {
             $error      = true;
             $messages[] = _t('ERRORMESSAGE-ALREADY_IN_SHOPPINGCART', 'Dieser Gutschein befindet sich schon in Ihrem Warenkorb.');
         }
@@ -134,9 +134,7 @@ class SilvercartVoucher extends DataObject {
      *
      * @param ShoppingCart $shoppingCart the shopping cart to check against
      *
-     * @return array:
-     *  'error'     => bool,
-     *  'messages'  => array()
+     * @return void
      *
      * @author Sascha Koehler <skoehler@pixeltricks.de>
      * @copyright 2011 pixeltricks GmbH
@@ -146,15 +144,18 @@ class SilvercartVoucher extends DataObject {
         $status = $this->areShoppingCartConditionsMet($shoppingCart);
 
         if ($status['error']) {
-            $this->removeFromShoppingCart(Member::currentUser());
+            $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::get($shoppingCart->ID, $this->ID);
+            $silvercartVoucherShoppingCartPosition->setImplicationStatus(false);
         } else {
-            $voucherHistory = $this->getLastHistoryEntry($shoppingCart);
+            $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::get($shoppingCart->ID, $this->ID);
 
-            if ($voucherHistory &&
-                $voucherHistory->action == 'removed') {
+            if ($silvercartVoucherShoppingCartPosition &&
+                $silvercartVoucherShoppingCartPosition->implicatePosition == false) {
 
                 $voucherHistory = new SilvercartVoucherHistory();
                 $voucherHistory->add($this, $customer, 'redeemed');
+
+                $silvercartVoucherShoppingCartPosition->setImplicationStatus(true);
 
                 $customer->SilvercartVouchers()->add($this);
             }
@@ -218,7 +219,6 @@ class SilvercartVoucher extends DataObject {
      * Checks if the given voucher code is already in the shopping cart.
      *
      * @param ShoppingCart $shoppingCart the shopping cart object
-     * @param string       $code         the code of the voucher
      *
      * @return bool
      *
@@ -226,28 +226,11 @@ class SilvercartVoucher extends DataObject {
      * @copyright 2011 pixeltricks GmbH
      * @since 24.01.2011
      */
-    public function isInShoppingCartAlready(ShoppingCart $shoppingCart, $code) {
+    public function isInShoppingCartAlready(ShoppingCart $shoppingCart) {
         $isInCart = false;
 
-        $voucherHistory = $this->getLastHistoryEntry($shoppingCart);
-
-        if ($voucherHistory &&
-            $voucherHistory->action != 'removed' &&
-            $voucherHistory->action != 'manuallyRemoved') {
-            
-            foreach ($voucherHistory as $voucherHistoryEntry) {
-                $voucher = DataObject::get_by_id(
-                    'SilvercartVoucher',
-                    $voucherHistoryEntry->VoucherID
-                );
-
-                if ($voucher) {
-                    if ($voucher->code == $code) {
-                        $isInCart = true;
-                        break;
-                    }
-                }
-            }
+        if (SilvercartVoucherShoppingCartPosition::combinationExists($shoppingCart->ID, $this->ID)) {
+            $isInCart = true;
         }
 
         return $isInCart;
@@ -262,7 +245,7 @@ class SilvercartVoucher extends DataObject {
      * @copyright 2011 pixeltricks GmbH
      * @since 20.01.2011
      */
-    public function isCustomerEligible($customer) {
+    public function isCustomerEligible(Member $customer) {
         $isEligibleByUndefinedMembership        = false;
         $isEligibleByMembership                 = false;
         $isEligibleByUndefinedGroupMembership   = false;
@@ -521,13 +504,19 @@ class SilvercartVoucher extends DataObject {
         if ($this->quantity > 0) {
             $this->quantity -= 1;
         }
+
+        $this->quantityRedeemed += 1;
         $this->write();
 
         // Write SilvercartVoucherHistory
         $voucherHistory = new SilvercartVoucherHistory();
         $voucherHistory->add($this, $customer, $action);
 
+        // Add voucher to customer
         $customer->SilvercartVouchers()->add($this);
+
+        // Connect voucher with shopping cart
+        SilvercartVoucherShoppingCartPosition::add($customer->shoppingCart()->ID, $this->ID);
     }
 
     /**
@@ -549,18 +538,13 @@ class SilvercartVoucher extends DataObject {
         }
         $this->write();
 
-        $voucherHistory = $this->getLastHistoryEntry($customer->shoppingCart());
-        
-        // Write SilvercartVoucherHistory if the voucher hasn't been already
-        // removed
-        if ($voucherHistory &&
-            $voucherHistory->action != 'removed') {
+        $voucherHistory = new SilvercartVoucherHistory();
+        $voucherHistory->add($this, $customer, $action);
 
-            $voucherHistory = new SilvercartVoucherHistory();
-            $voucherHistory->add($this, $customer, $action);
+        $customer->SilvercartVouchers()->remove($this);
 
-            $customer->SilvercartVouchers()->remove($this);
-        }
+        // Disconnect voucher from shopping cart
+        SilvercartVoucherShoppingCartPosition::remove($customer->shoppingCart()->ID, $this->ID);
     }
 
     /**
@@ -604,16 +588,15 @@ class SilvercartVoucher extends DataObject {
      * @since 21.01.2011
      */
     public function ShoppingCartPositions(ShoppingCart $shoppingCart, Member $customer) {
-        $positions = new DataObjectSet();
         $this->performShoppingCartConditionsCheck($shoppingCart, $customer);
 
-        $voucherHistory = $this->getLastHistoryEntry($shoppingCart);
-
-        if ($voucherHistory &&
-            $voucherHistory->action != 'removed' &&
-            $voucherHistory->action != 'manuallyRemoved') {
-
-            $shoppingCartPositions  = $this->getShoppingCartPositions($shoppingCart);
+        $positions                             = new DataObjectSet();
+        $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::get($shoppingCart->ID, $this->ID);
+        
+        if ($silvercartVoucherShoppingCartPosition &&
+            $silvercartVoucherShoppingCartPosition->implicatePosition) {
+            
+            $shoppingCartPositions = $this->getShoppingCartPositions($shoppingCart);
 
             if ($shoppingCartPositions) {
                 $positions->push(
@@ -786,6 +769,8 @@ class SilvercartVoucher extends DataObject {
     /**
      * Returns a dataobjectset for the display of the voucher positions in the
      * shoppingcart.
+     *
+     * @return bool false
      *
      * @param ShoppingCart $shoppingCart
      *

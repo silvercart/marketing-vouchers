@@ -20,7 +20,7 @@ class SilvercartVoucherRemoveFromCartForm extends CustomHtmlForm {
      * @since 25.01.2010
      */
     protected $formFields = array(
-        'code' => array(
+        'VoucherID' => array(
             'type'          => 'HiddenField',
             'value'         => ''
         )
@@ -51,8 +51,6 @@ class SilvercartVoucherRemoveFromCartForm extends CustomHtmlForm {
         $this->preferences['submitButtonTitle'] = _t('SilvercartVoucher.LABEL-SHOPPINGCART_REMOVE', 'entfernen');
         
         parent::fillInFieldValues();
-
-        
     }
 
     /**
@@ -69,32 +67,15 @@ class SilvercartVoucherRemoveFromCartForm extends CustomHtmlForm {
      */
     protected function submitSuccess($data, $form, $formData) {
         $customer = Member::currentUser();
-        
-        $voucherHistoryEntry = DataObject::get_one(
-            'SilvercartVoucherHistory',
-            sprintf(
-                "ShoppingCartID = '%d' AND
-                 CustomerID = '%d'",
-                $customer->shoppingCart()->ID,
-                $customer->ID
-            ),
-            false,
-            'Created DESC'
+        $voucher  = DataObject::get_by_id(
+            'SilvercartVoucher',
+            $formData['VoucherID']
         );
 
-        if ($voucherHistoryEntry &&
-            $voucherHistoryEntry->action != 'removed' &&
-            $voucherHistoryEntry->action != 'manuallyRemoved' ) {
-
-            $voucher = DataObject::get_by_id(
-                'SilvercartVoucher',
-                $voucherHistoryEntry->VoucherID
-            );
-
-            if ($voucher) {
-                $voucher->removeFromShoppingCart($customer, 'manuallyRemoved');
-            }
+        if ($voucher) {
+            $voucher->removeFromShoppingCart($customer, 'manuallyRemoved');
         }
+
         Director::redirect($this->controller->Link());
     }
 }
