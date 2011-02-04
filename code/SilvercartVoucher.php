@@ -28,6 +28,19 @@ class SilvercartVoucher extends DataObject {
     );
 
     /**
+     * 1:1 relations
+     *
+     * @var array
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 04.02.2011
+     */
+    public static $has_one = array(
+        'Tax' => 'Tax'
+    );
+
+    /**
      * Many-many Relationships.
      *
      * @var array
@@ -145,7 +158,10 @@ class SilvercartVoucher extends DataObject {
 
         if ($status['error']) {
             $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::get($shoppingCart->ID, $this->ID);
-            $silvercartVoucherShoppingCartPosition->setImplicationStatus(false);
+
+            if ($silvercartVoucherShoppingCartPosition) {
+                $silvercartVoucherShoppingCartPosition->setImplicationStatus(false);
+            }
         } else {
             $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::get($shoppingCart->ID, $this->ID);
 
@@ -180,7 +196,7 @@ class SilvercartVoucher extends DataObject {
         $error      = false;
         $messages   = array();
 
-        if (!$error && !$this->isShoppingCartAmountValid($shoppingCart->getPrice(true, array('SilvercartVoucher')))) {
+        if (!$error && !$this->isShoppingCartAmountValid($shoppingCart->getTaxableAmountGrossWithoutFees(array('SilvercartVoucher')))) {
             $error      = true;
             $messages[] = _t('ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID', 'Der Warenkorbwert ist nicht passend.');
         }
@@ -581,13 +597,17 @@ class SilvercartVoucher extends DataObject {
      *
      * It returns an entry for the cart listing.
      *
+     * @param ShoppingCart $shoppingCart The shoppingcart object
+     * @param Member       $customer     The customer object
+     * @param Bool         $taxable      Indicates if taxable or nontaxable entries should be returned
+     *
      * @return DataObjectSet
      *
      * @author Sascha Koehler <skoehler@pixeltricks.de>
      * @copyright 2011 pixeltricks GmbH
      * @since 21.01.2011
      */
-    public function ShoppingCartPositions(ShoppingCart $shoppingCart, Member $customer) {
+    public function ShoppingCartPositions(ShoppingCart $shoppingCart, Member $customer, $taxable = true) {
         $this->performShoppingCartConditionsCheck($shoppingCart, $customer);
 
         $positions                             = new DataObjectSet();
@@ -596,18 +616,46 @@ class SilvercartVoucher extends DataObject {
         if ($silvercartVoucherShoppingCartPosition &&
             $silvercartVoucherShoppingCartPosition->implicatePosition) {
             
-            $shoppingCartPositions = $this->getShoppingCartPositions($shoppingCart);
+            $shoppingCartPositions = $this->getShoppingCartPositions($shoppingCart, $taxable);
 
             if ($shoppingCartPositions) {
-                $positions->push(
-                    new ArrayData(
-                        array(
-                            'moduleOutput' => $shoppingCartPositions
-                        )
-                    )
-                );
+                $positions = $shoppingCartPositions;
             }
         }
+
+        return $positions;
+    }
+
+    /**
+     * This method is a hook that gets called by the shoppingcart.
+     *
+     * It returns taxable entries for the cart listing.
+     *
+     * @return DataObjectSet
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 04.02.2011
+     */
+    public function TaxableShoppingCartPositions(ShoppingCart $shoppingCart, Member $customer) {
+        $positions = $this->ShoppingCartPositions($shoppingCart, $customer, true);
+
+        return $positions;
+    }
+
+    /**
+     * This method is a hook that gets called by the shoppingcart.
+     *
+     * It returns nontaxable entries for the cart listing.
+     *
+     * @return DataObjectSet
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 04.02.2011
+     */
+    public function NonTaxableShoppingCartPositions(ShoppingCart $shoppingCart, Member $customer) {
+        $positions = $this->ShoppingCartPositions($shoppingCart, $customer, false);
 
         return $positions;
     }
@@ -764,6 +812,32 @@ class SilvercartVoucher extends DataObject {
         $fields->addFieldToTab('Root.RestrictToArticleGroupPage',   $articleGroupPageTableField);
 
         return $fields;
+    }
+
+    /**
+     * Checks if a tax rate is attributed to this voucher. If not, we try
+     * to get a 0% rate.
+     * 
+     * @return void
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 04.02.2011
+     */
+    public function onAfterWrite() {
+        parent::onAfterWrite();
+
+        if (!$this->TaxID) {
+            $taxRateZero = DataObject::get_one(
+                'Tax',
+                "Rate = 0"
+            );
+
+            if ($taxRateZero) {
+                $this->TaxID = $taxRateZero->ID;
+                $this->write();
+            }
+        }
     }
 
     /**

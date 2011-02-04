@@ -76,7 +76,8 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
      * Returns a dataobjectset for the display of the voucher positions in the
      * shoppingcart.
      *
-     * @param ShoppingCart $shoppingCart
+     * @param ShoppingCart $shoppingCart The shoppingcart object
+     * @param Bool         $taxable      Indicates if taxable or nontaxable entries should be returned
      *
      * @return DataObjectSet
      *
@@ -84,32 +85,45 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
      * @copyright 2011 pixeltricks GmbH
      * @since 20.01.2011
      */
-    public function getShoppingCartPositions(ShoppingCart $shoppingCart) {
+    public function getShoppingCartPositions(ShoppingCart $shoppingCart, $taxable = true) {
         $controller             = Controller::curr();
         $removeCartFormRendered = '';
+        $positions              = new DataObjectSet();
+        $tax                    = $this->Tax();
 
-        if ($removeCartForm = $controller->getRegisteredCustomHtmlForm('SilvercartVoucherRemoveFromCartForm')) {
-            $removeCartForm->setFormFieldValue('VoucherID', $this->ID);
-            $removeCartFormRendered = Controller::curr()->InsertCustomHtmlForm('SilvercartVoucherRemoveFromCartForm');
+        if ( (!$taxable && !$tax) ||
+             (!$taxable && $tax->Rate == 0) ||
+             ($taxable && $tax && $tax->Rate > 0) ) {
+
+            $removeCartForm = $controller->getRegisteredCustomHtmlForm('SilvercartVoucherRemoveFromCartForm');
+
+            if ($removeCartForm) {
+                $removeCartForm->setFormFieldValue('VoucherID', $this->ID);
+                $removeCartFormRendered = Controller::curr()->InsertCustomHtmlForm('SilvercartVoucherRemoveFromCartForm');
+            }
+
+            $positions->push(
+                new DataObject(
+                    array(
+                        'ID'                    => $this->ID,
+                        'Name'                  => self::$singular_name.' (Code: '.$this->code.')',
+                        'ShortDescription'      => $this->code,
+                        'LongDescription'       => $this->code,
+                        'Currency'              => $this->value->getCurrency(),
+                        'Price'                 => $this->value->getAmount() * -1,
+                        'PriceFormatted'        => '-'.$this->value->Nice(),
+                        'PriceTotal'            => $this->value->getAmount() * -1,
+                        'PriceTotalFormatted'   => '-'.$this->value->Nice(),
+                        'Quantity'              => '1',
+                        'removeFromCartForm'    => $removeCartFormRendered,
+                        'TaxRate'               => $this->Tax()->Rate,
+                        'TaxAmount'             => $this->value->getAmount() - ($this->value->getAmount() / (100 + $this->Tax()->Rate) * 100),
+                        'Tax'                   => $this->Tax()
+                    )
+                )
+            );
         }
 
-        // Shopping cart position data
-        $positions = new ArrayData(
-            array(
-                'ID'                    => $this->ID,
-                'Title'                 => self::$singular_name.' (Code: '.$this->code.')',
-                'ShortDescription'      => $this->code,
-                'LongDescription'       => $this->code,
-                'Currency'              => $this->value->getCurrency(),
-                'Price'                 => $this->value->getAmount() * -1,
-                'PriceFormatted'        => '-'.$this->value->Nice(),
-                'PriceTotal'            => $this->value->getAmount() * -1,
-                'PriceTotalFormatted'   => '-'.$this->value->Nice(),
-                'Quantity'              => '1',
-                'removeFromCartForm'    => $removeCartFormRendered
-            )
-        );
-        
         return $positions;
     }
 
