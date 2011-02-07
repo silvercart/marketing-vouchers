@@ -629,6 +629,26 @@ class SilvercartVoucher extends DataObject {
     /**
      * This method is a hook that gets called by the shoppingcart.
      *
+     * It disconnects the voucher from the shopping cart.
+     *
+     * @param ShoppingCart $shoppingCart The shoppingcart object
+     * @param Member       $customer     The customer object
+     * @param Bool         $taxable      Indicates if taxable or nontaxable entries should be returned
+     *
+     * @return DataObjectSet
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 07.02.2011
+     */
+    public function ShoppingCartConvert(ShoppingCart $shoppingCart, Member $customer, $taxable = true) {
+        // Disconnect voucher from shopping cart
+        SilvercartVoucherShoppingCartPosition::remove($shoppingCart->ID, $this->ID);
+    }
+
+    /**
+     * This method is a hook that gets called by the shoppingcart.
+     *
      * It returns taxable entries for the cart listing.
      *
      * @return DataObjectSet
