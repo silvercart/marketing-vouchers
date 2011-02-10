@@ -95,11 +95,11 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
              (!$taxable && $tax->Rate == 0) ||
              ($taxable && $tax && $tax->Rate > 0) ) {
 
-            $removeCartForm = $controller->getRegisteredCustomHtmlForm('SilvercartVoucherRemoveFromCartForm');
+            $removeCartForm = $controller->getRegisteredCustomHtmlForm('SilvercartVoucherRemoveFromCartForm'.$this->ID);
 
             if ($removeCartForm) {
                 $removeCartForm->setFormFieldValue('VoucherID', $this->ID);
-                $removeCartFormRendered = Controller::curr()->InsertCustomHtmlForm('SilvercartVoucherRemoveFromCartForm');
+                $removeCartFormRendered = Controller::curr()->InsertCustomHtmlForm('SilvercartVoucherRemoveFromCartForm'.$this->ID);
             }
 
             $positions->push(
@@ -136,7 +136,7 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
      * @copyright 2011 pixeltricks GmbH
      * @since 24.01.2011
      */
-    public function ShoppingCartTotal() {
+    public function getShoppingCartTotal() {
         $amount = new Money();
         $member = Member::currentUser();
 

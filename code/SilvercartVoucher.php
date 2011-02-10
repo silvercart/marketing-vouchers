@@ -517,19 +517,9 @@ class SilvercartVoucher extends DataObject {
      * @since 20.01.2011
      */
     public function redeem(Member $customer, $action = 'redeemed') {
-        if ($this->quantity > 0) {
-            $this->quantity -= 1;
-        }
-
-        $this->quantityRedeemed += 1;
-        $this->write();
-
         // Write SilvercartVoucherHistory
         $voucherHistory = new SilvercartVoucherHistory();
         $voucherHistory->add($this, $customer, $action);
-
-        // Add voucher to customer
-        $customer->SilvercartVouchers()->add($this);
 
         // Connect voucher with shopping cart
         SilvercartVoucherShoppingCartPosition::add($customer->shoppingCart()->ID, $this->ID);
@@ -608,22 +598,31 @@ class SilvercartVoucher extends DataObject {
      * @since 21.01.2011
      */
     public function ShoppingCartPositions(ShoppingCart $shoppingCart, Member $customer, $taxable = true) {
-        $this->performShoppingCartConditionsCheck($shoppingCart, $customer);
+        $positions = array();
+        $vouchers  = DataObject::get(
+            'SilvercartVoucher',
+            "isActive = 1"
+        );
 
-        $positions                             = new DataObjectSet();
-        $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::get($shoppingCart->ID, $this->ID);
-        
-        if ($silvercartVoucherShoppingCartPosition &&
-            $silvercartVoucherShoppingCartPosition->implicatePosition) {
-            
-            $shoppingCartPositions = $this->getShoppingCartPositions($shoppingCart, $taxable);
+        foreach ($vouchers as $voucher) {
+            $voucher->performShoppingCartConditionsCheck($shoppingCart, $customer);
 
-            if ($shoppingCartPositions) {
-                $positions = $shoppingCartPositions;
+            $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::get($shoppingCart->ID, $voucher->ID);
+
+            if ($silvercartVoucherShoppingCartPosition &&
+                $silvercartVoucherShoppingCartPosition->implicatePosition) {
+
+                $shoppingCartPositions = $voucher->getShoppingCartPositions($shoppingCart, $taxable);
+
+                if ($shoppingCartPositions) {
+                    foreach ($shoppingCartPositions as $key => $shoppingCartPosition) {
+                        $positions[] = $shoppingCartPosition;
+                    }
+                }
             }
         }
 
-        return $positions;
+        return new DataObjectSet($positions);
     }
 
     /**
@@ -642,8 +641,27 @@ class SilvercartVoucher extends DataObject {
      * @since 07.02.2011
      */
     public function ShoppingCartConvert(ShoppingCart $shoppingCart, Member $customer, $taxable = true) {
-        // Disconnect voucher from shopping cart
-        SilvercartVoucherShoppingCartPosition::remove($shoppingCart->ID, $this->ID);
+        $vouchers  = DataObject::get(
+            'SilvercartVoucher',
+            "isActive = 1"
+        );
+
+        foreach ($vouchers as $voucher) {
+
+            // Adjust quantity
+            if ($voucher->quantity > 0) {
+                $voucher->quantity -= 1;
+            }
+
+            $voucher->quantityRedeemed += 1;
+            $voucher->write();
+
+            // Connect voucher to customer
+            $customer->SilvercartVouchers()->add($this);
+
+            // And remove from the customers shopping cart
+            SilvercartVoucherShoppingCartPosition::remove($shoppingCart->ID, $voucher->ID);
+        }
     }
 
     /**
@@ -748,17 +766,24 @@ class SilvercartVoucher extends DataObject {
     public function ShoppingCartInit() {
         $controller         = Controller::curr();
         $actionForm         = new SilvercartVoucherShoppingCartActionForm($controller);
-        $removeFromCartForm = new SilvercartVoucherRemoveFromCartForm($controller);
 
         $controller->registerCustomHtmlForm(
             'SilvercartVoucherShoppingCartActionForm',
             $actionForm
         );
-
-        $controller->registerCustomHtmlForm(
-            'SilvercartVoucherRemoveFromCartForm',
-            $removeFromCartForm
+        $vouchers = DataObject::get(
+            'SilvercartVoucher',
+            "isActive = 1"
         );
+
+        foreach ($vouchers as $voucher) {
+            $removeFromCartForm = new SilvercartVoucherRemoveFromCartForm($controller);
+
+            $controller->registerCustomHtmlForm(
+                'SilvercartVoucherRemoveFromCartForm'.$voucher->ID,
+                $removeFromCartForm
+            );
+        }
     }
 
     /**
@@ -771,7 +796,19 @@ class SilvercartVoucher extends DataObject {
      * @since 24.01.2011
      */
     public function ShoppingCartTotal() {
-        // Implement in descendants
+        $amountObj = new Money();
+        $amount    = 0;
+        $vouchers  = DataObject::get(
+            'SilvercartVoucher'
+        );
+
+        foreach ($vouchers as $voucher) {
+            $amount += $voucher->getShoppingCartTotal()->getAmount();
+        }
+
+        $amountObj->setAmount($amount);
+
+        return $amountObj;
     }
 
     /**
