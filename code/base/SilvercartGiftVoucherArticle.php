@@ -31,4 +31,30 @@ class SilvercartGiftVoucherArticle extends Article {
      * @since 10.02.2011
      */
     public static $plural_name   = 'Geschenkgutschein Artikel';
+
+    /**
+     * Has-one relationships
+     *
+     * @var string
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @since 10.02.2011
+     */
+    public static $has_one = array(
+        'SilvercartAbsoluteRebateGiftVoucherBlueprint' => 'SilvercartAbsoluteRebateGiftVoucherBlueprint'
+    );
+
+    /**
+     * Summaryfields for display in tables.
+     *
+     * @var array
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 10.02.2011
+     */
+    public static $summary_fields = array(
+        'Title'                                                 => 'Artikel',
+        'SilvercartAbsoluteRebateGiftVoucherBlueprint.value'    => 'Gutscheinwert'
+    );
 }

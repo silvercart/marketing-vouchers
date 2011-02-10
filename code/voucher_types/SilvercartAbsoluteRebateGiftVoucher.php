@@ -51,7 +51,6 @@ class SilvercartAbsoluteRebateGiftVoucher extends SilvercartVoucher {
      * @since 21.01.2011
      */
     public static $summary_fields = array(
-        'code',
         'quantity'
     );
 
@@ -64,7 +63,6 @@ class SilvercartAbsoluteRebateGiftVoucher extends SilvercartVoucher {
      * @since 21.01.2011
      */
     public static $field_labels = array(
-        'code'          => 'Gutscheincode',
         'quantity'      => 'Anzahl'
     );
 
@@ -77,8 +75,8 @@ class SilvercartAbsoluteRebateGiftVoucher extends SilvercartVoucher {
      * @since 10.02.2011
      */
     public static $has_one = array(
-        'SilvercartGiftVoucherArticle'      => 'SilvercartGiftVoucherArticle',
-        'Customer'                          => 'Member'
+        'SilvercartAbsoluteRebateGiftVoucherBlueprint' => 'SilvercartAbsoluteRebateGiftVoucherBlueprint',
+        'Customer'                                     => 'Member'
     );
 
     // ------------------------------------------------------------------------
