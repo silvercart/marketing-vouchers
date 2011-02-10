@@ -19,6 +19,9 @@ class SilvercartVoucherCustomerRole extends DataObjectDecorator {
      */
     public function extraStatics() {
         return array(
+            'has_many' => array(
+                'SilvercartAbsoluteRebateGiftVouchers' => 'SilvercartAbsoluteRebateGiftVoucher'
+            ),
             'many_many' => array(
                 'SilvercartVouchers' => 'SilvercartVoucher'
             )

@@ -7,3 +7,8 @@ CustomHtmlForm::registerModule('silvercart_vouchers', 50);
 // ----------------------------------------------------------------------------
 Object::add_extension('Member',  'SilvercartVoucherCustomerRole');
 Object::add_extension('Article', 'SilvercartVoucherArticleRole');
+
+// ----------------------------------------------------------------------------
+// Extend the article admin
+// ----------------------------------------------------------------------------
+ArticleAdmin::$managed_models[] = 'SilvercartGiftVoucherArticle';
