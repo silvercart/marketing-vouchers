@@ -8,7 +8,7 @@
  * @since 24.01.2011
  * @license none
  */
-class SilvercartVoucherCustomerRole extends DataObjectDecorator {
+class SilvercartVoucherMemberRole extends DataObjectDecorator {
     
     /**
      * defines relations, attributes and some settings this class.

@@ -116,7 +116,7 @@ class SilvercartGiftVoucherArticle extends Article {
      * @copyright 2011 pixeltricks GmbH
      * @since 11.02.2011
      */
-    public function ShoppingCartConvert(Order $order, OrderPosition $orderPosition) {
+    public function ShoppingCartConvert(SilvercartOrder $order, SilvercartOrderPosition $orderPosition) {
         $blueprint = $this->SilvercartAbsoluteRebateGiftVoucherBlueprint();
 
         if ($blueprint) {

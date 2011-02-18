@@ -32,8 +32,8 @@ class SilvercartVoucherShoppingCartPosition extends DataObject {
      * @since 03.02.2011
      */
     public static $has_one = array(
-        'ShoppingCart'              => 'ShoppingCart',
-        'SilvercartVoucher'         => 'SilvercartVoucher'
+        'SilvercartShoppingCart' => 'SilvercartShoppingCart',
+        'SilvercartVoucher'      => 'SilvercartVoucher'
     );
 
     /**
@@ -42,7 +42,7 @@ class SilvercartVoucherShoppingCartPosition extends DataObject {
      * If there's already a record with the same shoppingCartID <-> voucherID
      * combination, then nothing is done.
      *
-     * @param int $shoppingCartID The ID of the shopping cart record
+     * @param int $silvercartShoppingCartID The ID of the shopping cart record
      * @param int $voucherID      The ID of the voucher record
      *
      * @return void
@@ -51,19 +51,19 @@ class SilvercartVoucherShoppingCartPosition extends DataObject {
      * @copyright 2011 pixeltricks GmbH
      * @since 03.02.2011
      */
-    public static function add($shoppingCartID, $voucherID) {
+    public static function add($silvercartShoppingCartID, $voucherID) {
         $silvercartVoucherShoppingCartPosition = DataObject::get_one(
             'SilvercartVoucherShoppingCartPosition',
             sprintf(
-                "`ShoppingCartID` = '%d' AND `SilvercartVoucherID` = '%d'",
-                $shoppingCartID,
+                "`SilvercartShoppingCartID` = '%d' AND `SilvercartVoucherID` = '%d'",
+                $silvercartShoppingCartID,
                 $voucherID
             )
         );
 
         if (!$silvercartVoucherShoppingCartPosition) {
             $silvercartVoucherShoppingCartPosition = new SilvercartVoucherShoppingCartPosition();
-            $silvercartVoucherShoppingCartPosition->setField('ShoppingCartID',      $shoppingCartID);
+            $silvercartVoucherShoppingCartPosition->setField('SilvercartShoppingCartID',      $silvercartShoppingCartID);
             $silvercartVoucherShoppingCartPosition->setField('SilvercartVoucherID', $voucherID);
             $silvercartVoucherShoppingCartPosition->setField('implicatePosition',   1);
             $silvercartVoucherShoppingCartPosition->write();
@@ -73,7 +73,7 @@ class SilvercartVoucherShoppingCartPosition extends DataObject {
     /**
      * Remove a record from the database.
      *
-     * @param int $shoppingCartID The ID of the shopping cart record
+     * @param int $silvercartShoppingCartID The ID of the shopping cart record
      * @param int $voucherID      The ID of the voucher record
      *
      * @return void
@@ -82,12 +82,12 @@ class SilvercartVoucherShoppingCartPosition extends DataObject {
      * @copyright 2011 pixeltricks GmbH
      * @since 03.02.2011
      */
-    public static function remove($shoppingCartID, $voucherID) {
+    public static function remove($silvercartShoppingCartID, $voucherID) {
         $silvercartVoucherShoppingCartPosition = DataObject::get_one(
             'SilvercartVoucherShoppingCartPosition',
             sprintf(
-                "`ShoppingCartID` = '%d' AND `SilvercartVoucherID` = '%d'",
-                $shoppingCartID,
+                "`SilvercartShoppingCartID` = '%d' AND `SilvercartVoucherID` = '%d'",
+                $silvercartShoppingCartID,
                 $voucherID
             )
         );
@@ -101,7 +101,7 @@ class SilvercartVoucherShoppingCartPosition extends DataObject {
      * Checks if a record with the given shoppingCartID <-> voucherID
      * combination exists.
      *
-     * @param int $shoppingCartID The ID of the shopping cart record
+     * @param int $silvercartShoppingCartID The ID of the shopping cart record
      * @param int $voucherID      The ID of the voucher record
      *
      * @return bool
@@ -110,14 +110,14 @@ class SilvercartVoucherShoppingCartPosition extends DataObject {
      * @copyright 2011 pixeltricks GmbH
      * @since 03.02.2011
      */
-    public static function combinationExists($shoppingCartID, $voucherID) {
+    public static function combinationExists($silvercartShoppingCartID, $voucherID) {
         $recordExists = false;
 
         $silvercartVoucherShoppingCartPosition = DataObject::get_one(
             'SilvercartVoucherShoppingCartPosition',
             sprintf(
-                "`ShoppingCartID` = '%d' AND `SilvercartVoucherID` = '%d'",
-                $shoppingCartID,
+                "`SilvercartShoppingCartID` = '%d' AND `SilvercartVoucherID` = '%d'",
+                $silvercartShoppingCartID,
                 $voucherID
             )
         );
@@ -132,7 +132,7 @@ class SilvercartVoucherShoppingCartPosition extends DataObject {
     /**
      * Returns the asked for object if it exists in the database.
      *
-     * @param int $shoppingCartID The ID of the shopping cart record
+     * @param int $silvercartShoppingCartID The ID of the shopping cart record
      * @param int $voucherID      The ID of the voucher record
      *
      * @return mixed SilvercartVoucherShoppingCartPosition|bool false
@@ -141,14 +141,14 @@ class SilvercartVoucherShoppingCartPosition extends DataObject {
      * @copyright 2011 pixeltricks GmbH
      * @since 03.02.2011
      */
-    public static function get($shoppingCartID, $voucherID) {
+    public static function get($silvercartShoppingCartID, $voucherID) {
         $record = false;
 
         $silvercartVoucherShoppingCartPosition = DataObject::get_one(
             'SilvercartVoucherShoppingCartPosition',
             sprintf(
-                "`ShoppingCartID` = '%d' AND `SilvercartVoucherID` = '%d'",
-                $shoppingCartID,
+                "`SilvercartShoppingCartID` = '%d' AND `SilvercartVoucherID` = '%d'",
+                $silvercartShoppingCartID,
                 $voucherID
             )
         );

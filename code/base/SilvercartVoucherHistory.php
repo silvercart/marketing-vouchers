@@ -31,9 +31,9 @@ class SilvercartVoucherHistory extends DataObject {
      * @since 24.01.2011
      */
     public static $has_one = array(
-        'Customer'          => 'Member',
-        'Voucher'           => 'SilvercartVoucher',
-        'ShoppingCart'      => 'ShoppingCart'
+        'Member'                 => 'Member',
+        'SilvercartVoucher'      => 'SilvercartVoucher',
+        'SilvercartShoppingCart' => 'SilvercartShoppingCart'
     );
 
     /**
@@ -45,9 +45,9 @@ class SilvercartVoucherHistory extends DataObject {
      * @since 24.01.2011
      */
     public static $summary_fields = array(
-        'Customer.FirstName',
-        'Customer.Surname',
-        'Voucher.code',
+        'Member.FirstName',
+        'Member.Surname',
+        'SilvercartVoucher.code',
         'Created'
     );
 
@@ -65,10 +65,10 @@ class SilvercartVoucherHistory extends DataObject {
      * @since 24.01.2011
      */
     public function add(SilvercartVoucher $voucher, Member $customer, $action) {
-        $this->CustomerID           = $customer->ID;
-        $this->VoucherID            = $voucher->ID;
-        $this->ShoppingCartID       = $customer->shoppingCart()->ID;
-        $this->action               = $action;
+        $this->MemberID= $customer->ID;
+        $this->SilvercartVoucherID      = $voucher->ID;
+        $this->SilvercartShoppingCartID = $member->SilvercartShoppingCart()->ID;
+        $this->action                   = $action;
         $this->write();
 
         $voucher->VoucherHistory()->add($this);
