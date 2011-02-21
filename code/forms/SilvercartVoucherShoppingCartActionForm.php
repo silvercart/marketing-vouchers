@@ -89,7 +89,10 @@ class SilvercartVoucherShoppingCartActionForm extends CustomHtmlForm {
      * @return void
      */
     protected function submitSuccess($data, $form, $formData) {
-        $status      = array('error' => false, 'messages' => array());
+        $status      = array(
+            'error' => false,
+            'messages' => array()
+        );
         $voucherCode = Convert::raw2sql($formData['SilvercartVoucherCode']);
         $voucher     = DataObject::get_one(
             'SilvercartVoucher',

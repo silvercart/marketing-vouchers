@@ -1,12 +1,12 @@
 <form class="yform" $FormAttributes >
 
       $CustomHtmlFormMetadata
-      $CustomHtmlFormErrormessages
+      $CustomHtmlFormErrorMessages
 
       <fieldset>
         <legend>Gutschein einlösen</legend>
 
-        $CustomHtmlFormFieldByName(VoucherCode)
+        $CustomHtmlFormFieldByName(SilvercartVoucherCode)
 
     </fieldset>
 

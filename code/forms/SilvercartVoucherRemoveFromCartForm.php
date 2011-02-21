@@ -66,14 +66,14 @@ class SilvercartVoucherRemoveFromCartForm extends CustomHtmlForm {
      * @return void
      */
     protected function submitSuccess($data, $form, $formData) {
-        $customer = Member::currentUser();
-        $voucher  = DataObject::get_by_id(
+        $member  = Member::currentUser();
+        $voucher = DataObject::get_by_id(
             'SilvercartVoucher',
             $formData['SilvercartVoucherID']
         );
 
         if ($voucher) {
-            $voucher->removeFromShoppingCart($customer, 'manuallyRemoved');
+            $voucher->removeFromShoppingCart($member, 'manuallyRemoved');
         }
 
         Director::redirect($this->controller->Link());

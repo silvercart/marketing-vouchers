@@ -98,7 +98,7 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
             $removeCartForm = $controller->getRegisteredCustomHtmlForm('SilvercartVoucherRemoveFromCartForm'.$this->ID);
 
             if ($removeCartForm) {
-                $removeCartForm->setFormFieldValue('VoucherID', $this->ID);
+                $removeCartForm->setFormFieldValue('SilvercartVoucherID', $this->ID);
                 $removeCartFormRendered = Controller::curr()->InsertCustomHtmlForm('SilvercartVoucherRemoveFromCartForm'.$this->ID);
             }
 
@@ -140,10 +140,10 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
         $amount = new Money();
         $member = Member::currentUser();
 
-        $silvercartVoucherSilvercartShoppingCartPosition = SilvercartVoucherSilvercartShoppingCartPosition::get($member->SilvercartShoppingCart()->ID, $this->ID);
+        $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::get($member->SilvercartShoppingCart()->ID, $this->ID);
         
-        if ($silvercartVoucherSilvercartShoppingCartPosition &&
-            $silvercartVoucherSilvercartShoppingCartPosition->implicatePosition) {
+        if ($silvercartVoucherShoppingCartPosition &&
+            $silvercartVoucherShoppingCartPosition->implicatePosition) {
 
             $amount->setAmount($this->value->getAmount() * -1);
             $amount->setCurrency($this->value->getCurrency());
@@ -158,7 +158,7 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
     /**
      * Redefine input fields for the backend.
      *
-     * @param array params Additional parameters
+     * @param array $params Additional parameters
      *
      * @return FieldSet
      *

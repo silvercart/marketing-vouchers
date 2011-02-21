@@ -105,7 +105,7 @@ class SilvercartRelativeRebateVoucher extends SilvercartVoucher {
             $rebate->setCurrency($currency->getShortName(null, i18n::get_locale()));
 
             if ($removeCartForm) {
-                $removeCartForm->setFormFieldValue('VoucherID', $this->ID);
+                $removeCartForm->setFormFieldValue('SilvercartVoucherID', $this->ID);
                 $removeCartFormRendered = Controller::curr()->InsertCustomHtmlForm('SilvercartVoucherRemoveFromCartForm'.$this->ID);
             }
 
@@ -146,15 +146,15 @@ class SilvercartRelativeRebateVoucher extends SilvercartVoucher {
     public function getSilvercartShoppingCartTotal() {
         $amount             = new Money();
         $member             = Member::currentUser();
-        $silvercartShoppingCartAmount = $member->shoppingCart()->getTaxableAmountGrossWithoutFees(array('SilvercartVoucher'))->getAmount();
+        $silvercartShoppingCartAmount = $member->SilvercartShoppingCart()->getTaxableAmountGrossWithoutFees(array('SilvercartVoucher'))->getAmount();
         $rebateAmount       = ($silvercartShoppingCartAmount / 100 * $this->valueInPercent);
         $rebate             = new Money();
         $rebate->setAmount($rebateAmount);
 
-        $silvercartVoucherSilvercartShoppingCartPosition = SilvercartVoucherSilvercartShoppingCartPosition::get($member->shoppingCart()->ID, $this->ID);
+        $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::get($member->SilvercartShoppingCart()->ID, $this->ID);
 
-        if ($silvercartVoucherSilvercartShoppingCartPosition &&
-            $silvercartVoucherSilvercartShoppingCartPosition->implicatePosition) {
+        if ($silvercartVoucherShoppingCartPosition &&
+            $silvercartVoucherShoppingCartPosition->implicatePosition) {
 
             $amount->setAmount($rebateAmount * -1);
             $amount->setCurrency($rebate->getCurrency());

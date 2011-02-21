@@ -45,8 +45,6 @@ class SilvercartVoucher extends DataObject {
      *
      * @var array
      *
-     * @TODO insert RestrictToCategory Relationship when class is available
-     *
      * @author Sascha Koehler <skoehler@pixeltricks.de>
      * @since 20.01.2011
      */
@@ -55,7 +53,7 @@ class SilvercartVoucher extends DataObject {
         'RestrictToGroup'                      => 'Group',
         'RestrictToSilvercartProductGroupPage' => 'SilvercartProductGroupPage',
         'RestrictToSilvercartProduct'          => 'SilvercartProduct',
-        'VoucherHistory'                       => 'SilvercartVoucherHistory'
+        'SilvercartVoucherHistory'             => 'SilvercartVoucherHistory'
     );
 
     /**
@@ -97,8 +95,8 @@ class SilvercartVoucher extends DataObject {
      * Performs all checks to make sure, that this voucher is allowed in the
      * shopping cart. Returns an array with status and messages.
      *
-     * @param string       $voucherCode  the vouchers code
-     * @param Member       $member       the member object to check against
+     * @param string       $voucherCode            the vouchers code
+     * @param Member       $member                 the member object to check against
      * @param ShoppingCart $silvercartShoppingCart the shopping cart to check against
      *
      * @return array:
@@ -146,6 +144,7 @@ class SilvercartVoucher extends DataObject {
      * If the conditions are not met the voucher is removed from the cart.
      *
      * @param ShoppingCart $silvercartShoppingCart the shopping cart to check against
+     * @param Member       $member                 the shopping cart to check against
      *
      * @return void
      *
@@ -213,6 +212,9 @@ class SilvercartVoucher extends DataObject {
     }
 
     /**
+     * Checks if the given code is valid by comparing it to the code in the
+     * database.
+     *
      * @param string $code the voucher code
      *
      * @return bool
@@ -253,6 +255,9 @@ class SilvercartVoucher extends DataObject {
     }
 
     /**
+     * Checks if the customer is eligible to redeem the voucher by making sure
+     * that he/she is not excluded by the RestrictTo-relations.
+     *
      * @param Member $member the customer object
      *
      * @return bool
@@ -390,6 +395,9 @@ class SilvercartVoucher extends DataObject {
     }
 
     /**
+     * Checks if there are restrictions for this voucher in regars to the
+     * items in the shopping cart.
+     *
      * @param ShoppingCartPosition $silvercartShoppingCartPositions the shoppingcartposition object
      *
      * @return bool
@@ -404,8 +412,8 @@ class SilvercartVoucher extends DataObject {
         $isValidByUndefinedProductGroup = false;
         $isValidByProductGroup          = false;
 
-        if ($this->RestrictToProduct()->Count() > 0)  {
-            foreach ($this->RestrictToProduct() as $restrictedProduct) {
+        if ($this->RestrictToSilvercartProduct()->Count() > 0) {
+            foreach ($this->RestrictToSilvercartProduct() as $restrictedProduct) {
                 foreach ($silvercartShoppingCartPositions as $silvercartShoppingCartPosition) {
                     if ($silvercartShoppingCartPosition->SilvercartProduct()->ID == $restrictedProduct->ID) {
                         $isValidByProduct = true;
@@ -417,8 +425,8 @@ class SilvercartVoucher extends DataObject {
             $isValidByUndefinedProduct = true;
         }
 
-        if ($this->RestrictToProductGroupPage()->Count() > 0)  {
-            foreach ($this->RestrictToProductGroupPage() as $restrictedProductGroup) {
+        if ($this->RestrictToSilvercartProductGroupPage()->Count() > 0) {
+            foreach ($this->RestrictToSilvercartProductGroupPage() as $restrictedProductGroup) {
                 foreach ($silvercartShoppingCartPositions as $silvercartShoppingCartPosition) {
                     if ($silvercartShoppingCartPosition->SilvercartProduct()->SilvercartProductGroup()->ID == $restrictedProductGroup->ID) {
                         $isValidByProductGroup = true;
@@ -508,7 +516,7 @@ class SilvercartVoucher extends DataObject {
      * Redeem the voucher.
      *
      * @param Member $member the customer object
-     * @param string $action   the action for commenting
+     * @param string $action the action for commenting
      *
      * @return void
      *
@@ -529,7 +537,7 @@ class SilvercartVoucher extends DataObject {
      * Remove the voucher from the shopping cart.
      *
      * @param Member $member the customer object
-     * @param string $action   the action for commenting
+     * @param string $action the action for commenting
      *
      * @return void
      *
@@ -557,7 +565,7 @@ class SilvercartVoucher extends DataObject {
      * Returns an instance of a silvercart voucher object for the given
      * shopping cart.
      *
-     * @param Shoppingcart $silvercartShoppingCart The shopping cart object
+     * @param SilvercartShoppingcart $silvercartShoppingCart The shopping cart object
      *
      * @return SilvercartVoucher
      *
@@ -565,13 +573,13 @@ class SilvercartVoucher extends DataObject {
      * @copyright 2011 pixeltricks GmbH
      * @since 24.01.2011
      */
-    public function loadObjectForShoppingCart(Shoppingcart $silvercartShoppingCart) {
+    public function loadObjectForShoppingCart(SilvercartShoppingcart $silvercartShoppingCart) {
         $voucherHistory = $this->getLastHistoryEntry($silvercartShoppingCart);
 
         if ($voucherHistory) {
             $voucher = DataObject::get_by_id(
                 'SilvercartVoucher',
-                $voucherHistory->VoucherID
+                $voucherHistory->SilvercartVoucherObjectID
             );
 
             if ($voucher) {
@@ -579,7 +587,7 @@ class SilvercartVoucher extends DataObject {
             }
         }
 
-        return false;
+        return $this;
     }
 
     /**
@@ -588,8 +596,8 @@ class SilvercartVoucher extends DataObject {
      * It returns an entry for the cart listing.
      *
      * @param ShoppingCart $silvercartShoppingCart The shoppingcart object
-     * @param Member       $member     The customer object
-     * @param Bool         $taxable      Indicates if taxable or nontaxable entries should be returned
+     * @param Member       $member                 The customer object
+     * @param Bool         $taxable                Indicates if taxable or nontaxable entries should be returned
      *
      * @return DataObjectSet
      *
@@ -613,7 +621,7 @@ class SilvercartVoucher extends DataObject {
                 if ($silvercartVoucherShoppingCartPosition &&
                     $silvercartVoucherShoppingCartPosition->implicatePosition) {
 
-                    $silvercartShoppingCartPositions = $voucher->getShoppingCartPositions($silvercartShoppingCart, $taxable);
+                    $silvercartShoppingCartPositions = $voucher->getSilvercartShoppingCartPositions($silvercartShoppingCart, $taxable);
 
                     if ($silvercartShoppingCartPositions) {
                         foreach ($silvercartShoppingCartPositions as $key => $silvercartShoppingCartPosition) {
@@ -633,8 +641,8 @@ class SilvercartVoucher extends DataObject {
      * It disconnects the voucher from the shopping cart.
      *
      * @param ShoppingCart $silvercartShoppingCart The shoppingcart object
-     * @param Member       $member     The customer object
-     * @param Bool         $taxable      Indicates if taxable or nontaxable entries should be returned
+     * @param Member       $member                 The customer object
+     * @param Bool         $taxable                Indicates if taxable or nontaxable entries should be returned
      *
      * @return DataObjectSet
      *
@@ -671,6 +679,9 @@ class SilvercartVoucher extends DataObject {
      *
      * It returns taxable entries for the cart listing.
      *
+     * @param SilvercartShoppingCart $silvercartShoppingCart The Silvercart shoppingcart object
+     * @param Member                 $member                 The member object
+     *
      * @return DataObjectSet
      *
      * @author Sascha Koehler <skoehler@pixeltricks.de>
@@ -688,6 +699,9 @@ class SilvercartVoucher extends DataObject {
      *
      * It returns nontaxable entries for the cart listing.
      *
+     * @param SilvercartShoppingCart $silvercartShoppingCart The Silvercart shoppingcart object
+     * @param Member                 $member                 The member object
+     *
      * @return DataObjectSet
      *
      * @author Sascha Koehler <skoehler@pixeltricks.de>
@@ -704,7 +718,7 @@ class SilvercartVoucher extends DataObject {
      * Return the last history entry or false if none was found for the
      * given shoppingcart object.
      *
-     * @param Shoppingcart $silvercartShoppingCart the shoppingcart object
+     * @param SilvercartShoppingCart $silvercartShoppingCart the shoppingcart object
      *
      * @return mixed SilvercartVoucherHistory|bool false
      *
@@ -712,7 +726,7 @@ class SilvercartVoucher extends DataObject {
      * @copyright 2011 pixeltricks GmbH
      * @since 25.01.2011
      */
-    public function getLastHistoryEntry(Shoppingcart $silvercartShoppingCart) {
+    public function getLastHistoryEntry(SilvercartShoppingCart $silvercartShoppingCart) {
         $voucherHistory = DataObject::get_one(
             'SilvercartVoucherHistory',
             sprintf(
@@ -732,6 +746,8 @@ class SilvercartVoucher extends DataObject {
      * It returns input fields for the entry of the voucher code and insertion
      * into the shopping cart.
      *
+     * @param SilvercartShoppingCart $silvercartShoppingCart the shoppingcart object
+     *
      * @return DataObjectSet
      *
      * @author Sascha Koehler <skoehler@pixeltricks.de>
@@ -739,8 +755,8 @@ class SilvercartVoucher extends DataObject {
      * @since 21.01.2011
      */
     public function ShoppingCartActions(SilvercartShoppingCart $silvercartShoppingCart) {
-        $actions                = new DataObjectSet();
-        $silvercartShoppingCartActions    = Controller::curr()->getRegisteredCustomHtmlForm('SilvercartVoucherShoppingCartActionForm');
+        $actions                        = new DataObjectSet();
+        $silvercartShoppingCartActions  = Controller::curr()->getRegisteredCustomHtmlForm('SilvercartVoucherShoppingCartActionForm');
 
         $actions->push(
             new ArrayData(
@@ -767,12 +783,15 @@ class SilvercartVoucher extends DataObject {
      */
     public function ShoppingCartInit() {
         $controller         = Controller::curr();
-        $actionForm         = new SilvercartVoucherShoppingCartActionForm($controller);
 
-        $controller->registerCustomHtmlForm(
-            'SilvercartVoucherShoppingCartActionForm',
-            $actionForm
-        );
+        if (!$controller->getRegisteredCustomHtmlForm('SilvercartVoucherShoppingCartActionForm')) {
+            $actionForm = new SilvercartVoucherShoppingCartActionForm($controller);
+            $controller->registerCustomHtmlForm(
+                'SilvercartVoucherShoppingCartActionForm',
+                $actionForm
+            );
+        }
+
         $vouchers = DataObject::get(
             'SilvercartVoucher',
             "isActive = 1"
@@ -806,7 +825,7 @@ class SilvercartVoucher extends DataObject {
 
         if ($vouchers) {
             foreach ($vouchers as $voucher) {
-                $amount += $voucher->getShoppingCartTotal()->getAmount();
+                $amount += $voucher->getSilvercartShoppingCartTotal()->getAmount();
             }
         }
 
@@ -845,18 +864,18 @@ class SilvercartVoucher extends DataObject {
         );
         $productTableField = new ManyManyComplexTableField(
             $this,
-            'RestrictToProduct',
-            'Product',
-            Product::$summary_fields,
+            'RestrictToSilvercartProduct',
+            'SilvercartProduct',
+            SilvercartProduct::$summary_fields,
             'getCMSFields_forPopup',
             null,
-            'Product.Title ASC'
+            'SilvercartProduct.Title ASC'
         );
         $productGroupPageTableField = new ManyManyComplexTableField(
             $this,
-            'RestrictToProductGroupPage',
-            'ProductGroupPage',
-            ProductGroupPage::$summary_fields,
+            'RestrictToSilvercartProductGroupPage',
+            'SilvercartProductGroupPage',
+            SilvercartProductGroupPage::$summary_fields,
             'getCMSFields_forPopup',
             null,
             'SiteTree.Title ASC'
@@ -864,13 +883,13 @@ class SilvercartVoucher extends DataObject {
 
         $fields->removeByName('RestrictToMember');
         $fields->removeByName('RestrictToGroup');
-        $fields->removeByName('RestrictToProduct');
-        $fields->removeByName('RestrictToProductGroupPage');
+        $fields->removeByName('RestrictToSilvercartProduct');
+        $fields->removeByName('RestrictToSilvercartProductGroupPage');
 
-        $fields->addFieldToTab('Root.RestrictToMember',             $memberTableField);
-        $fields->addFieldToTab('Root.RestrictToGroup',              $groupTableField);
-        $fields->addFieldToTab('Root.RestrictToProduct',            $productTableField);
-        $fields->addFieldToTab('Root.RestrictToProductGroupPage',   $productGroupPageTableField);
+        $fields->addFieldToTab('Root.RestrictToMember',                       $memberTableField);
+        $fields->addFieldToTab('Root.RestrictToGroup',                        $groupTableField);
+        $fields->addFieldToTab('Root.RestrictToSilvercartProduct',            $productTableField);
+        $fields->addFieldToTab('Root.RestrictToSilvercartProductGroupPage',   $productGroupPageTableField);
 
         return $fields;
     }
@@ -888,14 +907,14 @@ class SilvercartVoucher extends DataObject {
     public function onAfterWrite() {
         parent::onAfterWrite();
 
-        if (!$this->TaxID) {
+        if (!$this->SilvercartTaxID) {
             $taxRateZero = DataObject::get_one(
-                'Tax',
+                'SilvercartTax',
                 "Rate = 0"
             );
 
             if ($taxRateZero) {
-                $this->TaxID = $taxRateZero->ID;
+                $this->SilvercartTaxID = $taxRateZero->ID;
                 $this->write();
             }
         }
@@ -905,15 +924,15 @@ class SilvercartVoucher extends DataObject {
      * Returns a dataobjectset for the display of the voucher positions in the
      * shoppingcart.
      *
-     * @return bool false
+     * @param SilvercartShoppingCart $silvercartShoppingCart the shoppingcart object
      *
-     * @param ShoppingCart $silvercartShoppingCart
+     * @return bool false
      *
      * @author Sascha Koehler <skoehler@pixeltricks.de>
      * @copyright 2011 pixeltricks GmbH
      * @since 24.01.2011
      */
-    protected function getShoppingCartPositions(SilvercartShoppingCart $silvercartShoppingCart) {
+    protected function getSilvercartShoppingCartPositions(SilvercartShoppingCart $silvercartShoppingCart) {
         // Implement in descendants
         return false;
     }

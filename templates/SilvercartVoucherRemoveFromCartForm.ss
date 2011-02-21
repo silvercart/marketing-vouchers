@@ -2,7 +2,7 @@
 
     $CustomHtmlFormMetadata
     $CustomHtmlFormErrormessages
-    $CustomHtmlFormFieldByName(VoucherID)
+    $CustomHtmlFormFieldByName(SilvercartVoucherID)
 
     <div class="action-remove">
         <% control Actions %>

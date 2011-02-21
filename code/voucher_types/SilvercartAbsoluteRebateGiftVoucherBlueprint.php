@@ -121,7 +121,7 @@ class SilvercartAbsoluteRebateGiftVoucherBlueprint extends SilvercartVoucher {
             $removeCartForm = $controller->getRegisteredCustomHtmlForm('SilvercartVoucherRemoveFromCartForm'.$this->ID);
 
             if ($removeCartForm) {
-                $removeCartForm->setFormFieldValue('VoucherID', $this->ID);
+                $removeCartForm->setFormFieldValue('SilvercartVoucherID', $this->ID);
                 $removeCartFormRendered = Controller::curr()->InsertCustomHtmlForm('SilvercartVoucherRemoveFromCartForm'.$this->ID);
             }
 

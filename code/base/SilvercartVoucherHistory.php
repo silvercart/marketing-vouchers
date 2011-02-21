@@ -19,7 +19,7 @@ class SilvercartVoucherHistory extends DataObject {
      * @since 24.01.2011
      */
     public static $db = array(
-        'action'            => "Enum('redeemed,manuallyRedeemed,removed,manuallyRemoved,activated,deactivated','redeemed')"
+        'action' => "Enum('redeemed,manuallyRedeemed,removed,manuallyRemoved,activated,deactivated','redeemed')"
     );
 
     /**
@@ -31,9 +31,9 @@ class SilvercartVoucherHistory extends DataObject {
      * @since 24.01.2011
      */
     public static $has_one = array(
-        'Member'                 => 'Member',
-        'SilvercartVoucher'      => 'SilvercartVoucher',
-        'SilvercartShoppingCart' => 'SilvercartShoppingCart'
+        'Member'                  => 'Member',
+        'SilvercartVoucherObject' => 'SilvercartVoucher',
+        'SilvercartShoppingCart'  => 'SilvercartShoppingCart'
     );
 
     /**
@@ -47,7 +47,7 @@ class SilvercartVoucherHistory extends DataObject {
     public static $summary_fields = array(
         'Member.FirstName',
         'Member.Surname',
-        'SilvercartVoucher.code',
+        'SilvercartVoucherObject.code',
         'Created'
     );
 
@@ -64,13 +64,13 @@ class SilvercartVoucherHistory extends DataObject {
      * @copyright 2011 pixeltricks GmbH
      * @since 24.01.2011
      */
-    public function add(SilvercartVoucher $voucher, Member $customer, $action) {
-        $this->MemberID= $customer->ID;
-        $this->SilvercartVoucherID      = $voucher->ID;
-        $this->SilvercartShoppingCartID = $member->SilvercartShoppingCart()->ID;
-        $this->action                   = $action;
+    public function add(SilvercartVoucher $voucher, Member $member, $action) {
+        $this->MemberID= $member->ID;
+        $this->SilvercartVoucherObjectID = $voucher->ID;
+        $this->SilvercartShoppingCartID  = $member->SilvercartShoppingCart()->ID;
+        $this->action                    = $action;
         $this->write();
 
-        $voucher->VoucherHistory()->add($this);
+        $voucher->SilvercartVoucherHistory()->add($this);
     }
 }
