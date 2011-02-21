@@ -20,7 +20,7 @@ class SilvercartVoucherRemoveFromCartForm extends CustomHtmlForm {
      * @since 25.01.2010
      */
     protected $formFields = array(
-        'VoucherID' => array(
+        'SilvercartVoucherID' => array(
             'type'          => 'HiddenField',
             'value'         => ''
         )
@@ -69,7 +69,7 @@ class SilvercartVoucherRemoveFromCartForm extends CustomHtmlForm {
         $customer = Member::currentUser();
         $voucher  = DataObject::get_by_id(
             'SilvercartVoucher',
-            $formData['VoucherID']
+            $formData['SilvercartVoucherID']
         );
 
         if ($voucher) {

@@ -76,8 +76,8 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
      * Returns a dataobjectset for the display of the voucher positions in the
      * shoppingcart.
      *
-     * @param ShoppingCart $shoppingCart The shoppingcart object
-     * @param Bool         $taxable      Indicates if taxable or nontaxable entries should be returned
+     * @param SilvercartShoppingCart $silvercartShoppingCart The shoppingcart object
+     * @param Bool                   $taxable                Indicates if taxable or nontaxable entries should be returned
      *
      * @return DataObjectSet
      *
@@ -85,11 +85,11 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
      * @copyright 2011 pixeltricks GmbH
      * @since 20.01.2011
      */
-    public function getShoppingCartPositions(ShoppingCart $shoppingCart, $taxable = true) {
+    public function getSilvercartShoppingCartPositions(SilvercartShoppingCart $silvercartShoppingCart, $taxable = true) {
         $controller             = Controller::curr();
         $removeCartFormRendered = '';
         $positions              = new DataObjectSet();
-        $tax                    = $this->Tax();
+        $tax                    = $this->SilvercartTax();
 
         if ( (!$taxable && !$tax) ||
              (!$taxable && $tax->Rate == 0) ||
@@ -116,9 +116,9 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
                         'PriceTotalFormatted'   => '-'.$this->value->Nice(),
                         'Quantity'              => '1',
                         'removeFromCartForm'    => $removeCartFormRendered,
-                        'TaxRate'               => $this->Tax()->Rate,
-                        'TaxAmount'             => $this->value->getAmount() - ($this->value->getAmount() / (100 + $this->Tax()->Rate) * 100),
-                        'Tax'                   => $this->Tax()
+                        'SilvercartTaxRate'     => $this->SilvercartTax()->Rate,
+                        'SilvercartTaxAmount'   => $this->value->getAmount() - ($this->value->getAmount() / (100 + $this->SilvercartTax()->Rate) * 100),
+                        'SilvercartTax'         => $this->SilvercartTax()
                     )
                 )
             );
@@ -136,14 +136,14 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
      * @copyright 2011 pixeltricks GmbH
      * @since 24.01.2011
      */
-    public function getShoppingCartTotal() {
+    public function getSilvercartShoppingCartTotal() {
         $amount = new Money();
         $member = Member::currentUser();
 
-        $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::get($member->shoppingCart()->ID, $this->ID);
+        $silvercartVoucherSilvercartShoppingCartPosition = SilvercartVoucherSilvercartShoppingCartPosition::get($member->SilvercartShoppingCart()->ID, $this->ID);
         
-        if ($silvercartVoucherShoppingCartPosition &&
-            $silvercartVoucherShoppingCartPosition->implicatePosition) {
+        if ($silvercartVoucherSilvercartShoppingCartPosition &&
+            $silvercartVoucherSilvercartShoppingCartPosition->implicatePosition) {
 
             $amount->setAmount($this->value->getAmount() * -1);
             $amount->setCurrency($this->value->getCurrency());

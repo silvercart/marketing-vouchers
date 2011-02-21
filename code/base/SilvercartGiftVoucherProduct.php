@@ -1,6 +1,6 @@
 <?php
 /**
- * Represents an extended article that generates a
+ * Represents an extended product that generates a
  * SilvercartAbsoluteRebateGiftVoucher object on conversion from shoppingcart
  * to order.
  * The data for the voucher originates from the related
@@ -12,7 +12,7 @@
  * @since 10.02.2011
  * @license none
  */
-class SilvercartGiftVoucherArticle extends Article {
+class SilvercartGiftVoucherProduct extends SilvercartProduct {
 
     /**
      * Singular name
@@ -74,12 +74,12 @@ class SilvercartGiftVoucherArticle extends Article {
     public function getCMSFields($params = null) {
         $fields = parent::getCMSFields($params);
 
-        $fields->removeFieldFromTab('Root', 'shoppingCartPositions');
-        $fields->removeFieldFromTab('Root', 'ArticleAbdaDb');
-        $fields->removeByName('ArticleAbdaLaieninfo');
-        $fields->removeByName('manufacturer');
+        $fields->removeFieldFromTab('Root', 'SilvercartShoppingCartPositions');
+        $fields->removeFieldFromTab('Root', 'SilvercartProductAbdaDb');
+        $fields->removeByName('SilvercartProductAbdaLaieninfo');
+        $fields->removeByName('SilvercartManufacturer');
         $fields->removeByName('EANCode');
-        $fields->removeByName('ArticleNumberManufacturer');
+        $fields->removeByName('ProductNumberManufacturer');
         $fields->removeByName('UVP');
         $fields->removeByName('PurchasePrice');
         $fields->removeByName('SilvercartAbsoluteRebateGiftVoucherBlueprint');
@@ -141,21 +141,21 @@ class SilvercartGiftVoucherArticle extends Article {
             foreach ($blueprint->RestrictToGroup() as $group) {
                 $giftVoucher->RestrictToGroup()->push($group);
             }
-            foreach ($blueprint->RestrictToArticleGroupPage() as $articleGroupPage) {
-                $giftVoucher->RestrictToArticleGroupPage()->push($articleGroupPage);
+            foreach ($blueprint->RestrictToSilvercartProductGroupPage() as $productGroupPage) {
+                $giftVoucher->RestrictToSilvercartProductGroupPage()->push($productGroupPage);
             }
-            foreach ($blueprint->RestrictToArticle() as $article) {
-                $giftVoucher->RestrictToArticle()->push($article);
+            foreach ($blueprint->RestrictToSilvercartProduct() as $product) {
+                $giftVoucher->RestrictToSilvercartProduct()->push($product);
             }
             $giftVoucher->write();
         }
 
         // Adjust OrderPosition, so that the code gets saved in the order.
-        if (empty($orderPosition->ArticleDescription)) {
+        if (empty($orderPosition->ProductDescription)) {
             $description = '';
         } else {
-            $description = $orderPosition->ArticleDescription."\n\n"."Der Gutschein-Code lautet: ".$giftVoucher->code;
+            $description = $orderPosition->ProductDescription."\n\n"."Der Gutschein-Code lautet: ".$giftVoucher->code;
         }
-        $orderPosition->setField('ArticleDescription', $description);
+        $orderPosition->setField('ProductDescription', $description);
     }
 }

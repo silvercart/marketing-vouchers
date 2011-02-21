@@ -1,6 +1,6 @@
 <?php
 /**
- * Extends the article object with voucher specific fields and methods.
+ * Extends the SilvercartProduct object with voucher specific fields and methods.
  *
  * @package teleapotheke
  * @author Sascha Koehler <skoehler@pixeltricks.de>

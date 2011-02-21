@@ -5,10 +5,10 @@ CustomHtmlForm::registerModule('silvercart_vouchers', 50);
 // ----------------------------------------------------------------------------
 // Register extensions
 // ----------------------------------------------------------------------------
-Object::add_extension('Member',             'SilvercartVoucherCustomerRole');
-Object::add_extension('SilvercartProduct',  'SilvercartVoucherArticleRole');
+Object::add_extension('Member',             'SilvercartVoucherMemberRole');
+Object::add_extension('SilvercartProduct',  'SilvercartVoucherProductRole');
 
 // ----------------------------------------------------------------------------
-// Extend the article admin
+// Extend the product admin
 // ----------------------------------------------------------------------------
-SilvercartProductAdmin::$managed_models[] = 'SilvercartGiftVoucherArticle';
+SilvercartProductAdmin::$managed_models[] = 'SilvercartGiftVoucherProduct';

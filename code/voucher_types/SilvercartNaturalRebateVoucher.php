@@ -1,6 +1,6 @@
 <?php
 /**
- * Extends the voucher class for natural rebates, i.e. articles.
+ * Extends the voucher class for natural rebates, i.e. products.
  *
  * @package SilvercartVouchers
  * @author Sascha Koehler <skoehler@pixeltricks.de>
@@ -39,7 +39,7 @@ class SilvercartNaturalRebateVoucher extends SilvercartVoucher {
      * @since 20.01.2011
      */
     public static $has_many = array(
-        'Articles'                      => 'Article'
+        'SilvercartProducts' => 'SilvercartProduct'
     );
 
     /**
@@ -76,8 +76,8 @@ class SilvercartNaturalRebateVoucher extends SilvercartVoucher {
      * Returns a dataobjectset for the display of the voucher positions in the
      * shoppingcart.
      *
-     * @param ShoppingCart $shoppingCart The shoppingcart object
-     * @param Bool         $taxable      Indicates if taxable or nontaxable entries should be returned
+     * @param SilvercartShoppingCart $silvercartSilvercartShoppingCart The shoppingcart object
+     * @param Bool                   $taxable                          Indicates if taxable or nontaxable entries should be returned
      *
      * @return DataObjectSet
      *
@@ -85,11 +85,11 @@ class SilvercartNaturalRebateVoucher extends SilvercartVoucher {
      * @copyright 2011 pixeltricks GmbH
      * @since 20.01.2011
      */
-    public function getShoppingCartPositions(ShoppingCart $shoppingCart, $taxable = true) {
+    public function getSilvercartShoppingCartPositions(SilvercartShoppingCart $silvercartSilvercartShoppingCart, $taxable = true) {
         $controller             = Controller::curr();
         $removeCartFormRendered = '';
         $positions              = new DataObjectSet();
-        $tax                    = $this->Tax();
+        $tax                    = $this->SilvercartTax();
 
         if ( (!$taxable && !$tax) ||
              (!$taxable && $tax->Rate == 0) ||
@@ -116,32 +116,32 @@ class SilvercartNaturalRebateVoucher extends SilvercartVoucher {
                         'PriceTotalFormatted'   => '',
                         'Quantity'              => '1',
                         'removeFromCartForm'    => $removeCartFormRendered,
-                        'TaxRate'               => $this->Tax()->Rate,
-                        'TaxAmount'             => 0,
-                        'Tax'                   => $this->Tax()
+                        'SilvercartTaxRate'     => $this->SilvercartTax()->Rate,
+                        'SilvercartTaxAmount'   => 0,
+                        'SilvercartTax'         => $this->SilvercartTax()
                     )
                 )
             );
 
-            // Display related articles
-            foreach ($this->Articles() as $article) {
+            // Display related product
+            foreach ($this->SilvercartProducts() as $SilvercartProduct) {
                 $positions->push(
                     new DataObject(
                         array(
-                            'ID'                    => $article->ID,
-                            'Name'                  => $article->Title,
-                            'ShortDescription'      => $article->ShortDescription,
-                            'LongDescription'       => $article->LongDescription,
+                            'ID'                    => $SilvercartProduct->ID,
+                            'Name'                  => $SilvercartProduct->Title,
+                            'ShortDescription'      => $SilvercartProduct->ShortDescription,
+                            'LongDescription'       => $SilvercartProduct->LongDescription,
                             'Currency'              => '',
-                            'Price'                 => $article->Price->getAmount(),
-                            'PriceFormatted'        => $article->Price->Nice(),
+                            'Price'                 => $SilvercartProduct->Price->getAmount(),
+                            'PriceFormatted'        => $SilvercartProduct->Price->Nice(),
                             'PriceTotal'            => 0,
                             'PriceTotalFormatted'   => '',
                             'Quantity'              => '1',
                             'removeFromCartForm'    => '',
-                            'TaxRate'               => '',
-                            'TaxAmount'             => 0,
-                            'Tax'                   => ''
+                            'SilvercartTaxRate'     => '',
+                            'SilvercartTaxAmount'   => 0,
+                            'SilvercartTax'         => ''
                         )
                     )
                 );
@@ -160,7 +160,7 @@ class SilvercartNaturalRebateVoucher extends SilvercartVoucher {
      * @copyright 2011 pixeltricks GmbH
      * @since 24.01.2011
      */
-    public function getShoppingCartTotal() {
+    public function getSilvercartShoppingCartTotal() {
         $amount     = new Money();
         $currency   = new Zend_Currency(null, i18n::get_locale());
 
@@ -189,21 +189,21 @@ class SilvercartNaturalRebateVoucher extends SilvercartVoucher {
 
         $fields->addFieldToTab('Root.Main', $quantityRedeemedField);
 
-        // Remove Article Tab and replace with DOM
-        $fields->removeFieldFromTab('Root', 'Articles');
+        // Remove Product Tab and replace with DOM
+        $fields->removeFieldFromTab('Root', 'SilvercartProducts');
 
-        $articleTable = new HasManyComplexTableField(
+        $productTable = new HasManyComplexTableField(
             $this,
-            'Articles',
-            'Article',
-            Article::$summary_fields,
+            'SilvercartProducts',
+            'SilvercartProduct',
+            SilvertcartProduct::$summary_fields,
             'getCMSFields_forPopup',
             '',
-            'Article.ID DESC',
+            'SilvertcartProduct.ID DESC',
             ''
         );
         
-        $fields->addFieldToTab('Root.Articles', $articleTable);
+        $fields->addFieldToTab('Root.Products', $productTable);
 
         return $fields;
     }

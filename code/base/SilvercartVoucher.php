@@ -399,61 +399,61 @@ class SilvercartVoucher extends DataObject {
      * @since 20.01.2011
      */
     public function isValidForShoppingCartItems(SilvercartShoppingCartPosition $silvercartShoppingCartPositions) {
-        $isValidByUndefinedArticle      = false;
-        $isValidByArticle               = false;
-        $isValidByUndefinedArticleGroup = false;
-        $isValidByArticleGroup          = false;
+        $isValidByUndefinedProduct      = false;
+        $isValidByProduct               = false;
+        $isValidByUndefinedProductGroup = false;
+        $isValidByProductGroup          = false;
 
-        if ($this->RestrictToArticle()->Count() > 0)  {
-            foreach ($this->RestrictToArticle() as $restrictedArticle) {
+        if ($this->RestrictToProduct()->Count() > 0)  {
+            foreach ($this->RestrictToProduct() as $restrictedProduct) {
                 foreach ($silvercartShoppingCartPositions as $silvercartShoppingCartPosition) {
-                    if ($silvercartShoppingCartPosition->article()->ID == $restrictedArticle->ID) {
-                        $isValidByArticle = true;
+                    if ($silvercartShoppingCartPosition->SilvercartProduct()->ID == $restrictedProduct->ID) {
+                        $isValidByProduct = true;
                         break(2);
                     }
                 }
             }
         } else {
-            $isValidByUndefinedArticle = true;
+            $isValidByUndefinedProduct = true;
         }
 
-        if ($this->RestrictToArticleGroupPage()->Count() > 0)  {
-            foreach ($this->RestrictToArticleGroupPage() as $restrictedArticleGroup) {
+        if ($this->RestrictToProductGroupPage()->Count() > 0)  {
+            foreach ($this->RestrictToProductGroupPage() as $restrictedProductGroup) {
                 foreach ($silvercartShoppingCartPositions as $silvercartShoppingCartPosition) {
-                    if ($silvercartShoppingCartPosition->article()->articleGroup()->ID == $restrictedArticleGroup->ID) {
-                        $isValidByArticleGroup = true;
+                    if ($silvercartShoppingCartPosition->SilvercartProduct()->SilvercartProductGroup()->ID == $restrictedProductGroup->ID) {
+                        $isValidByProductGroup = true;
                         break(2);
                     }
                 }
             }
         } else {
-            $isValidByUndefinedArticleGroup = true;
+            $isValidByUndefinedProductGroup = true;
         }
 
         // --------------------------------------------------------------------
-        // check if article is valid for this cart
+        // check if product is valid for this cart
         // --------------------------------------------------------------------
-        if ($isValidByArticle &&
-            $isValidByArticleGroup) {
+        if ($isValidByProduct &&
+            $isValidByProductGroup) {
 
             return true;
         }
 
-        // exceptional case: no articles and groups defined
-        if ($isValidByUndefinedArticle &&
-            $isValidByUndefinedArticleGroup) {
+        // exceptional case: no product and groups defined
+        if ($isValidByUndefinedProduct &&
+            $isValidByUndefinedProductGroup) {
 
             return true;
         }
 
-        if (!$isValidByArticleGroup &&
-             $isValidByArticle) {
+        if (!$isValidByProductGroup &&
+             $isValidByProduct) {
 
             return true;
         }
 
-        if (!$isValidByArticle &&
-             $isValidByArticleGroup) {
+        if (!$isValidByProduct &&
+             $isValidByProductGroup) {
 
             return true;
         }
@@ -604,19 +604,21 @@ class SilvercartVoucher extends DataObject {
             "isActive = 1"
         );
 
-        foreach ($vouchers as $voucher) {
-            $voucher->performShoppingCartConditionsCheck($silvercartShoppingCart, $member);
+        if ($vouchers) {
+            foreach ($vouchers as $voucher) {
+                $voucher->performShoppingCartConditionsCheck($silvercartShoppingCart, $member);
 
-            $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::get($silvercartShoppingCart->ID, $voucher->ID);
+                $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::get($silvercartShoppingCart->ID, $voucher->ID);
 
-            if ($silvercartVoucherShoppingCartPosition &&
-                $silvercartVoucherShoppingCartPosition->implicatePosition) {
+                if ($silvercartVoucherShoppingCartPosition &&
+                    $silvercartVoucherShoppingCartPosition->implicatePosition) {
 
-                $silvercartShoppingCartPositions = $voucher->getShoppingCartPositions($silvercartShoppingCart, $taxable);
+                    $silvercartShoppingCartPositions = $voucher->getShoppingCartPositions($silvercartShoppingCart, $taxable);
 
-                if ($silvercartShoppingCartPositions) {
-                    foreach ($silvercartShoppingCartPositions as $key => $silvercartShoppingCartPosition) {
-                        $positions[] = $silvercartShoppingCartPosition;
+                    if ($silvercartShoppingCartPositions) {
+                        foreach ($silvercartShoppingCartPositions as $key => $silvercartShoppingCartPosition) {
+                            $positions[] = $silvercartShoppingCartPosition;
+                        }
                     }
                 }
             }
@@ -714,7 +716,7 @@ class SilvercartVoucher extends DataObject {
         $voucherHistory = DataObject::get_one(
             'SilvercartVoucherHistory',
             sprintf(
-                "ShoppingCartID = '%d'",
+                "SilvercartShoppingCartID = '%d'",
                 $silvercartShoppingCart->ID
             ),
             false,
@@ -802,8 +804,10 @@ class SilvercartVoucher extends DataObject {
             'SilvercartVoucher'
         );
 
-        foreach ($vouchers as $voucher) {
-            $amount += $voucher->getShoppingCartTotal()->getAmount();
+        if ($vouchers) {
+            foreach ($vouchers as $voucher) {
+                $amount += $voucher->getShoppingCartTotal()->getAmount();
+            }
         }
 
         $amountObj->setAmount($amount);
@@ -839,20 +843,20 @@ class SilvercartVoucher extends DataObject {
             null,
             'Group.Title ASC'
         );
-        $articleTableField = new ManyManyComplexTableField(
+        $productTableField = new ManyManyComplexTableField(
             $this,
-            'RestrictToArticle',
-            'Article',
-            Article::$summary_fields,
+            'RestrictToProduct',
+            'Product',
+            Product::$summary_fields,
             'getCMSFields_forPopup',
             null,
-            'Article.Title ASC'
+            'Product.Title ASC'
         );
-        $articleGroupPageTableField = new ManyManyComplexTableField(
+        $productGroupPageTableField = new ManyManyComplexTableField(
             $this,
-            'RestrictToArticleGroupPage',
-            'ArticleGroupPage',
-            ArticleGroupPage::$summary_fields,
+            'RestrictToProductGroupPage',
+            'ProductGroupPage',
+            ProductGroupPage::$summary_fields,
             'getCMSFields_forPopup',
             null,
             'SiteTree.Title ASC'
@@ -860,13 +864,13 @@ class SilvercartVoucher extends DataObject {
 
         $fields->removeByName('RestrictToMember');
         $fields->removeByName('RestrictToGroup');
-        $fields->removeByName('RestrictToArticle');
-        $fields->removeByName('RestrictToArticleGroupPage');
+        $fields->removeByName('RestrictToProduct');
+        $fields->removeByName('RestrictToProductGroupPage');
 
         $fields->addFieldToTab('Root.RestrictToMember',             $memberTableField);
         $fields->addFieldToTab('Root.RestrictToGroup',              $groupTableField);
-        $fields->addFieldToTab('Root.RestrictToArticle',            $articleTableField);
-        $fields->addFieldToTab('Root.RestrictToArticleGroupPage',   $articleGroupPageTableField);
+        $fields->addFieldToTab('Root.RestrictToProduct',            $productTableField);
+        $fields->addFieldToTab('Root.RestrictToProductGroupPage',   $productGroupPageTableField);
 
         return $fields;
     }

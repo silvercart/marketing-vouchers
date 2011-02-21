@@ -16,7 +16,7 @@ class SilvercartVoucherShoppingCartActionForm extends CustomHtmlForm {
      * @var array
      */
     protected $formFields = array(
-        'VoucherCode' => array(
+        'SilvercartVoucherCode' => array(
             'type'              => 'TextField',
             'title'             => 'Gutschein Code',
             'value'             => '',
@@ -90,7 +90,7 @@ class SilvercartVoucherShoppingCartActionForm extends CustomHtmlForm {
      */
     protected function submitSuccess($data, $form, $formData) {
         $status      = array('error' => false, 'messages' => array());
-        $voucherCode = Convert::raw2sql($formData['VoucherCode']);
+        $voucherCode = Convert::raw2sql($formData['SilvercartVoucherCode']);
         $voucher     = DataObject::get_one(
             'SilvercartVoucher',
             sprintf(
@@ -99,7 +99,7 @@ class SilvercartVoucherShoppingCartActionForm extends CustomHtmlForm {
             )
         );
         $member         = Member::currentUser();
-        $shoppingCart   = $member->shoppingCart();
+        $shoppingCart   = $member->SilvercartShoppingCart();
 
         if ($voucher) {
             $status = $voucher->checkifAllowedInShoppingCart($voucherCode, $member, $shoppingCart);

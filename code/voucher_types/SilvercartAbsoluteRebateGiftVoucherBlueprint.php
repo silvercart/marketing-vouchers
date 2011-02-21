@@ -75,8 +75,8 @@ class SilvercartAbsoluteRebateGiftVoucherBlueprint extends SilvercartVoucher {
      * @since 10.02.2011
      */
     public static $has_one = array(
-        'SilvercartGiftVoucherArticle'      => 'SilvercartGiftVoucherArticle',
-        'Customer'                          => 'Member'
+        'SilvercartGiftVoucherProduct' => 'SilvercartGiftVoucherProduct',
+        'Member'                       => 'Member'
     );
 
     /**
@@ -99,7 +99,7 @@ class SilvercartAbsoluteRebateGiftVoucherBlueprint extends SilvercartVoucher {
      * Returns a dataobjectset for the display of the voucher positions in the
      * shoppingcart.
      *
-     * @param ShoppingCart $shoppingCart The shoppingcart object
+     * @param SilvercartShoppingCart $silvercartSilvercartShoppingCart The shoppingcart object
      * @param Bool         $taxable      Indicates if taxable or nontaxable entries should be returned
      *
      * @return DataObjectSet
@@ -108,11 +108,11 @@ class SilvercartAbsoluteRebateGiftVoucherBlueprint extends SilvercartVoucher {
      * @copyright 2011 pixeltricks GmbH
      * @since 20.01.2011
      */
-    public function getShoppingCartPositions(ShoppingCart $shoppingCart, $taxable = true) {
+    public function getSilvercartShoppingCartPositions(SilvercartShoppingCart $silvercartSilvercartShoppingCart, $taxable = true) {
         $controller             = Controller::curr();
         $removeCartFormRendered = '';
         $positions              = new DataObjectSet();
-        $tax                    = $this->Tax();
+        $tax                    = $this->SilvercartTax();
 
         if ( (!$taxable && !$tax) ||
              (!$taxable && $tax->Rate == 0) ||
@@ -139,9 +139,9 @@ class SilvercartAbsoluteRebateGiftVoucherBlueprint extends SilvercartVoucher {
                         'PriceTotalFormatted'   => '-'.$this->value->Nice(),
                         'Quantity'              => '1',
                         'removeFromCartForm'    => $removeCartFormRendered,
-                        'TaxRate'               => $this->Tax()->Rate,
-                        'TaxAmount'             => $this->value->getAmount() - ($this->value->getAmount() / (100 + $this->Tax()->Rate) * 100),
-                        'Tax'                   => $this->Tax()
+                        'SilvercartTaxRate'     => $this->SilvercartTax()->Rate,
+                        'SilvercartTaxAmount'   => $this->value->getAmount() - ($this->value->getAmount() / (100 + $this->SilvercartTax()->Rate) * 100),
+                        'SilvercartTax'         => $this->SilvercartTax()
                     )
                 )
             );
@@ -159,14 +159,14 @@ class SilvercartAbsoluteRebateGiftVoucherBlueprint extends SilvercartVoucher {
      * @copyright 2011 pixeltricks GmbH
      * @since 24.01.2011
      */
-    public function getShoppingCartTotal() {
+    public function getSilvercartShoppingCartTotal() {
         $amount = new Money();
         $member = Member::currentUser();
 
-        $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::get($member->shoppingCart()->ID, $this->ID);
+        $silvercartVoucherSilvercartShoppingCartPosition = SilvercartVoucherSilvercartShoppingCartPosition::get($member->SilvercartShoppingCart()->ID, $this->ID);
 
-        if ($silvercartVoucherShoppingCartPosition &&
-            $silvercartVoucherShoppingCartPosition->implicatePosition) {
+        if ($silvercartVoucherSilvercartShoppingCartPosition &&
+            $silvercartVoucherSilvercartShoppingCartPosition->implicatePosition) {
 
             $amount->setAmount($this->value->getAmount() * -1);
             $amount->setCurrency($this->value->getCurrency());
@@ -197,21 +197,21 @@ class SilvercartAbsoluteRebateGiftVoucherBlueprint extends SilvercartVoucher {
 
         $fields->addFieldToTab('Root.Main', $quantityRedeemedField);
 
-        // Remove Article Tab and replace with DOM
-        $fields->removeFieldFromTab('Root', 'Articles');
+        // Remove Product Tab and replace with DOM
+        $fields->removeFieldFromTab('Root', 'SilvercartProducts');
 
-        $articleTable = new HasOneComplexTableField(
+        $productTable = new HasOneComplexTableField(
             $this,
-            'Articles',
-            'SilvercartGiftVoucherArticle',
-            Article::$summary_fields,
+            'SilvercartProducts',
+            'SilvercartGiftVoucherProduct',
+            SilvercartProduct::$summary_fields,
             'getCMSFields_forPopup',
             '',
-            'Article.ID DESC',
+            'SilvercartProduct.ID DESC',
             ''
         );
 
-        $fields->addFieldToTab('Root.Articles', $articleTable);
+        $fields->addFieldToTab('Root.Products', $productTable);
 
         return $fields;
     }
