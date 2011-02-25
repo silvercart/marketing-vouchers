@@ -784,6 +784,11 @@ class SilvercartVoucher extends DataObject {
     public function ShoppingCartInit() {
         $controller         = Controller::curr();
 
+        // Don't initialise when called from within the cms
+        if (substr($controller, 0, 10) == 'ModelAdmin') {
+            return false;
+        }
+
         if (!$controller->getRegisteredCustomHtmlForm('SilvercartVoucherShoppingCartActionForm')) {
             $actionForm = new SilvercartVoucherShoppingCartActionForm($controller);
             $controller->registerCustomHtmlForm(
