@@ -1,13 +1,34 @@
 <?php
 /**
+ * Copyright 2011 pixeltricks GmbH
+ *
+ * This file is part of SilverCart.
+ *
+ * SilverCart is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * SilverCart is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with SilverCart.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
  * This form provides input fields for the voucher code.
  *
  * The user can redeem a voucher with this form.
  *
+ * @package Silvercart
+ * @subpackage Vouchers
  * @copyright pixeltricks GmbH
  * @author Sascha Koehler <skoehler@pixeltricks.de>
- * @license none
  * @since 21.01.2011
+ * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  */
 class SilvercartVoucherShoppingCartActionForm extends CustomHtmlForm {
     /**
@@ -129,9 +150,7 @@ class SilvercartVoucherShoppingCartActionForm extends CustomHtmlForm {
      * Setzt eine Statusmeldung in der Session, die nach einem Reload der
      * Seite im Formular angezeigt wird.
      *
-     * @param string $text          Der Text der  Meldung, der angezeigt werden soll.
-     * @param bool   $bidSuccessful Gibt an, ob das Gebot erfolgreich war.
-     * @param bool   $bidGiven      Gibt an, ob das Gebot abgegeben wurde.
+     * @param string $text Der Text der  Meldung, der angezeigt werden soll.
      *
      * @return void
      *

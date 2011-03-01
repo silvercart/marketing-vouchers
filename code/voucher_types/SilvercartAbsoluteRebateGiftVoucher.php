@@ -1,12 +1,32 @@
 <?php
 /**
+ * Copyright 2011 pixeltricks GmbH
+ *
+ * This file is part of SilverCart.
+ *
+ * SilverCart is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * SilverCart is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with SilverCart.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
  * Extends the voucher class for absolute rebates, i.e. 50,00 Eur.
  *
- * @package SilvercartVouchers
+ * @package Silvercart
+ * @subpackage Vouchers
  * @author Sascha Koehler <skoehler@pixeltricks.de>
  * @copyright 2011 pixeltricks GmbH
  * @since 20.01.2011
- * @license none
+ * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  */
 class SilvercartAbsoluteRebateGiftVoucher extends SilvercartVoucher {
 
@@ -88,7 +108,7 @@ class SilvercartAbsoluteRebateGiftVoucher extends SilvercartVoucher {
      * shoppingcart.
      *
      * @param SilvercartShoppingCart $silvercartShoppingCart The shoppingcart object
-     * @param Bool         $taxable      Indicates if taxable or nontaxable entries should be returned
+     * @param Bool                   $taxable                Indicates if taxable or nontaxable entries should be returned
      *
      * @return DataObjectSet
      *
@@ -169,7 +189,7 @@ class SilvercartAbsoluteRebateGiftVoucher extends SilvercartVoucher {
     /**
      * Redefine input fields for the backend.
      *
-     * @param array params Additional parameters
+     * @param array $params Additional parameters
      *
      * @return FieldSet
      *

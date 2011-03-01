@@ -1,13 +1,33 @@
 <?php
 /**
+ * Copyright 2011 pixeltricks GmbH
+ *
+ * This file is part of SilverCart.
+ *
+ * SilverCart is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * SilverCart is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with SilverCart.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
  * This class connects a SilvercartVoucher to a ShoppingCart Instance and
  * provides methods to add, remove and check for those connections.
  *
- * @package SilvcercartVouchers
+ * @package Silvcercart
+ * @subpackage Vouchers
  * @author Sascha Koehler <skoehler@pixeltricks.de>
  * @copyright 2011 pixeltricks GmbH
  * @since 03.02.2011
- * @license none
+ * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  */
 class SilvercartVoucherShoppingCartPosition extends DataObject {
 
@@ -43,7 +63,7 @@ class SilvercartVoucherShoppingCartPosition extends DataObject {
      * combination, then nothing is done.
      *
      * @param int $silvercartShoppingCartID The ID of the shopping cart record
-     * @param int $voucherID      The ID of the voucher record
+     * @param int $voucherID                The ID of the voucher record
      *
      * @return void
      *
@@ -74,7 +94,7 @@ class SilvercartVoucherShoppingCartPosition extends DataObject {
      * Remove a record from the database.
      *
      * @param int $silvercartShoppingCartID The ID of the shopping cart record
-     * @param int $voucherID      The ID of the voucher record
+     * @param int $voucherID                The ID of the voucher record
      *
      * @return void
      *
@@ -102,7 +122,7 @@ class SilvercartVoucherShoppingCartPosition extends DataObject {
      * combination exists.
      *
      * @param int $silvercartShoppingCartID The ID of the shopping cart record
-     * @param int $voucherID      The ID of the voucher record
+     * @param int $voucherID                The ID of the voucher record
      *
      * @return bool
      *
@@ -133,7 +153,7 @@ class SilvercartVoucherShoppingCartPosition extends DataObject {
      * Returns the asked for object if it exists in the database.
      *
      * @param int $silvercartShoppingCartID The ID of the shopping cart record
-     * @param int $voucherID      The ID of the voucher record
+     * @param int $voucherID                The ID of the voucher record
      *
      * @return mixed SilvercartVoucherShoppingCartPosition|bool false
      *
