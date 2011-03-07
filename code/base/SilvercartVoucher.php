@@ -775,6 +775,12 @@ class SilvercartVoucher extends DataObject {
      * @since 21.01.2011
      */
     public function ShoppingCartActions(SilvercartShoppingCart $silvercartShoppingCart) {
+        // Don't initialise when called from within the cms
+        if (substr($controller, 0, 10) == 'ModelAdmin' ||
+            substr($controller, 0, 7) == 'CMSMain') {
+            return false;
+        }
+
         $actions                        = new DataObjectSet();
         $silvercartShoppingCartActions  = Controller::curr()->getRegisteredCustomHtmlForm('SilvercartVoucherShoppingCartActionForm');
 
@@ -802,10 +808,11 @@ class SilvercartVoucher extends DataObject {
      * @since 21.01.2011
      */
     public function ShoppingCartInit() {
-        $controller         = Controller::curr();
+        $controller = Controller::curr();
 
         // Don't initialise when called from within the cms
-        if (substr($controller, 0, 10) == 'ModelAdmin') {
+        if (substr($controller, 0, 10) == 'ModelAdmin' ||
+            substr($controller, 0, 7) == 'CMSMain') {
             return false;
         }
 
