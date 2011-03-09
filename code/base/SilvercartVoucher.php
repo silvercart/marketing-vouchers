@@ -775,6 +775,8 @@ class SilvercartVoucher extends DataObject {
      * @since 21.01.2011
      */
     public function ShoppingCartActions(SilvercartShoppingCart $silvercartShoppingCart) {
+        $controller = Controller::curr();
+        
         // Don't initialise when called from within the cms
         if (substr($controller, 0, 10) == 'ModelAdmin' ||
             substr($controller, 0, 7) == 'CMSMain') {
