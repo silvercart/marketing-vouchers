@@ -778,13 +778,13 @@ class SilvercartVoucher extends DataObject {
         $controller = Controller::curr();
         
         // Don't initialise when called from within the cms
-        if (substr($controller, 0, 10) == 'ModelAdmin' ||
-            substr($controller, 0, 7) == 'CMSMain') {
+        $checkClass = new ReflectionClass($controller);
+        if (!$checkClass->hasMethod('getRegisteredCustomHtmlForm')) {
             return false;
         }
 
         $actions                        = new DataObjectSet();
-        $silvercartShoppingCartActions  = Controller::curr()->getRegisteredCustomHtmlForm('SilvercartVoucherShoppingCartActionForm');
+        $silvercartShoppingCartActions  = $controller->getRegisteredCustomHtmlForm('SilvercartVoucherShoppingCartActionForm');
 
         $actions->push(
             new ArrayData(
@@ -813,8 +813,8 @@ class SilvercartVoucher extends DataObject {
         $controller = Controller::curr();
 
         // Don't initialise when called from within the cms
-        if (substr($controller, 0, 10) == 'ModelAdmin' ||
-            substr($controller, 0, 7) == 'CMSMain') {
+        $checkClass = new ReflectionClass($controller);
+        if (!$checkClass->hasMethod('getRegisteredCustomHtmlForm')) {
             return false;
         }
 
