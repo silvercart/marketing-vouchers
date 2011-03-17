@@ -183,10 +183,10 @@ class SilvercartAbsoluteRebateGiftVoucherBlueprint extends SilvercartVoucher {
         $amount = new Money();
         $member = Member::currentUser();
 
-        $silvercartVoucherSilvercartShoppingCartPosition = SilvercartVoucherSilvercartShoppingCartPosition::get($member->SilvercartShoppingCart()->ID, $this->ID);
+        $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::get($member->SilvercartShoppingCart()->ID, $this->ID);
 
-        if ($silvercartVoucherSilvercartShoppingCartPosition &&
-            $silvercartVoucherSilvercartShoppingCartPosition->implicatePosition) {
+        if ($silvercartVoucherShoppingCartPosition &&
+            $silvercartVoucherShoppingCartPosition->implicatePosition) {
 
             $amount->setAmount($this->value->getAmount() * -1);
             $amount->setCurrency($this->value->getCurrency());

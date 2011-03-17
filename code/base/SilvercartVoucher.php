@@ -182,7 +182,7 @@ class SilvercartVoucher extends DataObject {
                 $silvercartVoucherShoppingCartPosition->setImplicationStatus(false);
             }
         } else {
-            $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::get($silvercartShoppingCart->ID, $this->ID);
+            $silvercartVoucherShoppingCartPosition = silvercartVoucherShoppingCartPosition::get($silvercartShoppingCart->ID, $this->ID);
 
             if ($silvercartVoucherShoppingCartPosition &&
                 $silvercartVoucherShoppingCartPosition->implicatePosition == false) {
