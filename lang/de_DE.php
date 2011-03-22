@@ -27,3 +27,14 @@ $lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-NOT_REDEEMABLE']              
 $lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-ALREADY_IN_SHOPPINGCART']         = 'Dieser Gutschein befindet sich schon in Ihrem Warenkorb.';
 $lang['de_DE']['SilvercartVoucher']['LABEL-SHOPPINGCART_REMOVE']                    = 'Entfernen';
 $lang['de_DE']['SilvercartVoucher']['LABEL-REDEEM']                                 = 'Einlösen';
+
+$lang['de_DE']['SilvercartVoucher']['SILVERCARTABSOLUTEREBATEGIFTVOUCHER.SINGULARNAME']             = 'Geschenkgutschein';
+$lang['de_DE']['SilvercartVoucher']['SILVERCARTABSOLUTEREBATEGIFTVOUCHER.PLURALNAME']               = 'Geschenkgutscheine';
+$lang['de_DE']['SilvercartVoucher']['SILVERCARTABSOLUTEREBATEGIFTVOUCHER_BLUEPRINT.SINGULARNAME']   = 'Geschenkgutschein Vorlage';
+$lang['de_DE']['SilvercartVoucher']['SILVERCARTABSOLUTEREBATEGIFTVOUCHER_BLUEPRINT.PLURALNAME']     = 'Geschenkgutscheine Vorlage';
+$lang['de_DE']['SilvercartVoucher']['SILVERCARTABSOLUTEREBATEVOUCHER.SINGULARNAME']                 = 'Wertgutschein';
+$lang['de_DE']['SilvercartVoucher']['SILVERCARTABSOLUTEREBATEVOUCHER.PLURALNAME']                   = 'Wertgutscheine';
+$lang['de_DE']['SilvercartVoucher']['SILVERCARTRELATIVEREBATEVOUCHER.SINGULARNAME']                 = 'Rabattgutschein';
+$lang['de_DE']['SilvercartVoucher']['SILVERCARTRELATIVEREBATEVOUCHER.PLURALNAME']                   = 'Rabattgutscheine';
+$lang['de_DE']['SilvercartVoucher']['SILVERCARTNATURALREBATEVOUCHER.SINGULARNAME']                  = 'Warengutschein';
+$lang['de_DE']['SilvercartVoucher']['SILVERCARTNATURALREBATEVOUCHER.PLURALNAME']                    = 'Warengutscheine';

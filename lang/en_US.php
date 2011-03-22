@@ -19,3 +19,14 @@ $lang['en_US']['SilvercartVoucher']['ERRORMESSAGE-NOT_REDEEMABLE']              
 $lang['en_US']['SilvercartVoucher']['ERRORMESSAGE-ALREADY_IN_SHOPPINGCART']         = 'This voucher is already in your shoppingcart.';
 $lang['en_US']['SilvercartVoucher']['LABEL-SHOPPINGCART_REMOVE']                    = 'Remove';
 $lang['en_US']['SilvercartVoucher']['LABEL-REDEEM']                                 = 'Redeem';
+
+$lang['en_US']['SilvercartVoucher']['SILVERCARTABSOLUTEREBATEGIFTVOUCHER.SINGULARNAME']             = 'Gift voucher';
+$lang['en_US']['SilvercartVoucher']['SILVERCARTABSOLUTEREBATEGIFTVOUCHER.PLURALNAME']               = 'Gift vouchers';
+$lang['en_US']['SilvercartVoucher']['SILVERCARTABSOLUTEREBATEGIFTVOUCHER_BLUEPRINT.SINGULARNAME']   = 'Gift voucher blueprint';
+$lang['en_US']['SilvercartVoucher']['SILVERCARTABSOLUTEREBATEGIFTVOUCHER_BLUEPRINT.PLURALNAME']     = 'Gift voucher blueprints';
+$lang['en_US']['SilvercartVoucher']['SILVERCARTABSOLUTEREBATEVOUCHER.SINGULARNAME']                 = 'Absolute rebate voucher';
+$lang['en_US']['SilvercartVoucher']['SILVERCARTABSOLUTEREBATEVOUCHER.PLURALNAME']                   = 'Absolute rebate vouchers';
+$lang['en_US']['SilvercartVoucher']['SILVERCARTRELATIVEREBATEVOUCHER.SINGULARNAME']                 = 'Relative rebate voucher';
+$lang['en_US']['SilvercartVoucher']['SILVERCARTRELATIVEREBATEVOUCHER.PLURALNAME']                   = 'Relative rebate vouchers';
+$lang['en_US']['SilvercartVoucher']['SILVERCARTNATURALREBATEVOUCHER.SINGULARNAME']                  = 'Natural rebate voucher';
+$lang['en_US']['SilvercartVoucher']['SILVERCARTNATURALREBATEVOUCHER.PLURALNAME']                    = 'Natural rebate vouchers';
