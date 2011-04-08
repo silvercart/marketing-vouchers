@@ -39,7 +39,7 @@ class SilvercartVoucherAdmin extends ModelAdmin {
      * @copyright 2011 pixeltricks GmbH
      * @since 10.02.2011
      */
-    public static $url_segment = 'vouchers';
+    public static $url_segment = 'silvercart-vouchers';
 
     /**
      * The menu title
@@ -50,8 +50,8 @@ class SilvercartVoucherAdmin extends ModelAdmin {
      * @copyright 2011 pixeltricks GmbH
      * @since 10.02.2011
      */
-    public static $menu_title  = 'Gutscheine';
-
+    public static $menu_title  = 'Silvercart Gutscheine';
+    
     /**
      * Managed models
      *
