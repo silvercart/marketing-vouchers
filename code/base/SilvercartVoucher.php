@@ -94,7 +94,7 @@ class SilvercartVoucher extends DataObject {
 
     /**
      * Initialisation
-     * 
+     *
      * @return void
      *
      * @author Sascha Koehler <skoehler@pixeltricks.de>
@@ -131,7 +131,7 @@ class SilvercartVoucher extends DataObject {
         $status     = $this->areShoppingCartConditionsMet($silvercartShoppingCart);
         $error      = $status['error'];
         $messages   = $status['messages'];
-        
+
         if (!$error && !$this->isCodeValid($voucherCode)) {
             $error      = true;
             $messages[] = _t('ERRORMESSAGE-CODE_NOT_VALID', 'Dieser Gutscheincode ist nicht gültig.');
@@ -344,7 +344,7 @@ class SilvercartVoucher extends DataObject {
 
             return true;
         }
-        
+
         // exceptional case: user is not allowed by membership, but has a
         // permission on group membership level
         if (!$isEligibleByMembership &&
@@ -524,7 +524,7 @@ class SilvercartVoucher extends DataObject {
         if ($this->isActive) {
             if ($this->quantity == -1 ||
                 $this->getRemainingVouchers() > 0) {
-                
+
                 $isRedeemable = true;
             }
         }
@@ -776,10 +776,9 @@ class SilvercartVoucher extends DataObject {
      */
     public function ShoppingCartActions(SilvercartShoppingCart $silvercartShoppingCart) {
         $controller = Controller::curr();
-        
+
         // Don't initialise when called from within the cms
-        $checkClass = new ReflectionClass($controller);
-        if (!$checkClass->hasMethod('getRegisteredCustomHtmlForm')) {
+        if (!$controller->isFrontendPage) {
             return false;
         }
 
@@ -813,8 +812,7 @@ class SilvercartVoucher extends DataObject {
         $controller = Controller::curr();
 
         // Don't initialise when called from within the cms
-        $checkClass = new ReflectionClass($controller);
-        if (!$checkClass->hasMethod('getRegisteredCustomHtmlForm')) {
+        if (!$controller->isFrontendPage) {
             return false;
         }
 
@@ -931,7 +929,7 @@ class SilvercartVoucher extends DataObject {
     /**
      * Checks if a tax rate is attributed to this voucher. If not, we try
      * to get a 0% rate.
-     * 
+     *
      * @return void
      *
      * @author Sascha Koehler <skoehler@pixeltricks.de>
