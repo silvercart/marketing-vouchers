@@ -829,13 +829,15 @@ class SilvercartVoucher extends DataObject {
             "isActive = 1"
         );
 
-        foreach ($vouchers as $voucher) {
-            $removeFromCartForm = new SilvercartVoucherRemoveFromCartForm($controller);
+        if ($vouchers) {
+            foreach ($vouchers as $voucher) {
+                $removeFromCartForm = new SilvercartVoucherRemoveFromCartForm($controller);
 
-            $controller->registerCustomHtmlForm(
-                'SilvercartVoucherRemoveFromCartForm'.$voucher->ID,
-                $removeFromCartForm
-            );
+                $controller->registerCustomHtmlForm(
+                    'SilvercartVoucherRemoveFromCartForm'.$voucher->ID,
+                    $removeFromCartForm
+                );
+            }
         }
     }
 
