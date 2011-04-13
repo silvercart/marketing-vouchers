@@ -14,6 +14,7 @@ global $lang;
 $lang['en_US']['SilvercartVoucher']['ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID']     = 'The shoppingcart value is not valid.';
 $lang['en_US']['SilvercartVoucher']['ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID']     = 'Your cart doesn\'t contain the appropriate products for this voucher.';
 $lang['en_US']['SilvercartVoucher']['ERRORMESSAGE-CODE_NOT_VALID']                  = 'This voucher code is not valid.';
+$lang['en_US']['SilvercartVoucher']['ERRORMESSAGE-CUSTOMER_MUST_BE_REGISTERED']     = 'To redeem this voucher you must be registered, since this voucher gets bound to the customer on redemption.<br />Thus you can use the voucher for multiple purchases in case the value of your shoppingcart is lower than the voucher value.<br /><a href="%s">Click here to register.</a>';
 $lang['en_US']['SilvercartVoucher']['ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE']           = 'You\'re not entitled to redeem this voucher.';
 $lang['en_US']['SilvercartVoucher']['ERRORMESSAGE-NOT_REDEEMABLE']                  = 'This voucher can\'t be redeemed.';
 $lang['en_US']['SilvercartVoucher']['ERRORMESSAGE-ALREADY_IN_SHOPPINGCART']         = 'This voucher is already in your shoppingcart.';

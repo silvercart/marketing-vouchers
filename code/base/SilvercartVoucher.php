@@ -134,22 +134,22 @@ class SilvercartVoucher extends DataObject {
 
         if (!$error && !$this->isCodeValid($voucherCode)) {
             $error      = true;
-            $messages[] = _t('ERRORMESSAGE-CODE_NOT_VALID', 'Dieser Gutscheincode ist nicht gültig.');
+            $messages[] = _t('SilvercartVoucher.ERRORMESSAGE-CODE_NOT_VALID', 'Dieser Gutscheincode ist nicht gültig.');
         }
 
         if (!$error && !$this->isCustomerEligible($member)) {
             $error      = true;
-            $messages[] = _t('ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE', 'Sie dürfen diesen Gutschein nicht einlösen.');
+            $messages[] = _t('SilvercartVoucher.ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE', 'Sie dürfen diesen Gutschein nicht einlösen.');
         }
 
         if (!$error && !$this->isRedeemable()) {
             $error      = true;
-            $messages[] = _t('ERRORMESSAGE-NOT_REDEEMABLE', 'Der Gutschein kann nicht eingelöst werden.');
+            $messages[] = _t('SilvercartVoucher.ERRORMESSAGE-NOT_REDEEMABLE', 'Der Gutschein kann nicht eingelöst werden.');
         }
 
         if (!$error && $this->isInShoppingCartAlready($silvercartShoppingCart)) {
             $error      = true;
-            $messages[] = _t('ERRORMESSAGE-ALREADY_IN_SHOPPINGCART', 'Dieser Gutschein befindet sich schon in Ihrem Warenkorb.');
+            $messages[] = _t('SilvercartVoucher.ERRORMESSAGE-ALREADY_IN_SHOPPINGCART', 'Dieser Gutschein befindet sich schon in Ihrem Warenkorb.');
         }
 
         return array(
@@ -163,8 +163,9 @@ class SilvercartVoucher extends DataObject {
      * the voucher is allowed to be placed in the cart.
      * If the conditions are not met the voucher is removed from the cart.
      *
-     * @param ShoppingCart $silvercartShoppingCart the shopping cart to check against
-     * @param Member       $member                 the shopping cart to check against
+     * @param ShoppingCart $silvercartShoppingCart       the shopping cart to check against
+     * @param Member       $member                       the shopping cart to check against
+     * @param array        $excludeShoppingCartPositions Positions that shall not be counted
      *
      * @return void
      *
@@ -172,9 +173,15 @@ class SilvercartVoucher extends DataObject {
      * @copyright 2011 pixeltricks GmbH
      * @since 24.01.2011
      */
-    public function performShoppingCartConditionsCheck(SilvercartShoppingCart $silvercartShoppingCart, Member $member) {
+    public function performShoppingCartConditionsCheck(SilvercartShoppingCart $silvercartShoppingCart, Member $member, $excludeShoppingCartPositions = false) {
         $status = $this->areShoppingCartConditionsMet($silvercartShoppingCart);
 
+        if ($excludeShoppingCartPositions &&
+            in_array($this->ID, $excludeShoppingCartPositions)) {
+
+            return true;
+        }
+        
         if ($status['error']) {
             $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::get($silvercartShoppingCart->ID, $this->ID);
 
@@ -610,9 +617,10 @@ class SilvercartVoucher extends DataObject {
      *
      * It returns an entry for the cart listing.
      *
-     * @param ShoppingCart $silvercartShoppingCart The shoppingcart object
-     * @param Member       $member                 The customer object
-     * @param Bool         $taxable                Indicates if taxable or nontaxable entries should be returned
+     * @param ShoppingCart $silvercartShoppingCart       The shoppingcart object
+     * @param Member       $member                       The customer object
+     * @param Bool         $taxable                      Indicates if taxable or nontaxable entries should be returned
+     * @param array        $excludeShoppingCartPositions Positions that shall not be counted
      *
      * @return DataObjectSet
      *
@@ -620,7 +628,7 @@ class SilvercartVoucher extends DataObject {
      * @copyright 2011 pixeltricks GmbH
      * @since 21.01.2011
      */
-    public function ShoppingCartPositions(SilvercartShoppingCart $silvercartShoppingCart, Member $member, $taxable = true) {
+    public function ShoppingCartPositions(SilvercartShoppingCart $silvercartShoppingCart, Member $member, $taxable = true, $excludeShoppingCartPositions = false) {
         $positions = array();
         $vouchers  = DataObject::get(
             'SilvercartVoucher',
@@ -629,14 +637,14 @@ class SilvercartVoucher extends DataObject {
 
         if ($vouchers) {
             foreach ($vouchers as $voucher) {
-                $voucher->performShoppingCartConditionsCheck($silvercartShoppingCart, $member);
+                $voucher->performShoppingCartConditionsCheck($silvercartShoppingCart, $member, $excludeShoppingCartPositions);
 
                 $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::get($silvercartShoppingCart->ID, $voucher->ID);
 
                 if ($silvercartVoucherShoppingCartPosition &&
                     $silvercartVoucherShoppingCartPosition->implicatePosition) {
 
-                    $silvercartShoppingCartPositions = $voucher->getSilvercartShoppingCartPositions($silvercartShoppingCart, $taxable);
+                    $silvercartShoppingCartPositions = $voucher->getSilvercartShoppingCartPositions($silvercartShoppingCart, $taxable, $excludeShoppingCartPositions);
 
                     if ($silvercartShoppingCartPositions) {
                         foreach ($silvercartShoppingCartPositions as $key => $silvercartShoppingCartPosition) {

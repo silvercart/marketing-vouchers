@@ -107,8 +107,9 @@ class SilvercartAbsoluteRebateGiftVoucher extends SilvercartVoucher {
      * Returns a dataobjectset for the display of the voucher positions in the
      * shoppingcart.
      *
-     * @param SilvercartShoppingCart $silvercartShoppingCart The shoppingcart object
-     * @param Bool                   $taxable                Indicates if taxable or nontaxable entries should be returned
+     * @param SilvercartShoppingCart $silvercartShoppingCart       The shoppingcart object
+     * @param Bool                   $taxable                      Indicates if taxable or nontaxable entries should be returned
+     * @param array                  $excludeShoppingCartPositions Positions that shall not be counted
      *
      * @return DataObjectSet
      *
@@ -116,10 +117,15 @@ class SilvercartAbsoluteRebateGiftVoucher extends SilvercartVoucher {
      * @copyright 2011 pixeltricks GmbH
      * @since 20.01.2011
      */
-    public function getSilvercartShoppingCartPositions(SilvercartShoppingCart $silvercartShoppingCart, $taxable = true) {
+    public function getSilvercartShoppingCartPositions(SilvercartShoppingCart $silvercartShoppingCart, $taxable = true, $excludeShoppingCartPositions = false) {
+        $positions = new DataObjectSet();
+        
+        if ($excludeShoppingCartPositions &&
+            in_array($this->ID, $excludeShoppingCartPositions)) {
+            return $positions;
+        }
         $controller             = Controller::curr();
         $removeCartFormRendered = '';
-        $positions              = new DataObjectSet();
         $tax                    = $this->SilvercartTax();
 
         if ( (!$taxable && !$tax) ||
@@ -133,11 +139,36 @@ class SilvercartAbsoluteRebateGiftVoucher extends SilvercartVoucher {
                 $removeCartFormRendered = Controller::curr()->InsertCustomHtmlForm('SilvercartVoucherRemoveFromCartForm'.$this->ID);
             }
 
+            $title = self::$singular_name.' (Code: '.$this->code.')';
+
+            // The shopppingcart total may not be below 0
+            $shoppingcartTotal = $silvercartShoppingCart->getAmountTotal(null, array($this->ID));
+            $originalAmount    = $this->value->getAmount();
+            if ($this->value->getAmount() >= $shoppingcartTotal->getAmount()) {
+                $this->value->setAmount(
+                    $shoppingcartTotal->getAmount()
+                );
+
+                $originalAmountObj = new Money();
+                $originalAmountObj->setAmount($originalAmount);
+
+                $restAmountObj = new Money();
+                $restAmountObj->setAmount(
+                    $originalAmount - $this->value->getAmount()
+                );
+
+                $title .= sprintf(
+                    "<br />Ursprünglicher Wert: %s, Restwert: %s",
+                    $originalAmountObj->Nice(),
+                    $restAmountObj->Nice()
+                );
+            }
+
             $positions->push(
                 new DataObject(
                     array(
                         'ID'                    => $this->ID,
-                        'Name'                  => self::$singular_name.' (Code: '.$this->code.')',
+                        'Name'                  => $title,
                         'ShortDescription'      => $this->code,
                         'LongDescription'       => $this->code,
                         'Currency'              => $this->value->getCurrency(),
@@ -222,5 +253,38 @@ class SilvercartAbsoluteRebateGiftVoucher extends SilvercartVoucher {
         $fields->addFieldToTab('Root.Products', $productTable);
 
         return $fields;
+    }
+
+    /**
+     * In order to succeed the customer must be fully registered. Otherwise
+     * the binding of the voucher to the customer doesn't make sense.
+     *
+     * @param string       $voucherCode            the vouchers code
+     * @param Member       $member                 the member object to check against
+     * @param ShoppingCart $silvercartShoppingCart the shopping cart to check against
+     *
+     * @return array:
+     *  'error'     => bool,
+     *  'messages'  => array()
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 13.04.2011
+     */
+    public function checkifAllowedInShoppingCart($voucherCode, Member $member, SilvercartShoppingCart $silvercartShoppingCart) {
+        $checkStatus = parent::checkifAllowedInShoppingCart($voucherCode, $member, $silvercartShoppingCart);
+
+        if (!SilvercartCustomerRole::currentRegisteredCustomer()) {
+            $checkStatus['error']       = true;
+            $checkStatus['messages'][]  = sprintf(
+                _t('SilvercartVoucher.ERRORMESSAGE-CUSTOMER_MUST_BE_REGISTERED'),
+                SilvercartPage_Controller::PageByIdentifierCodeLink('SilvercartRegistrationPage').
+                    '?backlink='.urlencode(Controller::curr()->Link()).
+                    '&backlinkText='.urlencode(_t('SilvercartCheckoutFormStep1NewCustomerForm.CONTINUE_WITH_CHECKOUT')).
+                    '&optInTempText='.urlencode(_t('SilvercartCheckoutFormStep1NewCustomerForm.OPTIN_TEMP_TEXT'))
+            );
+        }
+
+        return $checkStatus;
     }
 }

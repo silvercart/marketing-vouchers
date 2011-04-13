@@ -122,11 +122,36 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
                 $removeCartFormRendered = Controller::curr()->InsertCustomHtmlForm('SilvercartVoucherRemoveFromCartForm'.$this->ID);
             }
 
+            $title = self::$singular_name.' (Code: '.$this->code.')';
+
+            // The shopppingcart total may not be below 0
+            $shoppingcartTotal = $silvercartShoppingCart->getTaxableAmountGrossWithFees(array($this->ID));
+            $originalAmount    = $this->value->getAmount();
+            if ($this->value->getAmount() >= $shoppingcartTotal->getAmount()) {
+                $this->value->setAmount(
+                    $shoppingcartTotal->getAmount()
+                );
+
+                $originalAmountObj = new Money();
+                $originalAmountObj->setAmount($originalAmount);
+
+                $restAmountObj = new Money();
+                $restAmountObj->setAmount(
+                    $originalAmount - $this->value->getAmount()
+                );
+
+                $title .= sprintf(
+                    "<br />Ursprünglicher Wert: %s",
+                    $originalAmountObj->Nice(),
+                    $restAmountObj->Nice()
+                );
+            }
+
             $positions->push(
                 new DataObject(
                     array(
                         'ID'                    => $this->ID,
-                        'Name'                  => self::$singular_name.' (Code: '.$this->code.')',
+                        'Name'                  => $title,
                         'ShortDescription'      => $this->code,
                         'LongDescription'       => $this->code,
                         'Currency'              => $this->value->getCurrency(),

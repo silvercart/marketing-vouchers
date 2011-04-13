@@ -22,6 +22,7 @@ if (array_key_exists('de_DE', $lang) && is_array($lang['de_DE'])) {
 $lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID']     = 'Der Warenkorbwert ist nicht passend.';
 $lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID']     = 'Dieser Gutschein kann nicht für die Waren eingelöst werden, die sich in Ihrem Warenkorb befinden.';
 $lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-CODE_NOT_VALID']                  = 'Dieser Gutscheincode ist nicht gültig.';
+$lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-CUSTOMER_MUST_BE_REGISTERED']     = 'Sie müssen sich registrieren, um diesen Gutschein einzulösen, da dieser Gutschein bei Einlösung an den Kunde gebunden wird.<br />Dadurch können Sie diesen Gutschein für mehrere Einkäufe verwenden, falls Ihr Einkaufswert niedriger ist als der Gutscheinwert.<br /><a href="%s">Klicken Sie hier, um zum Registrierungsformular zu gelangen.</a>';
 $lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE']           = 'Sie dürfen diesen Gutschein nicht einlösen.';
 $lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-NOT_REDEEMABLE']                  = 'Der Gutschein kann nicht eingelöst werden.';
 $lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-ALREADY_IN_SHOPPINGCART']         = 'Dieser Gutschein befindet sich schon in Ihrem Warenkorb.';
