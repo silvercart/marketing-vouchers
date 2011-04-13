@@ -30,3 +30,10 @@ $lang['en_US']['SilvercartVoucher']['SILVERCARTRELATIVEREBATEVOUCHER.SINGULARNAM
 $lang['en_US']['SilvercartVoucher']['SILVERCARTRELATIVEREBATEVOUCHER.PLURALNAME']                   = 'Relative rebate vouchers';
 $lang['en_US']['SilvercartVoucher']['SILVERCARTNATURALREBATEVOUCHER.SINGULARNAME']                  = 'Natural rebate voucher';
 $lang['en_US']['SilvercartVoucher']['SILVERCARTNATURALREBATEVOUCHER.PLURALNAME']                    = 'Natural rebate vouchers';
+
+$lang['en_US']['SilvercartVoucherOrderDetailPage']['SINGULARVOUCHERTITLE']                  = 'The voucher code ist';
+$lang['en_US']['SilvercartVoucherOrderDetailPage']['PLURALVOUCHERTITLE']                    = 'The voucher codes are:';
+$lang['en_US']['SilvercartVoucherOrderDetailPage']['SINGULARVOUCHERVALUETITLE']             = 'The vouchers\' value is';
+$lang['en_US']['SilvercartVoucherOrderDetailPage']['PLURALVOUCHERVALUETITLE']               = 'The value of each voucher is';
+$lang['en_US']['SilvercartVoucherOrderDetailPage']['WARNING_PAYBEFOREREDEEMING_SINGULAR']   = 'Please note that you have to pay this order first before the voucher can be redeemed.';
+$lang['en_US']['SilvercartVoucherOrderDetailPage']['WARNING_PAYBEFOREREDEEMING_PLURAL']     = 'Please note that you have to pay this order first before the vouchers can be redeemed.';

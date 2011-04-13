@@ -38,3 +38,10 @@ $lang['de_DE']['SilvercartVoucher']['SILVERCARTRELATIVEREBATEVOUCHER.SINGULARNAM
 $lang['de_DE']['SilvercartVoucher']['SILVERCARTRELATIVEREBATEVOUCHER.PLURALNAME']                   = 'Rabattgutscheine';
 $lang['de_DE']['SilvercartVoucher']['SILVERCARTNATURALREBATEVOUCHER.SINGULARNAME']                  = 'Warengutschein';
 $lang['de_DE']['SilvercartVoucher']['SILVERCARTNATURALREBATEVOUCHER.PLURALNAME']                    = 'Warengutscheine';
+
+$lang['de_DE']['SilvercartVoucherOrderDetailPage']['SINGULARVOUCHERTITLE']          = ' Der Gutschein-Code lautet';
+$lang['de_DE']['SilvercartVoucherOrderDetailPage']['PLURALVOUCHERTITLE']            = 'Die Gutschein-Codes lauten:';
+$lang['de_DE']['SilvercartVoucherOrderDetailPage']['SINGULARVOUCHERVALUETITLE']     = 'Der Wert des Gutscheins beträgt';
+$lang['de_DE']['SilvercartVoucherOrderDetailPage']['PLURALVOUCHERVALUETITLE']       = 'Der Wert jedes Gutscheins beträgt';
+$lang['de_DE']['SilvercartVoucherOrderDetailPage']['WARNING_PAYBEFOREREDEEMING_SINGULAR']   = 'Beachten Sie bitte, dass die Bestellung erst bezahlt werden muss, bevor der Gutscheine eingelöst werden kann.';
+$lang['de_DE']['SilvercartVoucherOrderDetailPage']['WARNING_PAYBEFOREREDEEMING_PLURAL']     = 'Beachten Sie bitte, dass die Bestellung erst bezahlt werden muss, bevor die Gutscheine eingelöst werden können.';

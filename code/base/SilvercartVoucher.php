@@ -567,11 +567,6 @@ class SilvercartVoucher extends DataObject {
      *
      */
     public function removeFromShoppingCart(Member $member, $action = 'removed') {
-        if ($this->quantity != -1) {
-            $this->quantity += 1;
-        }
-        $this->write();
-
         $voucherHistory = new SilvercartVoucherHistory();
         $voucherHistory->add($this, $member, $action);
 
@@ -671,26 +666,28 @@ class SilvercartVoucher extends DataObject {
      * @since 07.02.2011
      */
     public function ShoppingCartConvert(SilvercartShoppingCart $silvercartShoppingCart, Member $member, $taxable = true) {
-        $vouchers  = DataObject::get(
-            'SilvercartVoucher',
-            "isActive = 1"
+        $shoppingCartPositions  = DataObject::get(
+            'SilvercartVoucherShoppingCartPosition',
+            sprintf(
+                "SilvercartShoppingCartID = %d",
+                $silvercartShoppingCart->ID
+            )
         );
 
-        foreach ($vouchers as $voucher) {
-
+        foreach ($shoppingCartPositions as $shoppingCartPosition) {
             // Adjust quantity
-            if ($voucher->quantity > 0) {
-                $voucher->quantity -= 1;
+            if ($shoppingCartPosition->SilvercartVoucher()->quantity > 0) {
+                $shoppingCartPosition->SilvercartVoucher()->quantity -= 1;
             }
 
-            $voucher->quantityRedeemed += 1;
-            $voucher->write();
+            $shoppingCartPosition->SilvercartVoucher()->quantityRedeemed += 1;
+            $shoppingCartPosition->SilvercartVoucher()->write();
 
             // Connect voucher to customer
-            $member->SilvercartVouchers()->add($this);
+            $member->SilvercartVouchers()->add($shoppingCartPosition->SilvercartVoucher());
 
             // And remove from the customers shopping cart
-            SilvercartVoucherShoppingCartPosition::remove($silvercartShoppingCart->ID, $voucher->ID);
+            SilvercartVoucherShoppingCartPosition::remove($silvercartShoppingCart->ID, $shoppingCartPosition->SilvercartVoucher()->ID);
         }
     }
 

@@ -235,4 +235,34 @@ class SilvercartAbsoluteRebateGiftVoucherBlueprint extends SilvercartVoucher {
 
         return $fields;
     }
+
+    /**
+     * Generates a random voucher code.
+     *
+     * @param int $SilvercartGiftVoucherProductID The product id of the voucher product
+     *
+     * @return string
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 13.04.2011
+     */
+    public function generateCode($SilvercartGiftVoucherProductID) {
+        $code  = 'GF-';
+        $code .= rand(1000,9999).'-'.rand(1000,9999).'-'.rand(1000,9999);
+
+        $existingGiftVoucher = DataObject::get_one(
+            'SilvercartAbsoluteRebateGiftVoucher',
+            sprintf(
+                "code = '%s'",
+                $code
+            )
+        );
+
+        if ($existingGiftVoucher) {
+            $code = $this->generateCode($SilvercartGiftVoucherProductID);
+        }
+
+        return $code;
+    }
 }

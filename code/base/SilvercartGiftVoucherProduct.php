@@ -138,44 +138,57 @@ class SilvercartGiftVoucherProduct extends SilvercartProduct {
      */
     public function ShoppingCartConvert(SilvercartOrder $order, SilvercartOrderPosition $orderPosition) {
         $blueprint = $this->SilvercartAbsoluteRebateGiftVoucherBlueprint();
+        $codes     = array();
 
         if ($blueprint) {
-            // Create gift voucher
-            $giftVoucher = new SilvercartAbsoluteRebateGiftVoucher();
-            //$giftVoucher->generateCode();
-            $giftVoucher->setField('code', 'testtest');
-            $giftVoucher->setField('valueAmount',                                       $blueprint->value->getAmount());
-            $giftVoucher->setField('valueCurrency',                                     $blueprint->value->getCurrency());
-            $giftVoucher->setField('SilvercartAbsoluteRebateGiftVoucherBlueprintID',    $blueprint->ID);
-            $giftVoucher->setField('minimumShoppingCartValueAmount',                    $blueprint->minimumShoppingCartValue->getAmount());
-            $giftVoucher->setField('minimumShoppingCartValueCurrency',                  $blueprint->minimumShoppingCartValue->getCurrency());
-            $giftVoucher->setField('maximumShoppingCartValueAmount',                    $blueprint->maximumShoppingCartValue->getAmount());
-            $giftVoucher->setField('maximumShoppingCartValueCurrency',                  $blueprint->maximumShoppingCartValue->getCurrency());
-            $giftVoucher->setField('TaxID',                                             $blueprint->TaxID);
-            $giftVoucher->write();
+            // In case the user bought more than one gift product, we have
+            // to generate several vouchers
+            for ($voucherIdx = 0; $voucherIdx < $orderPosition->Quantity; $voucherIdx++) {
+                // Get code
+                $code = $blueprint->generateCode($this->ID);
 
-            // adjust restrictions
-            foreach ($blueprint->RestrictToMember() as $member) {
-                $giftVoucher->RestrictToMember()->push($member);
+                // Create gift voucher
+                $giftVoucher = new SilvercartAbsoluteRebateGiftVoucher();
+                $giftVoucher->setField('code',                                              $code);
+                $giftVoucher->setField('valueAmount',                                       $blueprint->value->getAmount());
+                $giftVoucher->setField('valueCurrency',                                     $blueprint->value->getCurrency());
+                $giftVoucher->setField('isActive',                                          true);
+                $giftVoucher->setField('SilvercartAbsoluteRebateGiftVoucherBlueprintID',    $blueprint->ID);
+                $giftVoucher->setField('minimumShoppingCartValueAmount',                    $blueprint->minimumShoppingCartValue->getAmount());
+                $giftVoucher->setField('minimumShoppingCartValueCurrency',                  $blueprint->minimumShoppingCartValue->getCurrency());
+                $giftVoucher->setField('maximumShoppingCartValueAmount',                    $blueprint->maximumShoppingCartValue->getAmount());
+                $giftVoucher->setField('maximumShoppingCartValueCurrency',                  $blueprint->maximumShoppingCartValue->getCurrency());
+                $giftVoucher->setField('TaxID',                                             $blueprint->TaxID);
+                $giftVoucher->setField('quantity',                                          1);
+                $giftVoucher->setField('quantityRedeemed',                                  0);
+                $giftVoucher->write();
+
+                // adjust restrictions
+                foreach ($blueprint->RestrictToMember() as $member) {
+                    $giftVoucher->RestrictToMember()->push($member);
+                }
+                foreach ($blueprint->RestrictToGroup() as $group) {
+                    $giftVoucher->RestrictToGroup()->push($group);
+                }
+                foreach ($blueprint->RestrictToSilvercartProductGroupPage() as $productGroupPage) {
+                    $giftVoucher->RestrictToSilvercartProductGroupPage()->push($productGroupPage);
+                }
+                foreach ($blueprint->RestrictToSilvercartProduct() as $product) {
+                    $giftVoucher->RestrictToSilvercartProduct()->push($product);
+                }
+
+                $giftVoucher->write();
+
+                $codes[] = $code;
             }
-            foreach ($blueprint->RestrictToGroup() as $group) {
-                $giftVoucher->RestrictToGroup()->push($group);
-            }
-            foreach ($blueprint->RestrictToSilvercartProductGroupPage() as $productGroupPage) {
-                $giftVoucher->RestrictToSilvercartProductGroupPage()->push($productGroupPage);
-            }
-            foreach ($blueprint->RestrictToSilvercartProduct() as $product) {
-                $giftVoucher->RestrictToSilvercartProduct()->push($product);
-            }
-            $giftVoucher->write();
         }
 
-        // Adjust OrderPosition, so that the code gets saved in the order.
-        if (empty($orderPosition->ProductDescription)) {
-            $description = '';
-        } else {
-            $description = $orderPosition->ProductDescription."\n\n"."Der Gutschein-Code lautet: ".$giftVoucher->code;
+        // Save generated voucher code(s) and the value in order position
+        if ($blueprint) {
+            $compositeCode = implode(', ', $codes);
+            $orderPosition->setField('SilvercartVoucherCode',           $compositeCode);
+            $orderPosition->setField('SilvercartVoucherValueAmount',    $blueprint->value->getAmount());
+            $orderPosition->setField('SilvercartVoucherValueCurrency',  $blueprint->value->getCurrency());
         }
-        $orderPosition->setField('ProductDescription', $description);
     }
 }
