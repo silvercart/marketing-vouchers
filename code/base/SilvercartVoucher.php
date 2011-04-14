@@ -682,20 +682,22 @@ class SilvercartVoucher extends DataObject {
             )
         );
 
-        foreach ($shoppingCartPositions as $shoppingCartPosition) {
-            // Adjust quantity
-            if ($shoppingCartPosition->SilvercartVoucher()->quantity > 0) {
-                $shoppingCartPosition->SilvercartVoucher()->quantity -= 1;
+        if ($shoppingCartPositions) {
+            foreach ($shoppingCartPositions as $shoppingCartPosition) {
+                // Adjust quantity
+                if ($shoppingCartPosition->SilvercartVoucher()->quantity > 0) {
+                    $shoppingCartPosition->SilvercartVoucher()->quantity -= 1;
+                }
+
+                $shoppingCartPosition->SilvercartVoucher()->quantityRedeemed += 1;
+                $shoppingCartPosition->SilvercartVoucher()->write();
+
+                // Connect voucher to customer
+                $member->SilvercartVouchers()->add($shoppingCartPosition->SilvercartVoucher());
+
+                // And remove from the customers shopping cart
+                SilvercartVoucherShoppingCartPosition::remove($silvercartShoppingCart->ID, $shoppingCartPosition->SilvercartVoucher()->ID);
             }
-
-            $shoppingCartPosition->SilvercartVoucher()->quantityRedeemed += 1;
-            $shoppingCartPosition->SilvercartVoucher()->write();
-
-            // Connect voucher to customer
-            $member->SilvercartVouchers()->add($shoppingCartPosition->SilvercartVoucher());
-
-            // And remove from the customers shopping cart
-            SilvercartVoucherShoppingCartPosition::remove($silvercartShoppingCart->ID, $shoppingCartPosition->SilvercartVoucher()->ID);
         }
     }
 
