@@ -111,6 +111,10 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
         $positions              = new DataObjectSet();
         $tax                    = $this->SilvercartTax();
 
+        if (!$controller->isFrontendPage) {
+            return $positions;
+        }
+
         if ( (!$taxable && !$tax) ||
              (!$taxable && $tax->Rate == 0) ||
              ($taxable && $tax && $tax->Rate > 0) ) {
