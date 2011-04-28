@@ -97,8 +97,10 @@ class SilvercartRelativeRebateVoucher extends SilvercartVoucher {
      * Returns a dataobjectset for the display of the voucher positions in the
      * shoppingcart.
      *
-     * @param SilvercartShoppingCart $silvercartShoppingCart The shoppingcart object
-     * @param Bool                   $taxable                Indicates if taxable or nontaxable entries should be returned
+     * @param SilvercartShoppingCart $silvercartShoppingCart        The shoppingcart object
+     * @param Bool                   $taxable                       Indicates if taxable or nontaxable entries should be returned
+     * @param array                  $excludeShoppingCartPositions  Positions that shall not be counted
+     * @param Bool                   $createForms                   Indicates wether the form objects should be created or not
      *
      * @return DataObjectSet
      *
@@ -106,10 +108,15 @@ class SilvercartRelativeRebateVoucher extends SilvercartVoucher {
      * @copyright 2011 pixeltricks GmbH
      * @since 20.01.2011
      */
-    public function getSilvercartShoppingCartPositions(SilvercartShoppingCart $silvercartShoppingCart, $taxable = true) {
+    public function getSilvercartShoppingCartPositions(SilvercartShoppingCart $silvercartShoppingCart, $taxable = true, $excludeShoppingCartPositions = false, $createForms = true) {
+        $positions = new DataObjectSet();
+        
+        if ($excludeShoppingCartPositions &&
+            in_array($this->ID, $excludeShoppingCartPositions)) {
+            return $positions;
+        }
         $controller             = Controller::curr();
         $removeCartFormRendered = '';
-        $positions              = new DataObjectSet();
         $tax                    = $this->SilvercartTax();
 
         if ( (!$taxable && !$tax) ||
@@ -117,16 +124,20 @@ class SilvercartRelativeRebateVoucher extends SilvercartVoucher {
              ($taxable && $tax && $tax->Rate > 0) ) {
 
             $currency           = new Zend_Currency(null, i18n::get_locale());
-            $removeCartForm     = $controller->getRegisteredCustomHtmlForm('SilvercartVoucherRemoveFromCartForm'.$this->ID);
+            if ($createForms) {
+                $removeCartForm = $controller->getRegisteredCustomHtmlForm('SilvercartVoucherRemoveFromCartForm'.$this->ID);
+            }
             $silvercartShoppingCartAmount = $silvercartShoppingCart->getTaxableAmountGrossWithoutFees(array('SilvercartVoucher'))->getAmount();
             $rebateAmount       = ($silvercartShoppingCartAmount / 100 * $this->valueInPercent);
             $rebate             = new Money();
             $rebate->setAmount($rebateAmount);
             $rebate->setCurrency($currency->getShortName(null, i18n::get_locale()));
 
-            if ($removeCartForm) {
-                $removeCartForm->setFormFieldValue('SilvercartVoucherID', $this->ID);
-                $removeCartFormRendered = Controller::curr()->InsertCustomHtmlForm('SilvercartVoucherRemoveFromCartForm'.$this->ID);
+            if ($createForms) {
+                if ($removeCartForm) {
+                    $removeCartForm->setFormFieldValue('SilvercartVoucherID', $this->ID);
+                    $removeCartFormRendered = Controller::curr()->InsertCustomHtmlForm('SilvercartVoucherRemoveFromCartForm'.$this->ID);
+                }
             }
 
             $positions->push(

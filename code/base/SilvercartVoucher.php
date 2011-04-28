@@ -621,6 +621,7 @@ class SilvercartVoucher extends DataObject {
      * @param Member       $member                       The customer object
      * @param Bool         $taxable                      Indicates if taxable or nontaxable entries should be returned
      * @param array        $excludeShoppingCartPositions Positions that shall not be counted
+     * @param Bool         $createForms                  Indicates wether the form objects should be created or not
      *
      * @return DataObjectSet
      *
@@ -628,7 +629,7 @@ class SilvercartVoucher extends DataObject {
      * @copyright 2011 pixeltricks GmbH
      * @since 21.01.2011
      */
-    public function ShoppingCartPositions(SilvercartShoppingCart $silvercartShoppingCart, Member $member, $taxable = true, $excludeShoppingCartPositions = false) {
+    public function ShoppingCartPositions(SilvercartShoppingCart $silvercartShoppingCart, Member $member, $taxable = true, $excludeShoppingCartPositions = false, $createForms = true) {
         $positions = array();
         $vouchers  = DataObject::get(
             'SilvercartVoucher',
@@ -644,7 +645,7 @@ class SilvercartVoucher extends DataObject {
                 if ($silvercartVoucherShoppingCartPosition &&
                     $silvercartVoucherShoppingCartPosition->implicatePosition) {
 
-                    $silvercartShoppingCartPositions = $voucher->getSilvercartShoppingCartPositions($silvercartShoppingCart, $taxable, $excludeShoppingCartPositions);
+                    $silvercartShoppingCartPositions = $voucher->getSilvercartShoppingCartPositions($silvercartShoppingCart, $taxable, $excludeShoppingCartPositions, $createForms);
 
                     if ($silvercartShoppingCartPositions) {
                         foreach ($silvercartShoppingCartPositions as $key => $silvercartShoppingCartPosition) {
