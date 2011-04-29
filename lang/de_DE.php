@@ -19,6 +19,7 @@ if (array_key_exists('de_DE', $lang) && is_array($lang['de_DE'])) {
     $lang['de_DE'] = $lang['en_US'];
 }
 
+$lang['de_DE']['SilvercartVoucher']['CODE']                                         = 'Gutschein-Code';
 $lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID']     = 'Der Warenkorbwert ist nicht passend.';
 $lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID']     = 'Dieser Gutschein kann nicht für die Waren eingelöst werden, die sich in Ihrem Warenkorb befinden.';
 $lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-CODE_NOT_VALID']                  = 'Dieser Gutscheincode ist nicht gültig.';
@@ -28,6 +29,8 @@ $lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-NOT_REDEEMABLE']              
 $lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-ALREADY_IN_SHOPPINGCART']         = 'Dieser Gutschein befindet sich schon in Ihrem Warenkorb.';
 $lang['de_DE']['SilvercartVoucher']['LABEL-SHOPPINGCART_REMOVE']                    = 'Entfernen';
 $lang['de_DE']['SilvercartVoucher']['LABEL-REDEEM']                                 = 'Einlösen';
+$lang['de_DE']['SilvercartVoucher']['QUANTITY']                                     = 'Anzahl';
+$lang['de_DE']['SilvercartVoucher']['VALUE']                                        = 'Wert';
 
 $lang['de_DE']['SilvercartVoucher']['SILVERCARTABSOLUTEREBATEGIFTVOUCHER.SINGULARNAME']             = 'Geschenkgutschein';
 $lang['de_DE']['SilvercartVoucher']['SILVERCARTABSOLUTEREBATEGIFTVOUCHER.PLURALNAME']               = 'Geschenkgutscheine';

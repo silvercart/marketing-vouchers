@@ -11,6 +11,7 @@
  */
 global $lang;
 
+$lang['en_US']['SilvercartVoucher']['CODE']                                         = 'Voucher code';
 $lang['en_US']['SilvercartVoucher']['ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID']     = 'The shoppingcart value is not valid.';
 $lang['en_US']['SilvercartVoucher']['ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID']     = 'Your cart doesn\'t contain the appropriate products for this voucher.';
 $lang['en_US']['SilvercartVoucher']['ERRORMESSAGE-CODE_NOT_VALID']                  = 'This voucher code is not valid.';
@@ -20,6 +21,8 @@ $lang['en_US']['SilvercartVoucher']['ERRORMESSAGE-NOT_REDEEMABLE']              
 $lang['en_US']['SilvercartVoucher']['ERRORMESSAGE-ALREADY_IN_SHOPPINGCART']         = 'This voucher is already in your shoppingcart.';
 $lang['en_US']['SilvercartVoucher']['LABEL-SHOPPINGCART_REMOVE']                    = 'Remove';
 $lang['en_US']['SilvercartVoucher']['LABEL-REDEEM']                                 = 'Redeem';
+$lang['en_US']['SilvercartVoucher']['QUANTITY']                                     = 'Quantity';
+$lang['en_US']['SilvercartVoucher']['VALUE']                                        = 'Value';
 
 $lang['en_US']['SilvercartVoucher']['SILVERCARTABSOLUTEREBATEGIFTVOUCHER.SINGULARNAME']             = 'Gift voucher';
 $lang['en_US']['SilvercartVoucher']['SILVERCARTABSOLUTEREBATEGIFTVOUCHER.PLURALNAME']               = 'Gift vouchers';

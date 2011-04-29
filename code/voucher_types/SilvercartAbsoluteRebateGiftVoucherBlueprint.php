@@ -63,18 +63,6 @@ class SilvercartAbsoluteRebateGiftVoucherBlueprint extends SilvercartVoucher {
     );
 
     /**
-     * Summary fields for the model admin table.
-     *
-     * @var array
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 21.01.2011
-     */
-    public static $summary_fields = array(
-        'quantity'
-    );
-
-    /**
      * Summary field labels for the model admin.
      *
      * @var array
@@ -111,6 +99,24 @@ class SilvercartAbsoluteRebateGiftVoucherBlueprint extends SilvercartVoucher {
         'SilvercartAbsoluteRebateGiftVoucher' => 'SilvercartAbsoluteRebateGiftVoucher'
     );
 
+    /**
+     * Returns the summary fields for table overviews.
+     *
+     * @return array
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 28.04.2011
+     */
+    public function summaryFields() {
+        $fields = parent::summaryFields();
+        
+        $fields['code']     = _t('SilvercartVoucher.CODE');
+        $fields['quantity'] = _t('SilvercartVoucher.QUANTITY');
+        
+        return $fields;
+    }
+    
     // ------------------------------------------------------------------------
     // Methods
     // ------------------------------------------------------------------------

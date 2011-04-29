@@ -146,7 +146,7 @@ class SilvercartGiftVoucherProduct extends SilvercartProduct {
             for ($voucherIdx = 0; $voucherIdx < $orderPosition->Quantity; $voucherIdx++) {
                 // Get code
                 $code = $blueprint->generateCode($this->ID);
-
+                
                 // Create gift voucher
                 $giftVoucher = new SilvercartAbsoluteRebateGiftVoucher();
                 $giftVoucher->setField('code',                                              $code);
