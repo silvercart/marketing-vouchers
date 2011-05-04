@@ -225,10 +225,10 @@ class SilvercartNaturalRebateVoucher extends SilvercartVoucher {
             $this,
             'SilvercartProducts',
             'SilvercartProduct',
-            SilvertcartProduct::$summary_fields,
+            SilvercartProduct::$summary_fields,
             'getCMSFields_forPopup',
             '',
-            'SilvertcartProduct.ID DESC',
+            'SilvercartProduct.ID DESC',
             ''
         );
         
