@@ -140,7 +140,8 @@ class SilvercartGiftVoucherProduct extends SilvercartProduct {
         $blueprint = $this->SilvercartAbsoluteRebateGiftVoucherBlueprint();
         $codes     = array();
 
-        if ($blueprint) {
+        if ($blueprint &&
+            $blueprint->exists()) {
             // In case the user bought more than one gift product, we have
             // to generate several vouchers
             for ($voucherIdx = 0; $voucherIdx < $orderPosition->Quantity; $voucherIdx++) {
@@ -181,14 +182,16 @@ class SilvercartGiftVoucherProduct extends SilvercartProduct {
 
                 $codes[] = $code;
             }
-        }
-
-        // Save generated voucher code(s) and the value in order position
-        if ($blueprint) {
+            
+            // Save generated voucher code(s) and the value in order position
             $compositeCode = implode(', ', $codes);
             $orderPosition->setField('SilvercartVoucherCode',           $compositeCode);
             $orderPosition->setField('SilvercartVoucherValueAmount',    $blueprint->value->getAmount());
             $orderPosition->setField('SilvercartVoucherValueCurrency',  $blueprint->value->getCurrency());
+        } else {
+            print "No Blueprint found.<br />";
+            print_r($this->SilvercartAbsoluteRebateGiftVoucherBlueprintID);
+            exit();
         }
     }
 }
