@@ -75,19 +75,6 @@ class SilvercartAbsoluteRebateGiftVoucherBlueprint extends SilvercartVoucher {
     );
 
     /**
-     * Has one relationships.
-     *
-     * @var array
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 10.02.2011
-     */
-    public static $has_one = array(
-        'SilvercartGiftVoucherProduct' => 'SilvercartGiftVoucherProduct',
-        'Member'                       => 'Member'
-    );
-
-    /**
      * Has many relationships.
      *
      * @var array
@@ -96,7 +83,8 @@ class SilvercartAbsoluteRebateGiftVoucherBlueprint extends SilvercartVoucher {
      * @since 10.02.2011
      */
     public static $has_many = array(
-        'SilvercartAbsoluteRebateGiftVoucher' => 'SilvercartAbsoluteRebateGiftVoucher'
+        'SilvercartGiftVoucherProducts'         => 'SilvercartGiftVoucherProduct',
+        'SilvercartAbsoluteRebateGiftVoucher'   => 'SilvercartAbsoluteRebateGiftVoucher'
     );
 
     /**
@@ -233,11 +221,11 @@ class SilvercartAbsoluteRebateGiftVoucherBlueprint extends SilvercartVoucher {
         $fields->addFieldToTab('Root.Main', $quantityRedeemedField);
 
         // Remove Product Tab and replace with DOM
-        $fields->removeFieldFromTab('Root', 'SilvercartProducts');
+        $fields->removeFieldFromTab('Root', 'SilvercartGiftVoucherProducts');
 
-        $productTable = new HasOneComplexTableField(
+        $productTable = new HasManyComplexTableField(
             $this,
-            'SilvercartProducts',
+            'SilvercartGiftVoucherProducts',
             'SilvercartGiftVoucherProduct',
             SilvercartProduct::$summary_fields,
             'getCMSFields_forPopup',
