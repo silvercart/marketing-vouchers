@@ -19,6 +19,7 @@ $lang['en_US']['SilvercartVoucher']['ERRORMESSAGE-CUSTOMER_MUST_BE_REGISTERED'] 
 $lang['en_US']['SilvercartVoucher']['ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE']           = 'You\'re not entitled to redeem this voucher.';
 $lang['en_US']['SilvercartVoucher']['ERRORMESSAGE-NOT_REDEEMABLE']                  = 'This voucher can\'t be redeemed.';
 $lang['en_US']['SilvercartVoucher']['ERRORMESSAGE-ALREADY_IN_SHOPPINGCART']         = 'This voucher is already in your shoppingcart.';
+$lang['en_US']['SilvercartVoucher']['ERRORMESSAGE-VOUCHER_ALREADY_OWNED']           = 'This voucher has already been redeemed by somebody else.';
 $lang['en_US']['SilvercartVoucher']['LABEL-SHOPPINGCART_REMOVE']                    = 'Remove';
 $lang['en_US']['SilvercartVoucher']['LABEL-REDEEM']                                 = 'Redeem';
 $lang['en_US']['SilvercartVoucher']['QUANTITY']                                     = 'Quantity';

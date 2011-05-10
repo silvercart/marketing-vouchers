@@ -157,6 +157,24 @@ class SilvercartVoucher extends DataObject {
             'messages'  => $messages
         );
     }
+    
+    /**
+     * This method gets called when converting the shoppingcart positions to
+     * order positions.
+     * Implement it in your own voucher types if needed.
+     *
+     * @param SilvercartShoppingCart $silvercartShoppingCart the shoppingcart object
+     *
+     * @return void
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 10.05.2011
+     *
+     */
+    public function convert(SilvercartShoppingCart $silvercartShoppingCart) {
+        // Implement in descendants
+    }
 
     /**
      * Performs checks related to the shopping cart entries to ensure that
@@ -692,6 +710,11 @@ class SilvercartVoucher extends DataObject {
 
                 $shoppingCartPosition->SilvercartVoucher()->quantityRedeemed += 1;
                 $shoppingCartPosition->SilvercartVoucher()->write();
+                
+                // Call conversion method on every voucher
+                if (method_exists($shoppingCartPosition->SilvercartVoucher(), 'convert')) {
+                    $shoppingCartPosition->SilvercartVoucher()->convert($silvercartShoppingCart, $member);
+                }
 
                 // Connect voucher to customer
                 $member->SilvercartVouchers()->add($shoppingCartPosition->SilvercartVoucher());

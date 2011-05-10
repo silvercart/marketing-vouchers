@@ -59,7 +59,8 @@ class SilvercartAbsoluteRebateGiftVoucher extends SilvercartVoucher {
      * @since 20.01.2011
      */
     public static $db = array(
-        'value' => 'Money'
+        'value'             => 'Money',
+        'isBoundToCustomer' => 'Boolean(0)'
     );
 
     /**
@@ -103,6 +104,170 @@ class SilvercartAbsoluteRebateGiftVoucher extends SilvercartVoucher {
     // Methods
     // ------------------------------------------------------------------------
 
+    /**
+     * Redeem the voucher.
+     *
+     * @param Member $member the customer object
+     * @param string $action the action for commenting
+     *
+     * @return void
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 20.01.2011
+     */
+    public function redeem(Member $member, $action = 'redeemed') {
+        // Save the member who redeems this voucher
+        if ($member &&
+            $member->exists()) {
+
+            parent::redeem($member, $action);
+
+            $this->MemberID = $member->ID;
+            $this->write();
+        }
+    }
+    
+    /**
+     * In order to succeed the customer must be fully registered. Otherwise
+     * the binding of the voucher to the customer doesn't make sense.
+     * 
+     * Furthermore there mustn't be a member bound to this voucher already.
+     *
+     * @param string       $voucherCode            the vouchers code
+     * @param Member       $member                 the member object to check against
+     * @param ShoppingCart $silvercartShoppingCart the shopping cart to check against
+     *
+     * @return array:
+     *  'error'     => bool,
+     *  'messages'  => array()
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 10.05.2011
+     */
+    public function checkifAllowedInShoppingCart($voucherCode, Member $member, SilvercartShoppingCart $silvercartShoppingCart) {
+        $status     = parent::checkifAllowedInShoppingCart($voucherCode, $member, $silvercartShoppingCart);
+        $error      = $status['error'];
+        $messages   = $status['messages'];
+
+        if (!$error && (
+                $this->MemberID > 0 &&
+                $this->MemberID != $member->ID &&
+                $this->isBoundToCustomer = true
+           )) {
+            $error      = true;
+            $messages[] = _t('SilvercartVoucher.ERRORMESSAGE-VOUCHER_ALREADY_OWNED', 'Dieser Gutschein wurde schon von einer anderen Person eingelöst.');
+        }
+        
+        if (!$error && !SilvercartCustomerRole::currentRegisteredCustomer()) {
+            $error     = true;
+            $messages[] = sprintf(
+                _t('SilvercartVoucher.ERRORMESSAGE-CUSTOMER_MUST_BE_REGISTERED'),
+                SilvercartPage_Controller::PageByIdentifierCodeLink('SilvercartRegistrationPage').
+                    '?backlink='.urlencode(Controller::curr()->Link()).
+                    '&backlinkText='.urlencode(_t('SilvercartCheckoutFormStep1NewCustomerForm.CONTINUE_WITH_CHECKOUT')).
+                    '&optInTempText='.urlencode(_t('SilvercartCheckoutFormStep1NewCustomerForm.OPTIN_TEMP_TEXT'))
+            );
+        }
+        
+        return array(
+            'error'     => $error,
+            'messages'  => $messages
+        );
+    }
+    
+    /**
+     * Remove the member binding from this voucher.
+     *
+     * @param Member $member the customer object
+     * @param string $action the action for commenting
+     *
+     * @return void
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 24.01.2011
+     *
+     */
+    public function removeFromShoppingCart(Member $member, $action = 'removed') {
+        parent::removeFromShoppingCart($member, $action);
+        
+        if (!$this->isBoundToCustomer) {
+            $this->MemberID = 0;
+            $this->write();
+        }
+    }
+    
+    /**
+     * Convert the voucher: if there is a residual value we create a new
+     * absolute rebate gift voucher with this value and bind it to the
+     * customer.
+     * The new voucher gets the code of the original voucher, whose code in
+     * turn gets renamed and gets deactivated.
+     *
+     * @param SilvercartShoppingCart $silvercartShoppingCart the shoppingcart object
+     * @param Member                 $member                 The customer object
+     *
+     * @return void
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 10.05.2011
+     *
+     */
+    public function convert(SilvercartShoppingCart $silvercartShoppingCart, Member $member) {
+        $originalVoucherCode = $this->code;
+        
+        // Set original voucher inactive
+        $this->isActive = false;
+        $this->write();
+        
+        $shoppingcartTotal = $silvercartShoppingCart->getAmountTotal(null, array($this->ID));
+        
+        $originalAmountObj = new Money();
+        $originalAmountObj->setAmount($this->value->getAmount());
+        $originalAmountObj->setCurrency($this->value->getCurrency());
+        
+        if ($originalAmountObj->getAmount() > $shoppingcartTotal->getAmount()) {
+            
+            // Get residual amount
+            $restAmountObj = new Money();
+            $restAmountObj->setAmount(0);
+            $restAmountObj->setCurrency($originalAmountObj->getCurrency());
+            $restAmountObj->setAmount(
+                $originalAmountObj->getAmount() - $shoppingcartTotal->getAmount()
+            );
+
+            // Rename old voucher code
+            $renameIdx = 1;
+
+            while (DataObject::get_one('SilvercartVoucher', sprintf("code = '%s'", $originalVoucherCode.'_'.$renameIdx))) {
+                $renameIdx++;
+            }
+            $this->code = $originalVoucherCode.'_'.$renameIdx;
+            $this->write();
+        
+            // Create new voucher and bind it to the customer
+            $newVoucher = new SilvercartAbsoluteRebateGiftVoucher();
+            $newVoucher->setField('quantity', 1);
+            $newVoucher->setField('isActive', 1);
+            $newVoucher->setField('code', $originalVoucherCode);
+            $newVoucher->setField('valueAmount', $restAmountObj->getAmount());
+            $newVoucher->setField('valueCurrency', $restAmountObj->getCurrency());
+            $newVoucher->setField('MemberID', $member->ID);
+            $newVoucher->setField('isBoundToCustomer', 1);
+            $newVoucher->setField('minimumShoppingCartValueAmount', $this->minimumShoppingCartValueAmount);
+            $newVoucher->setField('minimumShoppingCartValueCurrency', $this->minimumShoppingCartValueCurrency);
+            $newVoucher->setField('maximumShoppingCartValueAmount', $this->maximumShoppingCartValueAmount);
+            $newVoucher->setField('maximumShoppingCartValueCurrency', $this->maximumShoppingCartValueCurrency);
+            $newVoucher->setField('quantityRedeemed', $this->quantityRedeemed);
+            $newVoucher->setField('SilvercartTaxID', $this->SilvercartTaxID);
+            $newVoucher->setField('SilvercartAbsoluteRebateGiftVoucherBlueprintID', $this->SilvercartAbsoluteRebateGiftVoucherBlueprintID);
+            $newVoucher->write();
+         }
+    }
+    
     /**
      * Returns a dataobjectset for the display of the voucher positions in the
      * shoppingcart.
@@ -256,38 +421,5 @@ class SilvercartAbsoluteRebateGiftVoucher extends SilvercartVoucher {
         $fields->addFieldToTab('Root.Products', $productTable);
 
         return $fields;
-    }
-
-    /**
-     * In order to succeed the customer must be fully registered. Otherwise
-     * the binding of the voucher to the customer doesn't make sense.
-     *
-     * @param string       $voucherCode            the vouchers code
-     * @param Member       $member                 the member object to check against
-     * @param ShoppingCart $silvercartShoppingCart the shopping cart to check against
-     *
-     * @return array:
-     *  'error'     => bool,
-     *  'messages'  => array()
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @copyright 2011 pixeltricks GmbH
-     * @since 13.04.2011
-     */
-    public function checkifAllowedInShoppingCart($voucherCode, Member $member, SilvercartShoppingCart $silvercartShoppingCart) {
-        $checkStatus = parent::checkifAllowedInShoppingCart($voucherCode, $member, $silvercartShoppingCart);
-
-        if (!SilvercartCustomerRole::currentRegisteredCustomer()) {
-            $checkStatus['error']       = true;
-            $checkStatus['messages'][]  = sprintf(
-                _t('SilvercartVoucher.ERRORMESSAGE-CUSTOMER_MUST_BE_REGISTERED'),
-                SilvercartPage_Controller::PageByIdentifierCodeLink('SilvercartRegistrationPage').
-                    '?backlink='.urlencode(Controller::curr()->Link()).
-                    '&backlinkText='.urlencode(_t('SilvercartCheckoutFormStep1NewCustomerForm.CONTINUE_WITH_CHECKOUT')).
-                    '&optInTempText='.urlencode(_t('SilvercartCheckoutFormStep1NewCustomerForm.OPTIN_TEMP_TEXT'))
-            );
-        }
-
-        return $checkStatus;
     }
 }

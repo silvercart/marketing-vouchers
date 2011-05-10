@@ -27,6 +27,7 @@ $lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-CUSTOMER_MUST_BE_REGISTERED'] 
 $lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE']           = 'Sie dürfen diesen Gutschein nicht einlösen.';
 $lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-NOT_REDEEMABLE']                  = 'Der Gutschein kann nicht eingelöst werden.';
 $lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-ALREADY_IN_SHOPPINGCART']         = 'Dieser Gutschein befindet sich schon in Ihrem Warenkorb.';
+$lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-VOUCHER_ALREADY_OWNED']           = 'Dieser Gutschein wurde schon von einer anderen Person eingelöst.';
 $lang['de_DE']['SilvercartVoucher']['LABEL-SHOPPINGCART_REMOVE']                    = 'Entfernen';
 $lang['de_DE']['SilvercartVoucher']['LABEL-REDEEM']                                 = 'Einlösen';
 $lang['de_DE']['SilvercartVoucher']['QUANTITY']                                     = 'Anzahl';
