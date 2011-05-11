@@ -99,11 +99,29 @@ class SilvercartAbsoluteRebateGiftVoucher extends SilvercartVoucher {
         'SilvercartAbsoluteRebateGiftVoucherBlueprint' => 'SilvercartAbsoluteRebateGiftVoucherBlueprint',
         'Member'                                       => 'Member'
     );
+    
+    /**
+     * Returns the summary fields for table overviews.
+     *
+     * @return array
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 11.05.2011
+     */
+    public function summaryFields() {
+        $fields = parent::summaryFields();
+        
+        $fields['code']     = _t('SilvercartVoucher.CODE');
+        $fields['quantity'] = _t('SilvercartVoucher.QUANTITY');
+        
+        return $fields;
+    }
 
     // ------------------------------------------------------------------------
     // Methods
     // ------------------------------------------------------------------------
-
+    
     /**
      * Redeem the voucher.
      *

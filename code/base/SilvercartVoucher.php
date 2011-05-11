@@ -59,6 +59,19 @@ class SilvercartVoucher extends DataObject {
     public static $has_one = array(
         'SilvercartTax' => 'SilvercartTax'
     );
+    
+    /**
+     * Casted fields
+     *
+     * @var array
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 11.05.2011
+     */
+    public static $casting = array(
+        'castedFormattedCreationDate' => 'VarChar(10)'
+    );
 
     /**
      * Many-many Relationships.
@@ -87,11 +100,77 @@ class SilvercartVoucher extends DataObject {
     public static $belongs_many_many = array(
         'Members' => 'Member'
     );
+    
+    /**
+     * Returns the summary fields for table overviews.
+     *
+     * @return array
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 11.05.2011
+     */
+    public function summaryFields() {
+        $fields = array();
+        
+        $fields['castedFormattedCreationDate']  = _t('SilvercartVoucher.CREATED');
+        $fields['isActive']                     = _t('SilvercartVoucher.ISACTIVE');
+        
+        return $fields;
+    }
+    
+    /**
+     * Returns the searchable fields.
+     *
+     * @return array
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 11.05.2011
+     */
+    public function searchableFields() {
+        $fields = array();
+        
+        $fields['code'] = array(
+            'title'     => _t('SilvercartVoucher.CODE'),
+            'filter'    => 'PartialMatchFilter'
+        );
+        $fields['quantity'] = array(
+            'title'     => _t('SilvercartVoucher.QUANTITY'),
+            'filter'    => 'PartialMatchFilter'
+        );
+        $fields['isActive'] = array(
+            'title'     => _t('SilvercartVoucher.ISACTIVE'),
+            'filter'    => 'ExactMatchFilter'
+        );
+        
+        return $fields;
+    }
 
     // ------------------------------------------------------------------------
     // Methods
     // ------------------------------------------------------------------------
 
+    /**
+     * Returns a nicely formatted date that respects the local settings.
+     * 
+     * @return string
+     * 
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 11.05.2011
+     */
+    public function castedFormattedCreationDate() {
+        $old_locale = setlocale(LC_TIME, null);
+        $new_locale = setlocale(LC_TIME, i18n::get_locale(), i18n::get_locale().'.utf8');
+        
+        $date = strftime("%x %X", strtotime($this->Created));
+        
+        setlocale(LC_TIME, $old_locale);
+        
+        return $date;
+    }
+    
     /**
      * Initialisation
      *

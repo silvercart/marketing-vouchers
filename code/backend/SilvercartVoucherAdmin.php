@@ -65,6 +65,7 @@ class SilvercartVoucherAdmin extends ModelAdmin {
         'SilvercartAbsoluteRebateVoucher',
         'SilvercartNaturalRebateVoucher',
         'SilvercartRelativeRebateVoucher',
+        'SilvercartAbsoluteRebateGiftVoucher',
         'SilvercartAbsoluteRebateGiftVoucherBlueprint'
     );
 }
