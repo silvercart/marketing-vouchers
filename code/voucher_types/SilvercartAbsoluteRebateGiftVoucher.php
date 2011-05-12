@@ -328,7 +328,7 @@ class SilvercartAbsoluteRebateGiftVoucher extends SilvercartVoucher {
             $title = self::$singular_name.' (Code: '.$this->code.')';
 
             // The shopppingcart total may not be below 0
-            $shoppingcartTotal = $silvercartShoppingCart->getAmountTotal(null, array($this->ID));
+            $shoppingcartTotal = $silvercartShoppingCart->getAmountTotalWithoutFees(null, array($this->ID));
             $originalAmount    = $this->value->getAmount();
             if ($this->value->getAmount() >= $shoppingcartTotal->getAmount()) {
                 $this->value->setAmount(
@@ -421,22 +421,6 @@ class SilvercartAbsoluteRebateGiftVoucher extends SilvercartVoucher {
         $quantityRedeemedField = new LiteralField('quantityRedeemed', '<br />Eingel&ouml;ste Gutscheine: '.($this->quantityRedeemed ? $this->quantityRedeemed : '0'));
 
         $fields->addFieldToTab('Root.Main', $quantityRedeemedField);
-
-        // Remove ProductTab and replace with DOM
-        $fields->removeFieldFromTab('Root', 'SilvercartProducts');
-
-        $productTable = new HasOneComplexTableField(
-            $this,
-            'SilvercartProducts',
-            'SilvercartGiftVoucherProduct',
-            SilvercartProduct::$summary_fields,
-            'getCMSFields_forPopup',
-            '',
-            'SilvercartProduct.ID DESC',
-            ''
-        );
-
-        $fields->addFieldToTab('Root.Products', $productTable);
 
         return $fields;
     }

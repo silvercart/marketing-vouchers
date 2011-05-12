@@ -108,14 +108,16 @@ class SilvercartGiftVoucherProduct extends SilvercartProduct {
             'SilvercartAbsoluteRebateGiftVoucherBlueprint'
         );
         
-        $fields->addFieldToTab(
-            'Root.Main',
-            new DropdownField(
-                'SilvercartAbsoluteRebateGiftVoucherBlueprint',
-                'Gutschein Vorlage',
-                $blueprintVouchers->map('ID', 'value')
-            )
-        );
+        if ($blueprintVouchers) {
+            $fields->addFieldToTab(
+                'Root.Main',
+                new DropdownField(
+                    'SilvercartAbsoluteRebateGiftVoucherBlueprint',
+                    'Gutschein Vorlage',
+                    $blueprintVouchers->map('ID', 'value')
+                )
+            );
+        }
 
         return $fields;
     }
