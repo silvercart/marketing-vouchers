@@ -279,7 +279,7 @@ class SilvercartAbsoluteRebateGiftVoucher extends SilvercartVoucher {
             $newVoucher->setField('minimumShoppingCartValueCurrency', $this->minimumShoppingCartValueCurrency);
             $newVoucher->setField('maximumShoppingCartValueAmount', $this->maximumShoppingCartValueAmount);
             $newVoucher->setField('maximumShoppingCartValueCurrency', $this->maximumShoppingCartValueCurrency);
-            $newVoucher->setField('quantityRedeemed', $this->quantityRedeemed);
+            $newVoucher->setField('quantityRedeemed', 0);
             $newVoucher->setField('SilvercartTaxID', $this->SilvercartTaxID);
             $newVoucher->setField('SilvercartAbsoluteRebateGiftVoucherBlueprintID', $this->SilvercartAbsoluteRebateGiftVoucherBlueprintID);
             $newVoucher->write();

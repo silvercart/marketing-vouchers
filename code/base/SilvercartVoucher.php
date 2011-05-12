@@ -70,7 +70,7 @@ class SilvercartVoucher extends DataObject {
      * @since 11.05.2011
      */
     public static $casting = array(
-        'castedFormattedCreationDate' => 'VarChar(10)'
+        'castedFormattedCreationDate'   => 'VarChar(10)'
     );
 
     /**
@@ -271,6 +271,7 @@ class SilvercartVoucher extends DataObject {
      * @since 24.01.2011
      */
     public function performShoppingCartConditionsCheck(SilvercartShoppingCart $silvercartShoppingCart, Member $member, $excludeShoppingCartPositions = false) {
+        
         $status = $this->areShoppingCartConditionsMet($silvercartShoppingCart);
 
         if ($excludeShoppingCartPositions &&
@@ -280,10 +281,21 @@ class SilvercartVoucher extends DataObject {
         }
         
         if ($status['error']) {
-            $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::get($silvercartShoppingCart->ID, $this->ID);
+            $silvercartVoucherShoppingCartPosition = DataObject::get_one(
+                'SilvercartVoucherShoppingCartPosition',
+                sprintf(
+                    "SilvercartShoppingCartID = %d AND SilvercartVoucherID = %d",
+                    $silvercartShoppingCart->ID,
+                    $this->ID
+                )
+            );
 
-            if ($silvercartVoucherShoppingCartPosition) {
+            if ($silvercartVoucherShoppingCartPosition &&
+                $silvercartVoucherShoppingCartPosition->implicatePosition) {
                 $silvercartVoucherShoppingCartPosition->setImplicationStatus(false);
+                
+                $voucherHistory = new SilvercartVoucherHistory();
+                $voucherHistory->add($this, $member, 'removed');
             }
         } else {
             $silvercartVoucherShoppingCartPosition = silvercartVoucherShoppingCartPosition::get($silvercartShoppingCart->ID, $this->ID);
@@ -293,12 +305,14 @@ class SilvercartVoucher extends DataObject {
 
                 $voucherHistory = new SilvercartVoucherHistory();
                 $voucherHistory->add($this, $member, 'redeemed');
-
+                
                 $silvercartVoucherShoppingCartPosition->setImplicationStatus(true);
 
                 $member->SilvercartVouchers()->add($this);
             }
         }
+        
+        return true;
     }
 
     /**

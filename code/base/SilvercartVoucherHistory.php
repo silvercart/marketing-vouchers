@@ -31,6 +31,16 @@
 class SilvercartVoucherHistory extends DataObject {
 
     /**
+     * Set default sort field.
+     *
+     * @var array
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @since 12.05.2011
+     */
+    public static $default_sort = 'Created DESC';
+    
+    /**
      * Attributes.
      *
      * @var array
@@ -55,7 +65,7 @@ class SilvercartVoucherHistory extends DataObject {
         'SilvercartVoucherObject' => 'SilvercartVoucher',
         'SilvercartShoppingCart'  => 'SilvercartShoppingCart'
     );
-
+    
     /**
      * Summary fields for DataObjectManager.
      *
@@ -64,12 +74,18 @@ class SilvercartVoucherHistory extends DataObject {
      * @author Sascha Koehler <skoehler@pixeltricks.de>
      * @since 24.01.2011
      */
-    public static $summary_fields = array(
-        'Member.FirstName',
-        'Member.Surname',
-        'SilvercartVoucherObject.code',
-        'Created'
-    );
+    public function summaryFields() {
+        $fields = array(
+            'action'                        => 'action',
+            'Member.FirstName'              => 'FirstName',
+            'Member.Surname'                => 'Surname',
+            'SilvercartVoucherObject.code'  => 'Code',
+            'SilvercartVoucherObject.value' => 'value',
+            'Created'                       => 'Created'
+        );
+        
+        return $fields;
+    }
 
     /**
      * Adds a history entry for a voucher.
@@ -85,12 +101,12 @@ class SilvercartVoucherHistory extends DataObject {
      * @since 24.01.2011
      */
     public function add(SilvercartVoucher $voucher, Member $member, $action) {
-        $this->MemberID= $member->ID;
+        $this->MemberID                  = $member->ID;
         $this->SilvercartVoucherObjectID = $voucher->ID;
-        $this->SilvercartShoppingCartID  = $member->SilvercartShoppingCart()->ID;
+        $this->SilvercartShoppingCartID  = $member->SilvercartShoppingCartID;
         $this->action                    = $action;
         $this->write();
-
+        
         $voucher->SilvercartVoucherHistory()->add($this);
     }
 }

@@ -190,10 +190,6 @@ class SilvercartGiftVoucherProduct extends SilvercartProduct {
             $orderPosition->setField('SilvercartVoucherCode',           $compositeCode);
             $orderPosition->setField('SilvercartVoucherValueAmount',    $blueprint->value->getAmount());
             $orderPosition->setField('SilvercartVoucherValueCurrency',  $blueprint->value->getCurrency());
-        } else {
-            print "No Blueprint found.<br />";
-            print_r($this->SilvercartAbsoluteRebateGiftVoucherBlueprintID);
-            exit();
         }
     }
 }
