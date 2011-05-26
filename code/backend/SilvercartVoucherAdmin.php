@@ -68,4 +68,19 @@ class SilvercartVoucherAdmin extends ModelAdmin {
         'SilvercartAbsoluteRebateGiftVoucher',
         'SilvercartAbsoluteRebateGiftVoucherBlueprint'
     );
+    
+    /**
+     * Set the translations.
+     * 
+     * @return void
+     * 
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @copyright 2011 pixeltricks GmbH
+     * @since 26.05.2011
+     */
+    public function __construct() {
+        parent::__construct();
+        
+        self::$menu_title = _t('SilvercartVoucherAdmin.TITLE');
+    }
 }

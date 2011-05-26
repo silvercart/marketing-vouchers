@@ -19,6 +19,8 @@ if (array_key_exists('de_DE', $lang) && is_array($lang['de_DE'])) {
     $lang['de_DE'] = $lang['en_US'];
 }
 
+$lang['de_DE']['SilvercartVoucherAdmin']['TITLE']                                   = 'Silvercart Gutscheine';
+
 $lang['de_DE']['SilvercartVoucher']['CODE']                                         = 'Gutschein-Code';
 $lang['de_DE']['SilvercartVoucher']['CREATED']                                      = 'Erstellt am';
 $lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID']     = 'Der Warenkorbwert ist nicht passend.';
