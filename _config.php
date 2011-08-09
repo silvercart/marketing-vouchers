@@ -34,4 +34,4 @@ Object::add_extension('SilvercartOrderDetailPage_Controller',   'SilvercartVouch
 // ----------------------------------------------------------------------------
 // Extend the product admin
 // ----------------------------------------------------------------------------
-SilvercartProductAdmin::$managed_models[] = 'SilvercartGiftVoucherProduct';
+SilvercartShopAdministrationAdmin::$managed_models[] = 'SilvercartGiftVoucherProduct';
