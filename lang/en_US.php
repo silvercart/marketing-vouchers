@@ -35,6 +35,7 @@ $lang['en_US']['SilvercartVoucher']['ISACTIVE']                                 
 $lang['en_US']['SilvercartVoucher']['LABEL-SHOPPINGCART_REMOVE']                    = 'Remove';
 $lang['en_US']['SilvercartVoucher']['LABEL-REDEEM']                                 = 'Redeem';
 $lang['en_US']['SilvercartVoucher']['QUANTITY']                                     = 'Quantity';
+$lang['en_US']['SilvercartVoucher']['QUANTITY_REDEEMED']                            = 'Quantity redeemed';
 $lang['en_US']['SilvercartVoucher']['VALUE']                                        = 'Value';
 
 $lang['en_US']['SilvercartVoucher']['SILVERCARTABSOLUTEREBATEGIFTVOUCHER.SINGULARNAME']             = 'Gift voucher';

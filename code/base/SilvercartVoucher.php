@@ -114,7 +114,10 @@ class SilvercartVoucher extends DataObject {
         $fields = array();
         
         $fields['castedFormattedCreationDate']  = _t('SilvercartVoucher.CREATED');
+        $fields['code']                         = _t('SilvercartVoucher.CODE');
         $fields['isActive']                     = _t('SilvercartVoucher.ISACTIVE');
+        $fields['quantity']                     = _t('SilvercartVoucher.QUANTITY');
+        $fields['quantityRedeemed']             = _t('SilvercartVoucher.QUANTITY_REDEEMED');
         
         return $fields;
     }
