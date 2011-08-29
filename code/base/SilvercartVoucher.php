@@ -39,7 +39,7 @@ class SilvercartVoucher extends DataObject {
      * @since 20.01.2011
      */
     public static $db = array(
-        'code'                      => 'Varchar(20)',
+        'code'                      => 'Varchar(50)',
         'isActive'                  => 'Boolean',
         'minimumShoppingCartValue'  => 'Money',
         'maximumShoppingCartValue'  => 'Money',
