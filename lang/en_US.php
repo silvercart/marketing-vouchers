@@ -19,7 +19,7 @@ global $lang;
 
 
 
-$lang['en_US']['SilvercartVoucherAdmin']['TITLE']                                   = 'Silvercart vouchers';
+$lang['en_US']['SilvercartVoucherAdmin']['TITLE']                                   = 'SilverCart vouchers';
 
 $lang['en_US']['SilvercartVoucher']['CODE']                                         = 'Voucher code';
 $lang['en_US']['SilvercartVoucher']['CREATED']                                      = 'Created on';
