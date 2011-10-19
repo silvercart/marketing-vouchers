@@ -32,26 +32,6 @@
 class SilvercartRelativeRebateVoucher extends SilvercartVoucher {
 
     /**
-     * Singular name
-     *
-     * @var string
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 10.02.2011
-     */
-    public static $singular_name = 'Rabattgutschein';
-
-    /**
-     * Plural name
-     *
-     * @var string
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 10.02.2011
-     */
-    public static $plural_name   = 'Rabattgutscheine';
-
-    /**
      * Attributes.
      *
      * @var array
@@ -88,6 +68,42 @@ class SilvercartRelativeRebateVoucher extends SilvercartVoucher {
         'code'              => 'Gutscheincode',
         'ValueInPercent'    => 'Rabatt in Prozent'
     );
+    
+    /**
+     * Returns the translated plural name of the object. If no translation exists
+     * the class name will be returned.
+     * 
+     * @return string
+     * 
+     * @author Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 19.10.2011
+     */
+    public function plural_name() {
+        if (_t('SilvercartRelativeRebateVoucher.PLURALNAME')) {
+            $plural_name = _t('SilvercartRelativeRebateVoucher.PLURALNAME');
+        } else {
+            $plural_name = parent::plural_name();
+        }
+        return $plural_name;
+    }
+    
+    /**
+     * Returns the translated singular name of the object. If no translation exists
+     * the class name will be returned.
+     * 
+     * @return string
+     * 
+     * @author Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 19.10.2011
+     */
+    public function singular_name() {
+        if (_t('SilvercartRelativeRebateVoucher.SINGULARNAME')) {
+            $singular_name = _t('SilvercartRelativeRebateVoucher.SINGULARNAME');
+        } else {
+            $singular_name = parent::singular_name();
+        }
+        return $singular_name;
+    }
 
     // ------------------------------------------------------------------------
     // Methods
@@ -97,10 +113,10 @@ class SilvercartRelativeRebateVoucher extends SilvercartVoucher {
      * Returns a dataobjectset for the display of the voucher positions in the
      * shoppingcart.
      *
-     * @param SilvercartShoppingCart $silvercartShoppingCart        The shoppingcart object
-     * @param Bool                   $taxable                       Indicates if taxable or nontaxable entries should be returned
-     * @param array                  $excludeShoppingCartPositions  Positions that shall not be counted
-     * @param Bool                   $createForms                   Indicates wether the form objects should be created or not
+     * @param SilvercartShoppingCart $silvercartShoppingCart       The shoppingcart object
+     * @param Bool                   $taxable                      Indicates if taxable or nontaxable entries should be returned
+     * @param array                  $excludeShoppingCartPositions Positions that shall not be counted
+     * @param Bool                   $createForms                  Indicates wether the form objects should be created or not
      *
      * @return DataObjectSet
      *

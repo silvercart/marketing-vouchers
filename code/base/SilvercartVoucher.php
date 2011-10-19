@@ -102,24 +102,52 @@ class SilvercartVoucher extends DataObject {
     );
     
     /**
+     * Field labels for display in tables.
+     *
+     * @param boolean $includerelations A boolean value to indicate if the labels returned include relation fields
+     *
+     * @return array
+     * 
+     * @author Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 19.10.2011
+     */
+    public function fieldLabels($includerelations = true) {
+        return array_merge(
+            parent::fieldLabels($includerelations),
+            array(
+                'code'                                  => _t('SilvercartVoucher.CODE'),
+                'isActive'                              => _t('SilvercartVoucher.ISACTIVE'),
+                'minimumShoppingCartValue'              => _t('SilvercartVoucher.MINIMUM_SHOPPINGCART_VALUE'),
+                'maximumShoppingCartValue'              => _t('SilvercartVoucher.MAXIMUM_SHOPPINGCART_VALUE'),
+                'quantity'                              => _t('SilvercartVoucher.QUANTITY'),
+                'quantityRedeemed'                      => _t('SilvercartVoucher.QUANTITY_REDEEMED'),
+                'SilvercartTax'                         => _t('SilvercartTax.SINGULARNAME'),
+                'RestrictToMember'                      => _t('SilvercartVoucher.RESTRICT_TO_MEMBER'),
+                'RestrictToGroup'                       => _t('SilvercartVoucher.RESTRICT_TO_GROUP'),
+                'RestrictToSilvercartProductGroupPage'  => _t('SilvercartVoucher.RESTRICT_TO_PRODUCT'),
+                'RestrictToSilvercartProduct'           => _t('SilvercartVoucher.RESTRICT_TO_PRODUCTGROUP'),
+                'SilvercartVoucherHistory'              => _t('SilvercartVoucherHistory.SINGULARNAME'),
+                'castedFormattedCreationDate'           => _t('SilvercartVoucher.CREATED'),
+            )
+        );
+    }
+    
+    /**
      * Returns the summary fields for table overviews.
      *
      * @return array
      *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @copyright 2011 pixeltricks GmbH
-     * @since 11.05.2011
+     * @author Sascha Koehler <skoehler@pixeltricks.de>, Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 19.10.2011
      */
     public function summaryFields() {
-        $fields = array();
-        
-        $fields['castedFormattedCreationDate']  = _t('SilvercartVoucher.CREATED');
-        $fields['code']                         = _t('SilvercartVoucher.CODE');
-        $fields['isActive']                     = _t('SilvercartVoucher.ISACTIVE');
-        $fields['quantity']                     = _t('SilvercartVoucher.QUANTITY');
-        $fields['quantityRedeemed']             = _t('SilvercartVoucher.QUANTITY_REDEEMED');
-        
-        return $fields;
+        return array(
+            'castedFormattedCreationDate'           => _t('SilvercartVoucher.CREATED'),
+            'code'                                  => _t('SilvercartVoucher.CODE'),
+            'isActive'                              => _t('SilvercartVoucher.ISACTIVE'),
+            'quantity'                              => _t('SilvercartVoucher.QUANTITY'),
+            'quantityRedeemed'                      => _t('SilvercartVoucher.QUANTITY_REDEEMED'),
+        );
     }
     
     /**
@@ -1009,7 +1037,7 @@ class SilvercartVoucher extends DataObject {
             $this,
             'RestrictToMember',
             'Member',
-            Member::$summary_fields,
+            null,
             'getCMSFields_forPopup',
             'Member.Surname IS NOT NULL',
             'Member.Surname ASC, Member.FirstName ASC'
@@ -1018,7 +1046,7 @@ class SilvercartVoucher extends DataObject {
             $this,
             'RestrictToGroup',
             'Group',
-            Group::$summary_fields,
+            null,
             'getCMSFields_forPopup',
             null,
             'Group.Title ASC'
@@ -1027,7 +1055,7 @@ class SilvercartVoucher extends DataObject {
             $this,
             'RestrictToSilvercartProduct',
             'SilvercartProduct',
-            SilvercartProduct::$summary_fields,
+            null,
             'getCMSFields_forPopup',
             null,
             'SilvercartProduct.Title ASC'
@@ -1036,7 +1064,7 @@ class SilvercartVoucher extends DataObject {
             $this,
             'RestrictToSilvercartProductGroupPage',
             'SilvercartProductGroupPage',
-            SilvercartProductGroupPage::$summary_fields,
+            null,
             'getCMSFields_forPopup',
             null,
             'SiteTree.Title ASC'
@@ -1047,10 +1075,14 @@ class SilvercartVoucher extends DataObject {
         $fields->removeByName('RestrictToSilvercartProduct');
         $fields->removeByName('RestrictToSilvercartProductGroupPage');
 
-        $fields->addFieldToTab('Root.RestrictToMember',                       $memberTableField);
-        $fields->addFieldToTab('Root.RestrictToGroup',                        $groupTableField);
-        $fields->addFieldToTab('Root.RestrictToSilvercartProduct',            $productTableField);
-        $fields->addFieldToTab('Root.RestrictToSilvercartProductGroupPage',   $productGroupPageTableField);
+        $fields->findOrMakeTab('Root.RestrictToMember',                         _t('SilvercartVoucher.RESTRICT_TO_MEMBER'));
+        $fields->addFieldToTab('Root.RestrictToMember',                         $memberTableField);
+        $fields->findOrMakeTab('Root.RestrictToGroup',                          _t('SilvercartVoucher.RESTRICT_TO_GROUP'));
+        $fields->addFieldToTab('Root.RestrictToGroup',                          $groupTableField);
+        $fields->findOrMakeTab('Root.RestrictToSilvercartProduct',              _t('SilvercartVoucher.RESTRICT_TO_PRODUCT'));
+        $fields->addFieldToTab('Root.RestrictToSilvercartProduct',              $productTableField);
+        $fields->findOrMakeTab('Root.RestrictToSilvercartProductGroupPage',     _t('SilvercartVoucher.RESTRICT_TO_PRODUCTGROUP'));
+        $fields->addFieldToTab('Root.RestrictToSilvercartProductGroupPage',     $productGroupPageTableField);
 
         return $fields;
     }

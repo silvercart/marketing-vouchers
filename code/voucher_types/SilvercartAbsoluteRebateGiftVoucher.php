@@ -31,26 +31,6 @@
 class SilvercartAbsoluteRebateGiftVoucher extends SilvercartVoucher {
 
     /**
-     * Singular name
-     *
-     * @var string
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 24.01.2011
-     */
-    public static $singular_name = 'Geschenkgutschein';
-
-    /**
-     * Plural name
-     *
-     * @var string
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 24.01.2011
-     */
-    public static $plural_name   = 'Geschenkgutscheine';
-
-    /**
      * Attributes.
      *
      * @var array
@@ -61,30 +41,6 @@ class SilvercartAbsoluteRebateGiftVoucher extends SilvercartVoucher {
     public static $db = array(
         'value'             => 'Money',
         'isBoundToCustomer' => 'Boolean(0)'
-    );
-
-    /**
-     * Summary fields for the model admin table.
-     *
-     * @var array
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 21.01.2011
-     */
-    public static $summary_fields = array(
-        'quantity'
-    );
-
-    /**
-     * Summary field labels for the model admin.
-     *
-     * @var array
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 21.01.2011
-     */
-    public static $field_labels = array(
-        'quantity'      => 'Anzahl'
     );
 
     /**
@@ -101,21 +57,61 @@ class SilvercartAbsoluteRebateGiftVoucher extends SilvercartVoucher {
     );
     
     /**
-     * Returns the summary fields for table overviews.
+     * Returns the translated plural name of the object. If no translation exists
+     * the class name will be returned.
+     * 
+     * @return string
+     * 
+     * @author Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 19.10.2011
+     */
+    public function plural_name() {
+        if (_t('SilvercartAbsoluteRebateGiftVoucher.PLURALNAME')) {
+            $plural_name = _t('SilvercartAbsoluteRebateGiftVoucher.PLURALNAME');
+        } else {
+            $plural_name = parent::plural_name();
+        }
+        return $plural_name;
+    }
+    
+    /**
+     * Returns the translated singular name of the object. If no translation exists
+     * the class name will be returned.
+     * 
+     * @return string
+     * 
+     * @author Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 19.10.2011
+     */
+    public function singular_name() {
+        if (_t('SilvercartAbsoluteRebateGiftVoucher.SINGULARNAME')) {
+            $singular_name = _t('SilvercartAbsoluteRebateGiftVoucher.SINGULARNAME');
+        } else {
+            $singular_name = parent::singular_name();
+        }
+        return $singular_name;
+    }
+    
+    /**
+     * Field labels for display in tables.
+     *
+     * @param boolean $includerelations A boolean value to indicate if the labels returned include relation fields
      *
      * @return array
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @copyright 2011 pixeltricks GmbH
-     * @since 11.05.2011
+     * 
+     * @author Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 19.10.2011
      */
-    public function summaryFields() {
-        $fields = parent::summaryFields();
-        
-        $fields['code']     = _t('SilvercartVoucher.CODE');
-        $fields['quantity'] = _t('SilvercartVoucher.QUANTITY');
-        
-        return $fields;
+    public function fieldLabels($includerelations = true) {
+        return array_merge(
+            parent::fieldLabels($includerelations),
+            array(
+                'value'                                         => _t('SilvercartAbsoluteRebateGiftVoucher.VALUE'),
+                'isBoundToCustomer'                             => _t('SilvercartAbsoluteRebateGiftVoucher.IS_BOUND_TO_CUSTOMER'),
+                'SilvercartAbsoluteRebateGiftVoucherBlueprint'  => _t('SilvercartAbsoluteRebateGiftVoucherBlueprint.SINGULARNAME'),
+                'Member'                                        => _t('SilvercartOrder.CUSTOMER'),
+            )
+        );
     }
 
     // ------------------------------------------------------------------------
@@ -178,7 +174,7 @@ class SilvercartAbsoluteRebateGiftVoucher extends SilvercartVoucher {
             $messages[] = _t('SilvercartVoucher.ERRORMESSAGE-VOUCHER_ALREADY_OWNED', 'Dieser Gutschein wurde schon von einer anderen Person eingelöst.');
         }
         
-        if (!$error && !SilvercartCustomerRole::currentRegisteredCustomer()) {
+        if (!$error && !SilvercartCustomer::currentRegisteredCustomer()) {
             $error     = true;
             $messages[] = sprintf(
                 _t('SilvercartVoucher.ERRORMESSAGE-CUSTOMER_MUST_BE_REGISTERED'),

@@ -29,27 +29,7 @@
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  */
 class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
-
-    /**
-     * Singular name
-     *
-     * @var string
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 24.01.2011
-     */
-    public static $singular_name = 'Wertcoupon';
-
-    /**
-     * Plural name
-     *
-     * @var string
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 24.01.2011
-     */
-    public static $plural_name   = 'Wertcoupon';
-
+    
     /**
      * Attributes.
      *
@@ -62,44 +42,73 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
         'value' => 'Money'
     );
 
-    /**
-     * Summary fields for the model admin table.
-     *
-     * @var array
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 21.01.2011
-     */
-    public static $summary_fields = array(
-        'code',
-        'quantity'
-    );
-
-    /**
-     * Summary field labels for the model admin.
-     *
-     * @var array
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 21.01.2011
-     */
-    public static $field_labels = array(
-        'code'          => 'Gutscheincode',
-        'quantity'      => 'Anzahl'
-    );
-
     // ------------------------------------------------------------------------
     // Methods
     // ------------------------------------------------------------------------
+    
+    /**
+     * Returns the translated plural name of the object. If no translation exists
+     * the class name will be returned.
+     * 
+     * @return string
+     * 
+     * @author Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 19.10.2011
+     */
+    public function plural_name() {
+        if (_t('SilvercartAbsoluteRebateVoucher.PLURALNAME')) {
+            $plural_name = _t('SilvercartAbsoluteRebateVoucher.PLURALNAME');
+        } else {
+            $plural_name = parent::plural_name();
+        }
+        return $plural_name;
+    }
+    
+    /**
+     * Returns the translated singular name of the object. If no translation exists
+     * the class name will be returned.
+     * 
+     * @return string
+     * 
+     * @author Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 19.10.2011
+     */
+    public function singular_name() {
+        if (_t('SilvercartAbsoluteRebateVoucher.SINGULARNAME')) {
+            $singular_name = _t('SilvercartAbsoluteRebateVoucher.SINGULARNAME');
+        } else {
+            $singular_name = parent::singular_name();
+        }
+        return $singular_name;
+    }
+    
+    /**
+     * Field labels for display in tables.
+     *
+     * @param boolean $includerelations A boolean value to indicate if the labels returned include relation fields
+     *
+     * @return array
+     * 
+     * @author Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 19.10.2011
+     */
+    public function fieldLabels($includerelations = true) {
+        return array_merge(
+            parent::fieldLabels($includerelations),
+            array(
+                'value'                                 => _t('SilvercartAbsoluteRebateVoucher.VALUE'),
+            )
+        );
+    }
 
     /**
      * Returns a dataobjectset for the display of the voucher positions in the
      * shoppingcart.
      *
-     * @param SilvercartShoppingCart $silvercartShoppingCart        The shoppingcart object
-     * @param Bool                   $taxable                       Indicates if taxable or nontaxable entries should be returned
-     * @param array                  $excludeShoppingCartPositions  Positions that shall not be counted
-     * @param Bool                   $createForms                   Indicates wether the form objects should be created or not
+     * @param SilvercartShoppingCart $silvercartShoppingCart       The shoppingcart object
+     * @param Bool                   $taxable                      Indicates if taxable or nontaxable entries should be returned
+     * @param array                  $excludeShoppingCartPositions Positions that shall not be counted
+     * @param Bool                   $createForms                  Indicates wether the form objects should be created or not
      *
      * @return DataObjectSet
      *

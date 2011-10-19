@@ -31,26 +31,6 @@
 class SilvercartNaturalRebateVoucher extends SilvercartVoucher {
 
     /**
-     * Singular name
-     *
-     * @var string
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 24.01.2011
-     */
-    public static $singular_name = 'Warengutschein';
-
-    /**
-     * Plural name
-     *
-     * @var string
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 24.01.2011
-     */
-    public static $plural_name   = 'Warengutscheine';
-
-    /**
      * Has many relationships.
      *
      * @var array
@@ -62,44 +42,74 @@ class SilvercartNaturalRebateVoucher extends SilvercartVoucher {
         'SilvercartProducts' => 'SilvercartProduct'
     );
 
-    /**
-     * Summary fields for the model admin table.
-     *
-     * @var array
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 21.01.2011
-     */
-    public static $summary_fields = array(
-        'code',
-        'quantity'
-    );
-
-    /**
-     * Summary field labels for the model admin.
-     *
-     * @var array
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 21.01.2011
-     */
-    public static $field_labels = array(
-        'code'          => 'Gutscheincode',
-        'quantity'      => 'Anzahl'
-    );
-
     // ------------------------------------------------------------------------
     // Methods
     // ------------------------------------------------------------------------
+    
+    
+    /**
+     * Returns the translated plural name of the object. If no translation exists
+     * the class name will be returned.
+     * 
+     * @return string
+     * 
+     * @author Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 19.10.2011
+     */
+    public function plural_name() {
+        if (_t('SilvercartNaturalRebateVoucher.PLURALNAME')) {
+            $plural_name = _t('SilvercartNaturalRebateVoucher.PLURALNAME');
+        } else {
+            $plural_name = parent::plural_name();
+        }
+        return $plural_name;
+    }
+    
+    /**
+     * Returns the translated singular name of the object. If no translation exists
+     * the class name will be returned.
+     * 
+     * @return string
+     * 
+     * @author Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 19.10.2011
+     */
+    public function singular_name() {
+        if (_t('SilvercartNaturalRebateVoucher.SINGULARNAME')) {
+            $singular_name = _t('SilvercartNaturalRebateVoucher.SINGULARNAME');
+        } else {
+            $singular_name = parent::singular_name();
+        }
+        return $singular_name;
+    }
+    
+    /**
+     * Field labels for display in tables.
+     *
+     * @param boolean $includerelations A boolean value to indicate if the labels returned include relation fields
+     *
+     * @return array
+     * 
+     * @author Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 19.10.2011
+     */
+    public function fieldLabels($includerelations = true) {
+        return array_merge(
+            parent::fieldLabels($includerelations),
+            array(
+                'SilvercartProducts' => _t('SilvercartProduct.PLURALNAME'),
+            )
+        );
+    }
 
     /**
      * Returns a dataobjectset for the display of the voucher positions in the
      * shoppingcart.
      *
-     * @param SilvercartShoppingCart $silvercart                    ShoppingCart The shoppingcart object
-     * @param Bool                   $taxable                       Indicates if taxable or nontaxable entries should be returned
-     * @param array                  $excludeShoppingCartPositions  Positions that shall not be counted
-     * @param Bool                   $createForms                   Indicates wether the form objects should be created or not
+     * @param SilvercartShoppingCart $silvercartShoppingCart       ShoppingCart The shoppingcart object
+     * @param Bool                   $taxable                      Indicates if taxable or nontaxable entries should be returned
+     * @param array                  $excludeShoppingCartPositions Positions that shall not be counted
+     * @param Bool                   $createForms                  Indicates wether the form objects should be created or not
      *
      * @return DataObjectSet
      *
@@ -232,6 +242,8 @@ class SilvercartNaturalRebateVoucher extends SilvercartVoucher {
             ''
         );
         
+        $productsTab = $fields->findOrMakeTab('Root.Products');
+        $productsTab->setTitle(_t('SilvercartProduct.PLURALNAME'));
         $fields->addFieldToTab('Root.Products', $productTable);
 
         return $fields;

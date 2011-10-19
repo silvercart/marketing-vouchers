@@ -35,26 +35,6 @@
 class SilvercartGiftVoucherProduct extends SilvercartProduct {
 
     /**
-     * Singular name
-     *
-     * @var string
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 10.02.2011
-     */
-    public static $singular_name = 'Geschenkgutschein Artikel';
-
-    /**
-     * Plural name
-     *
-     * @var string
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 10.02.2011
-     */
-    public static $plural_name   = 'Geschenkgutschein Artikel';
-
-    /**
      * Has-one relationships
      *
      * @var string
@@ -120,6 +100,42 @@ class SilvercartGiftVoucherProduct extends SilvercartProduct {
         }
 
         return $fields;
+    }
+    
+    /**
+     * Returns the translated plural name of the object. If no translation exists
+     * the class name will be returned.
+     * 
+     * @return string
+     * 
+     * @author Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 19.10.2011
+     */
+    public function plural_name() {
+        if (_t('SilvercartGiftVoucherProduct.PLURALNAME')) {
+            $plural_name = _t('SilvercartGiftVoucherProduct.PLURALNAME');
+        } else {
+            $plural_name = parent::plural_name();
+        }
+        return $plural_name;
+    }
+    
+    /**
+     * Returns the translated singular name of the object. If no translation exists
+     * the class name will be returned.
+     * 
+     * @return string
+     * 
+     * @author Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 19.10.2011
+     */
+    public function singular_name() {
+        if (_t('SilvercartGiftVoucherProduct.SINGULARNAME')) {
+            $singular_name = _t('SilvercartGiftVoucherProduct.SINGULARNAME');
+        } else {
+            $singular_name = parent::singular_name();
+        }
+        return $singular_name;
     }
 
     /**
