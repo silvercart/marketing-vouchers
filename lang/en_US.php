@@ -21,6 +21,8 @@ global $lang;
 
 $lang['en_US']['SilvercartAbsoluteRebateGiftVoucher']['SINGULARNAME']           = 'Gift voucher';
 $lang['en_US']['SilvercartAbsoluteRebateGiftVoucher']['PLURALNAME']             = 'Gift vouchers';
+$lang['en_US']['SilvercartAbsoluteRebateGiftVoucher']['IS_BOUND_TO_CUSTOMER']   = 'Is bound to customer';
+$lang['en_US']['SilvercartAbsoluteRebateGiftVoucher']['VALUE']                  = 'Amount';
 
 $lang['en_US']['SilvercartAbsoluteRebateGiftVoucherBlueprint']['SINGULARNAME']  = 'Gift voucher blueprint';
 $lang['en_US']['SilvercartAbsoluteRebateGiftVoucherBlueprint']['PLURALNAME']    = 'Gift voucher blueprints';
@@ -28,6 +30,7 @@ $lang['de_DE']['SilvercartAbsoluteRebateGiftVoucherBlueprint']['VALUE']         
 
 $lang['en_US']['SilvercartAbsoluteRebateVoucher']['SINGULARNAME']               = 'Absolute rebate voucher';
 $lang['en_US']['SilvercartAbsoluteRebateVoucher']['PLURALNAME']                 = 'Absolute rebate vouchers';
+$lang['en_US']['SilvercartAbsoluteRebateVoucher']['VALUE']                      = 'Amount';
 
 $lang['en_US']['SilvercartGiftVoucherProduct']['SINGULARNAME']                  = 'Voucher product';
 $lang['en_US']['SilvercartGiftVoucherProduct']['PLURALNAME']                    = 'Voucher products';
