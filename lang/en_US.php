@@ -26,7 +26,7 @@ $lang['en_US']['SilvercartAbsoluteRebateGiftVoucher']['VALUE']                  
 
 $lang['en_US']['SilvercartAbsoluteRebateGiftVoucherBlueprint']['SINGULARNAME']  = 'Gift voucher blueprint';
 $lang['en_US']['SilvercartAbsoluteRebateGiftVoucherBlueprint']['PLURALNAME']    = 'Gift voucher blueprints';
-$lang['de_DE']['SilvercartAbsoluteRebateGiftVoucherBlueprint']['VALUE']         = 'Amount';
+$lang['en_US']['SilvercartAbsoluteRebateGiftVoucherBlueprint']['VALUE']         = 'Amount';
 
 $lang['en_US']['SilvercartAbsoluteRebateVoucher']['SINGULARNAME']               = 'Absolute rebate voucher';
 $lang['en_US']['SilvercartAbsoluteRebateVoucher']['PLURALNAME']                 = 'Absolute rebate vouchers';
@@ -56,18 +56,18 @@ $lang['en_US']['SilvercartVoucher']['ERRORMESSAGE-VOUCHER_ALREADY_OWNED']       
 $lang['en_US']['SilvercartVoucher']['ISACTIVE']                                 = 'Is active';
 $lang['en_US']['SilvercartVoucher']['LABEL-SHOPPINGCART_REMOVE']                = 'Remove';
 $lang['en_US']['SilvercartVoucher']['LABEL-REDEEM']                             = 'Redeem';
-$lang['de_DE']['SilvercartVoucher']['MAXIMUM_SHOPPINGCART_VALUE']               = 'Maximum shoppingcart amount';
-$lang['de_DE']['SilvercartVoucher']['MINIMUM_SHOPPINGCART_VALUE']               = 'Minimum shoppingcart amount';
+$lang['en_US']['SilvercartVoucher']['MAXIMUM_SHOPPINGCART_VALUE']               = 'Maximum shoppingcart amount';
+$lang['en_US']['SilvercartVoucher']['MINIMUM_SHOPPINGCART_VALUE']               = 'Minimum shoppingcart amount';
 $lang['en_US']['SilvercartVoucher']['QUANTITY']                                 = 'Quantity';
 $lang['en_US']['SilvercartVoucher']['QUANTITY_REDEEMED']                        = 'Quantity redeemed';
-$lang['de_DE']['SilvercartVoucher']['RESTRICT_TO_MEMBER']                       = 'Restrict to customer(s)';
-$lang['de_DE']['SilvercartVoucher']['RESTRICT_TO_GROUP']                        = 'Restrict to customergroup(s)';
-$lang['de_DE']['SilvercartVoucher']['RESTRICT_TO_PRODUCT']                      = 'Restrict to product(s)';
-$lang['de_DE']['SilvercartVoucher']['RESTRICT_TO_PRODUCTGROUP']                 = 'Restrict to productgroups(s)';
+$lang['en_US']['SilvercartVoucher']['RESTRICT_TO_MEMBER']                       = 'Restrict to customer(s)';
+$lang['en_US']['SilvercartVoucher']['RESTRICT_TO_GROUP']                        = 'Restrict to customergroup(s)';
+$lang['en_US']['SilvercartVoucher']['RESTRICT_TO_PRODUCT']                      = 'Restrict to product(s)';
+$lang['en_US']['SilvercartVoucher']['RESTRICT_TO_PRODUCTGROUP']                 = 'Restrict to productgroups(s)';
 $lang['en_US']['SilvercartVoucher']['VALUE']                                    = 'Value';
 
-$lang['de_DE']['SilvercartVoucherHistory']['SINGULARNAME']                      = 'Voucher history';
-$lang['de_DE']['SilvercartVoucherHistory']['PLURALNAME']                        = 'Voucher histories';
+$lang['en_US']['SilvercartVoucherHistory']['SINGULARNAME']                      = 'Voucher history';
+$lang['en_US']['SilvercartVoucherHistory']['PLURALNAME']                        = 'Voucher histories';
 
 $lang['en_US']['SilvercartVoucherOrderDetailPage']['SINGULARVOUCHERTITLE']      = 'The voucher code ist';
 $lang['en_US']['SilvercartVoucherOrderDetailPage']['PLURALVOUCHERTITLE']        = 'The voucher codes are:';
