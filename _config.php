@@ -21,7 +21,7 @@
  * @ignore
  */
 SilvercartShoppingCart::registerModule('SilvercartVoucher');
-CustomHtmlForm::registerModule('silvercart_vouchers', 50);
+CustomHtmlForm::registerModule('silvercart_marketing_vouchers', 50);
 
 // ----------------------------------------------------------------------------
 // Register extensions
