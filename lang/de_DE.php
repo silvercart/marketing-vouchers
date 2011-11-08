@@ -9,7 +9,7 @@
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @ignore
  */
-i18n::include_locale_file('silvercart', 'en_US');
+i18n::include_locale_file('silvercart_marketing_vouchers', 'en_US');
 
 global $lang;
 
