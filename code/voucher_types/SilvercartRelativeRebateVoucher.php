@@ -59,15 +59,22 @@ class SilvercartRelativeRebateVoucher extends SilvercartVoucher {
     /**
      * Summary field labels for the model admin.
      *
-     * @var array
+     * @param boolean $includerelations a boolean value to indicate if the labels returned include relation fields
+     * 
+     * @return array
      *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 10.02.2011
+     * @author Patrick Schneider <pschneider@pixeltricks.de>
+     * @since 15.11.2011
      */
-    public static $field_labels = array(
-        'code'              => 'Gutscheincode',
-        'ValueInPercent'    => 'Rabatt in Prozent'
-    );
+    public function fieldLabels($includerelations = true) {
+        return array_merge(
+                parent::fieldLabels($includerelations),
+                array(
+                    'code'              => _t('SilvercartVoucher.CODE', 'Gutscheincode'),
+                    'valueInPercent'    => _t('SilvercartVoucher.VALUE_IN_PERCENT', 'Rabatt in Prozent')
+                )
+        );
+    }
     
     /**
      * Returns the translated plural name of the object. If no translation exists

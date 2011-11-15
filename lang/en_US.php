@@ -66,6 +66,7 @@ $lang['en_US']['SilvercartVoucher']['RESTRICT_TO_GROUP']                        
 $lang['en_US']['SilvercartVoucher']['RESTRICT_TO_PRODUCT']                      = 'Restrict to product(s)';
 $lang['en_US']['SilvercartVoucher']['RESTRICT_TO_PRODUCTGROUP']                 = 'Restrict to productgroups(s)';
 $lang['en_US']['SilvercartVoucher']['VALUE']                                    = 'Value';
+$lang['de_DE']['SilvercartVoucher']['VALUE_IN_PERCENT']                         = 'Rebate value in percent';
 
 $lang['en_US']['SilvercartVoucherHistory']['SINGULARNAME']                      = 'Voucher history';
 $lang['en_US']['SilvercartVoucherHistory']['PLURALNAME']                        = 'Voucher histories';

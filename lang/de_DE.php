@@ -43,7 +43,7 @@ $lang['de_DE']['SilvercartRelativeRebateVoucher']['PLURALNAME']                 
 
 $lang['de_DE']['SilvercartVoucherAdmin']['TITLE']                               = 'SilverCart Gutscheine';
 
-$lang['de_DE']['SilvercartVoucher']['CODE']                                     = 'Gutschein-Code';
+$lang['de_DE']['SilvercartVoucher']['CODE']                                     = 'Gutscheincode';
 $lang['de_DE']['SilvercartVoucher']['CREATED']                                  = 'Erstellt am';
 $lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID'] = 'Der Warenkorbwert ist nicht passend.';
 $lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID'] = 'Dieser Gutschein kann nicht für die Waren eingelöst werden, die sich in Ihrem Warenkorb befinden.';
@@ -66,6 +66,7 @@ $lang['de_DE']['SilvercartVoucher']['RESTRICT_TO_GROUP']                        
 $lang['de_DE']['SilvercartVoucher']['RESTRICT_TO_PRODUCT']                      = 'An Produkt(e) binden';
 $lang['de_DE']['SilvercartVoucher']['RESTRICT_TO_PRODUCTGROUP']                 = 'An Warengruppe(n) binden';
 $lang['de_DE']['SilvercartVoucher']['VALUE']                                    = 'Wert';
+$lang['de_DE']['SilvercartVoucher']['VALUE_IN_PERCENT']                         = 'Rabatt in Prozent';
 
 $lang['de_DE']['SilvercartVoucherHistory']['SINGULARNAME']                      = 'Gutschein Historie';
 $lang['de_DE']['SilvercartVoucherHistory']['PLURALNAME']                        = 'Gutschein Historien';
