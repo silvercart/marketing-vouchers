@@ -60,6 +60,7 @@ $lang['en_US']['SilvercartVoucher']['MAXIMUM_SHOPPINGCART_VALUE']               
 $lang['en_US']['SilvercartVoucher']['MINIMUM_SHOPPINGCART_VALUE']               = 'Minimum shoppingcart amount';
 $lang['en_US']['SilvercartVoucher']['QUANTITY']                                 = 'Quantity';
 $lang['en_US']['SilvercartVoucher']['QUANTITY_REDEEMED']                        = 'Quantity redeemed';
+$lang['en_US']['SilvercartVoucher']['REDEEMED_VOUCHERS']                        = 'Redeemed vouchers:';
 $lang['en_US']['SilvercartVoucher']['RESTRICT_TO_MEMBER']                       = 'Restrict to customer(s)';
 $lang['en_US']['SilvercartVoucher']['RESTRICT_TO_GROUP']                        = 'Restrict to customergroup(s)';
 $lang['en_US']['SilvercartVoucher']['RESTRICT_TO_PRODUCT']                      = 'Restrict to product(s)';
