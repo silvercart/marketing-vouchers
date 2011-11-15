@@ -60,7 +60,7 @@ $lang['de_DE']['SilvercartVoucher']['MAXIMUM_SHOPPINGCART_VALUE']               
 $lang['de_DE']['SilvercartVoucher']['MINIMUM_SHOPPINGCART_VALUE']               = 'Minimaler Warenkorb-Wert';
 $lang['de_DE']['SilvercartVoucher']['QUANTITY']                                 = 'Anzahl';
 $lang['de_DE']['SilvercartVoucher']['QUANTITY_REDEEMED']                        = 'Anzahl eingelöst';
-$lang['de_DE']['SilvercartVoucher']['REDEEMED_VOUCHERS']                        = 'Eingelöste Gutscheine:';
+$lang['de_DE']['SilvercartVoucher']['REDEEMED_VOUCHERS']                        = 'Eingelöste Gutscheine: ';
 $lang['de_DE']['SilvercartVoucher']['RESTRICT_TO_MEMBER']                       = 'An Kunde(n) binden';
 $lang['de_DE']['SilvercartVoucher']['RESTRICT_TO_GROUP']                        = 'An Kundenklasse(n) binden';
 $lang['de_DE']['SilvercartVoucher']['RESTRICT_TO_PRODUCT']                      = 'An Produkt(e) binden';
