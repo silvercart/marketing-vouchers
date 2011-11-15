@@ -244,22 +244,22 @@ class SilvercartVoucher extends DataObject {
 
         if (!$error && !$this->isCodeValid($voucherCode)) {
             $error      = true;
-            $messages[] = _t('SilvercartVoucher.ERRORMESSAGE-CODE_NOT_VALID', 'Dieser Gutscheincode ist nicht gültig.');
+            $messages[] = _t('SilvercartVoucher.ERRORMESSAGE-CODE_NOT_VALID', 'This voucher code is not valid.');
         }
 
         if (!$error && !$this->isCustomerEligible($member)) {
             $error      = true;
-            $messages[] = _t('SilvercartVoucher.ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE', 'Sie dürfen diesen Gutschein nicht einlösen.');
+            $messages[] = _t('SilvercartVoucher.ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE', 'You\'re not entitled to redeem this voucher.');
         }
 
         if (!$error && !$this->isRedeemable()) {
             $error      = true;
-            $messages[] = _t('SilvercartVoucher.ERRORMESSAGE-NOT_REDEEMABLE', 'Der Gutschein kann nicht eingelöst werden.');
+            $messages[] = _t('SilvercartVoucher.ERRORMESSAGE-NOT_REDEEMABLE', 'This voucher can\'t be redeemed.');
         }
 
         if (!$error && $this->isInShoppingCartAlready($silvercartShoppingCart)) {
             $error      = true;
-            $messages[] = _t('SilvercartVoucher.ERRORMESSAGE-ALREADY_IN_SHOPPINGCART', 'Dieser Gutschein befindet sich schon in Ihrem Warenkorb.');
+            $messages[] = _t('SilvercartVoucher.ERRORMESSAGE-ALREADY_IN_SHOPPINGCART', 'This voucher is already in your shoppingcart.');
         }
 
         return array(
@@ -366,12 +366,12 @@ class SilvercartVoucher extends DataObject {
 
         if (!$error && !$this->isShoppingCartAmountValid($silvercartShoppingCart->getTaxableAmountGrossWithoutFees(array('SilvercartVoucher')))) {
             $error      = true;
-            $messages[] = _t('ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID', 'Der Warenkorbwert ist nicht passend.');
+            $messages[] = _t('ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID', 'The shoppingcart value is not valid.');
         }
 
         if (!$error && !$this->isValidForShoppingCartItems($silvercartShoppingCart->SilvercartShoppingcartPositions())) {
             $error      = true;
-            $messages[] = _t('ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID', 'Dieser Gutschein kann nicht für die Waren eingelöst werden, die sich in Ihrem Warenkorb befinden.');
+            $messages[] = _t('ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID', 'Your cart doesn\'t contain the appropriate products for this voucher.');
         }
 
         return array(
