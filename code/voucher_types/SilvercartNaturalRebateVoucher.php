@@ -224,7 +224,7 @@ class SilvercartNaturalRebateVoucher extends SilvercartVoucher {
         $fields = parent::getCMSFields($params);
 
         $fields->removeByName('quantityRedeemed');
-        $quantityRedeemedField = new LiteralField('quantityRedeemed', '<br />Eingel&ouml;ste Gutscheine: '.($this->quantityRedeemed ? $this->quantityRedeemed : '0'));
+        $quantityRedeemedField = new LiteralField('quantityRedeemed', '<br />' . _t('SilvercartVoucher.REDEEMED_VOUCHERS', 'Redeemed vouchers: ') . ($this->quantityRedeemed ? $this->quantityRedeemed : '0'));
 
         $fields->addFieldToTab('Root.Main', $quantityRedeemedField);
 

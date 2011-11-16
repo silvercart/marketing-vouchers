@@ -171,7 +171,7 @@ class SilvercartAbsoluteRebateGiftVoucher extends SilvercartVoucher {
                 $this->isBoundToCustomer = true
            )) {
             $error      = true;
-            $messages[] = _t('SilvercartVoucher.ERRORMESSAGE-VOUCHER_ALREADY_OWNED', 'Dieser Gutschein wurde schon von einer anderen Person eingelöst.');
+            $messages[] = _t('SilvercartVoucher.ERRORMESSAGE-VOUCHER_ALREADY_OWNED', 'This voucher has already been redeemed by somebody else.');
         }
         
         if (!$error && !SilvercartCustomer::currentRegisteredCustomer()) {
@@ -414,7 +414,7 @@ class SilvercartAbsoluteRebateGiftVoucher extends SilvercartVoucher {
         $fields = parent::getCMSFields($params);
 
         $fields->removeByName('quantityRedeemed');
-        $quantityRedeemedField = new LiteralField('quantityRedeemed', '<br />Eingel&ouml;ste Gutscheine: '.($this->quantityRedeemed ? $this->quantityRedeemed : '0'));
+        $quantityRedeemedField = new LiteralField('quantityRedeemed', '<br />' . _t('SilvercartVoucher.REDEEMED_VOUCHERS', 'Redeemed vouchers: ') . ($this->quantityRedeemed ? $this->quantityRedeemed : '0'));
 
         $fields->addFieldToTab('Root.Main', $quantityRedeemedField);
 

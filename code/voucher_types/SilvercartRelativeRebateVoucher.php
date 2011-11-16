@@ -70,8 +70,8 @@ class SilvercartRelativeRebateVoucher extends SilvercartVoucher {
         return array_merge(
                 parent::fieldLabels($includerelations),
                 array(
-                    'code'              => _t('SilvercartVoucher.CODE', 'Gutscheincode'),
-                    'valueInPercent'    => _t('SilvercartVoucher.VALUE_IN_PERCENT', 'Rabatt in Prozent')
+                    'code'              => _t('SilvercartVoucher.CODE', 'Voucher code'),
+                    'valueInPercent'    => _t('SilvercartVoucher.VALUE_IN_PERCENT', 'Rebate value in percent')
                 )
         );
     }
