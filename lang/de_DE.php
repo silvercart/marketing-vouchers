@@ -58,8 +58,10 @@ $lang['de_DE']['SilvercartVoucher']['LABEL-SHOPPINGCART_REMOVE']                
 $lang['de_DE']['SilvercartVoucher']['LABEL-REDEEM']                             = 'Einlösen';
 $lang['de_DE']['SilvercartVoucher']['MAXIMUM_SHOPPINGCART_VALUE']               = 'Maximaler Warenkorb-Wert';
 $lang['de_DE']['SilvercartVoucher']['MINIMUM_SHOPPINGCART_VALUE']               = 'Minimaler Warenkorb-Wert';
+$lang['de_DE']['SilvercartVoucher']['ORIGINAL_VALUE']                           = 'Ursprünglicher Wert';
 $lang['de_DE']['SilvercartVoucher']['QUANTITY']                                 = 'Anzahl';
 $lang['de_DE']['SilvercartVoucher']['QUANTITY_REDEEMED']                        = 'Anzahl eingelöst';
+$lang['de_DE']['SilvercartVoucher']['REDEEM_VOUCHER']                           = 'Gutschein einlösen: ';
 $lang['de_DE']['SilvercartVoucher']['REDEEMED_VOUCHERS']                        = 'Eingelöste Gutscheine: ';
 $lang['de_DE']['SilvercartVoucher']['RESTRICT_TO_MEMBER']                       = 'An Kunde(n) binden';
 $lang['de_DE']['SilvercartVoucher']['RESTRICT_TO_GROUP']                        = 'An Kundenklasse(n) binden';

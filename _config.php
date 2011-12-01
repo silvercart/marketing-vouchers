@@ -26,8 +26,8 @@ CustomHtmlForm::registerModule('silvercart_marketing_vouchers', 50);
 // ----------------------------------------------------------------------------
 // Register extensions
 // ----------------------------------------------------------------------------
-Object::add_extension('Member',                                 'SilvercartVoucherMemberRole');
-Object::add_extension('SilvercartProduct',                      'SilvercartVoucherProductRole');
+Object::add_extension('Member',                                 'SilvercartVoucherMember');
+Object::add_extension('SilvercartProduct',                      'SilvercartVoucherProduct');
 Object::add_extension('SilvercartOrderPosition',                'SilvercartVoucherOrderPosition');
 Object::add_extension('SilvercartOrderDetailPage_Controller',   'SilvercartVoucherOrderDetailPage_Controller');
 
@@ -35,3 +35,10 @@ Object::add_extension('SilvercartOrderDetailPage_Controller',   'SilvercartVouch
 // Extend the product admin
 // ----------------------------------------------------------------------------
 SilvercartShopAdministrationAdmin::$managed_models[] = 'SilvercartGiftVoucherProduct';
+
+// ----------------------------------------------------------------------------
+// Register SilvercartPlugins
+// ----------------------------------------------------------------------------
+Object::add_extension('SilvercartVoucherRemoveFromCartForm', 'SilvercartPluginObjectExtension');
+
+SilvercartPlugin::registerPluginProvider('SilvercartVoucherRemoveFromCartForm', 'SilvercartVoucherRemoveFromCartFormPluginProvider');

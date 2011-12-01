@@ -41,10 +41,6 @@ class SilvercartVoucherRemoveFromCartForm extends CustomHtmlForm {
      * @since 25.01.2010
      */
     protected $formFields = array(
-        'SilvercartVoucherID' => array(
-            'type'          => 'HiddenField',
-            'value'         => ''
-        )
     );
 
     /**
@@ -61,6 +57,26 @@ class SilvercartVoucherRemoveFromCartForm extends CustomHtmlForm {
         'doJsValidationScrolling'   => false
     );
 
+    /**
+     * Alternative method to define preferences.
+     *
+     * @return array
+     * 
+     * @author Sascha Koehler <skoehler@pixeltricks.de>
+     * @since 01.12.2011
+     */
+    public function preferences() {
+        $preferences = SilvercartPlugin::call($this, 'updatePreferences', array($this->preferences), true, array());
+        
+        if (is_array($preferences) &&
+            count($preferences) > 0) {
+            
+            $this->preferences = $preferences[0];
+        }
+        
+        return $this->preferences;
+    }
+    
     /**
      * Setzt Initialwerte in Formularfeldern.
      *

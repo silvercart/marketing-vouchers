@@ -107,7 +107,7 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
      *
      * @param SilvercartShoppingCart $silvercartShoppingCart       The shoppingcart object
      * @param Bool                   $taxable                      Indicates if taxable or nontaxable entries should be returned
-     * @param array                  $excludeShoppingCartPositions Positions that shall not be counted
+     * @param array                  $excludeShoppingCartPositions Positions that shall not be counted; can be the ID or the className of the position
      * @param Bool                   $createForms                  Indicates wether the form objects should be created or not
      *
      * @return DataObjectSet
@@ -119,8 +119,12 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
     public function getSilvercartShoppingCartPositions(SilvercartShoppingCart $silvercartShoppingCart, $taxable = true, $excludeShoppingCartPositions = false, $createForms = true) {
         $positions = new DataObjectSet();
         
-        if ($excludeShoppingCartPositions &&
-            in_array($this->ID, $excludeShoppingCartPositions)) {
+        if ($excludeShoppingCartPositions !== false &&
+            (
+                in_array($this->ID, $excludeShoppingCartPositions) ||
+                in_array($this->class, $excludeShoppingCartPositions)
+            )
+           ) {
             return $positions;
         }
         $controller             = Controller::curr();
@@ -144,10 +148,10 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
                 }
             }
 
-            $title = self::$singular_name.' (Code: '.$this->code.')';
+            $title = $this->singular_name().' (Code: '.$this->code.')';
 
             // The shopppingcart total may not be below 0
-            $shoppingcartTotal = $silvercartShoppingCart->getTaxableAmountGrossWithFees(array($this->ID));
+            $shoppingcartTotal = $silvercartShoppingCart->getTaxableAmountGrossWithFees(array($this->class));
             $originalAmount    = $this->value->getAmount();
             if ($this->value->getAmount() >= $shoppingcartTotal->getAmount()) {
                 $this->value->setAmount(
@@ -163,9 +167,9 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
                 );
 
                 $title .= sprintf(
-                    "<br />Ursprünglicher Wert: %s",
-                    $originalAmountObj->Nice(),
-                    $restAmountObj->Nice()
+                    "<br />%s: %s",
+                    _t('SilvercartVoucher.ORIGINAL_VALUE'),
+                    $originalAmountObj->Nice()
                 );
             }
 

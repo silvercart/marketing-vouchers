@@ -1,13 +1,9 @@
-<form $FormAttributes >
-
+<form class="yform" $FormAttributes>
     $CustomHtmlFormMetadata
-    $CustomHtmlFormErrormessages
-    $CustomHtmlFormFieldByName(SilvercartVoucherID)
 
-    <div class="action-remove">
-        <% control Actions %>
-            $Field
-        <% end_control %>
-    </div>
-
+    <% control Actions %>
+		<div class="type-button">
+			$Field
+		</div>
+	<% end_control %>
 </form>

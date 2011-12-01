@@ -762,7 +762,7 @@ class SilvercartVoucher extends DataObject {
      * @param ShoppingCart $silvercartShoppingCart       The shoppingcart object
      * @param Member       $member                       The customer object
      * @param Bool         $taxable                      Indicates if taxable or nontaxable entries should be returned
-     * @param array        $excludeShoppingCartPositions Positions that shall not be counted
+     * @param array        $excludeShoppingCartPositions Positions that shall not be counted; can contain the ID or the className of the position
      * @param Bool         $createForms                  Indicates wether the form objects should be created or not
      *
      * @return DataObjectSet
@@ -986,7 +986,7 @@ class SilvercartVoucher extends DataObject {
 
         if ($vouchers) {
             foreach ($vouchers as $voucher) {
-                $removeFromCartForm = new SilvercartVoucherRemoveFromCartForm($controller);
+                $removeFromCartForm = new SilvercartVoucherRemoveFromCartForm($controller, array('SilvercartVoucherID' => $voucher->ID));
 
                 $controller->registerCustomHtmlForm(
                     'SilvercartVoucherRemoveFromCartForm'.$voucher->ID,
