@@ -188,7 +188,7 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
                         'Quantity'              => '1',
                         'removeFromCartForm'    => $removeCartFormRendered,
                         'SilvercartTaxRate'     => $this->SilvercartTax()->Rate,
-                        'SilvercartTaxAmount'   => $this->value->getAmount() - ($this->value->getAmount() / (100 + $this->SilvercartTax()->Rate) * 100),
+                        'SilvercartTaxAmount'   => - ($this->value->getAmount() - ($this->value->getAmount() / (100 + $this->SilvercartTax()->Rate) * 100)),
                         'SilvercartTax'         => $this->SilvercartTax()
                     )
                 )
