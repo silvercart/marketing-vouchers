@@ -364,7 +364,7 @@ class SilvercartVoucher extends DataObject {
         $error      = false;
         $messages   = array();
 
-        if (!$error && !$this->isShoppingCartAmountValid($silvercartShoppingCart->getTaxableAmountGrossWithoutFees(array('SilvercartVoucher')))) {
+        if (!$error && !$this->isShoppingCartAmountValid($silvercartShoppingCart->getTaxableAmountGrossWithoutFeesAndCharges(array('SilvercartVoucher')))) {
             $error      = true;
             $messages[] = _t('ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID', 'The shoppingcart value is not valid.');
         }

@@ -360,9 +360,9 @@ class SilvercartAbsoluteRebateGiftVoucher extends SilvercartVoucher {
                         'PriceTotalFormatted'   => '-'.$this->value->Nice(),
                         'Quantity'              => '1',
                         'removeFromCartForm'    => $removeCartFormRendered,
-                        'SilvercartTaxRate'     => $this->SilvercartTax()->Rate,
-                        'SilvercartTaxAmount'   => $this->value->getAmount() - ($this->value->getAmount() / (100 + $this->SilvercartTax()->Rate) * 100),
-                        'SilvercartTax'         => $this->SilvercartTax()
+                        'TaxRate'               => $this->SilvercartTax()->Rate,
+                        'TaxAmount'             => $this->value->getAmount() - ($this->value->getAmount() / (100 + $this->SilvercartTax()->Rate) * 100),
+                        'Tax'                   => $this->SilvercartTax()
                     )
                 )
             );

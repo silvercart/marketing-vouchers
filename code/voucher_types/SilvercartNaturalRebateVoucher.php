@@ -155,9 +155,9 @@ class SilvercartNaturalRebateVoucher extends SilvercartVoucher {
                         'PriceTotalFormatted'   => '',
                         'Quantity'              => '1',
                         'removeFromCartForm'    => $removeCartFormRendered,
-                        'SilvercartTaxRate'     => $this->SilvercartTax()->Rate,
-                        'SilvercartTaxAmount'   => 0,
-                        'SilvercartTax'         => $this->SilvercartTax()
+                        'TaxRate'               => $this->SilvercartTax()->Rate,
+                        'TaxAmount'             => 0,
+                        'Tax'                   => $this->SilvercartTax()
                     )
                 )
             );
@@ -178,9 +178,9 @@ class SilvercartNaturalRebateVoucher extends SilvercartVoucher {
                             'PriceTotalFormatted'   => '',
                             'Quantity'              => '1',
                             'removeFromCartForm'    => '',
-                            'SilvercartTaxRate'     => '',
-                            'SilvercartTaxAmount'   => 0,
-                            'SilvercartTax'         => ''
+                            'TaxRate'               => '',
+                            'TaxAmount'             => 0,
+                            'Tax'                   => ''
                         )
                     )
                 );

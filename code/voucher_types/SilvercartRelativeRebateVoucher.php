@@ -177,9 +177,9 @@ class SilvercartRelativeRebateVoucher extends SilvercartVoucher {
                         'PriceTotalFormatted'   => '-'.$rebate->Nice(),
                         'Quantity'              => '1',
                         'removeFromCartForm'    => $removeCartFormRendered,
-                        'SilvercartTaxRate'     => $this->SilvercartTax()->Rate,
-                        'SilvercartTaxAmount'   => $rebateAmount - ($rebateAmount / (100 + $this->SilvercartTax()->Rate) * 100),
-                        'SilvercartTax'         => $this->SilvercartTax()
+                        'TaxRate'               => $this->SilvercartTax()->Rate,
+                        'TaxAmount'             => $rebateAmount - ($rebateAmount / (100 + $this->SilvercartTax()->Rate) * 100),
+                        'Tax'                   => $this->SilvercartTax()
                     )
                 )
             );
