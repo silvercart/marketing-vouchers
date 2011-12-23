@@ -366,12 +366,12 @@ class SilvercartVoucher extends DataObject {
 
         if (!$error && !$this->isShoppingCartAmountValid($silvercartShoppingCart->getTaxableAmountGrossWithoutFeesAndCharges(array('SilvercartVoucher')))) {
             $error      = true;
-            $messages[] = _t('ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID', 'The shoppingcart value is not valid.');
+            $messages[] = _t('SilvercartVoucher.ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID', 'The shoppingcart value is not valid.');
         }
 
         if (!$error && !$this->isValidForShoppingCartItems($silvercartShoppingCart->SilvercartShoppingcartPositions())) {
             $error      = true;
-            $messages[] = _t('ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID', 'Your cart doesn\'t contain the appropriate products for this voucher.');
+            $messages[] = _t('SilvercartVoucher.ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID', 'Your cart doesn\'t contain the appropriate products for this voucher.');
         }
 
         return array(
