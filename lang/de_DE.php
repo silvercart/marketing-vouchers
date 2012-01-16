@@ -32,8 +32,8 @@ $lang['de_DE']['SilvercartAbsoluteRebateVoucher']['SINGULARNAME']               
 $lang['de_DE']['SilvercartAbsoluteRebateVoucher']['PLURALNAME']                 = 'Wertgutscheine';
 $lang['de_DE']['SilvercartAbsoluteRebateVoucher']['VALUE']                      = 'Wert';
 
-$lang['de_DE']['SilvercartGiftVoucherProduct']['SINGULARNAME']                  = 'Gutschein Produkt';
-$lang['de_DE']['SilvercartGiftVoucherProduct']['PLURALNAME']                    = 'Gutschein Produkte';
+$lang['de_DE']['SilvercartGiftVoucherProduct']['SINGULARNAME']                  = 'Gutschein Artikel';
+$lang['de_DE']['SilvercartGiftVoucherProduct']['PLURALNAME']                    = 'Gutschein Artikel';
 
 $lang['de_DE']['SilvercartNaturalRebateVoucher']['SINGULARNAME']                = 'Warengutschein';
 $lang['de_DE']['SilvercartNaturalRebateVoucher']['PLURALNAME']                  = 'Warengutscheine';
@@ -65,7 +65,7 @@ $lang['de_DE']['SilvercartVoucher']['REDEEM_VOUCHER']                           
 $lang['de_DE']['SilvercartVoucher']['REDEEMED_VOUCHERS']                        = 'Eingelöste Gutscheine: ';
 $lang['de_DE']['SilvercartVoucher']['RESTRICT_TO_MEMBER']                       = 'An Kunde(n) binden';
 $lang['de_DE']['SilvercartVoucher']['RESTRICT_TO_GROUP']                        = 'An Kundenklasse(n) binden';
-$lang['de_DE']['SilvercartVoucher']['RESTRICT_TO_PRODUCT']                      = 'An Produkt(e) binden';
+$lang['de_DE']['SilvercartVoucher']['RESTRICT_TO_PRODUCT']                      = 'An Artikel binden';
 $lang['de_DE']['SilvercartVoucher']['RESTRICT_TO_PRODUCTGROUP']                 = 'An Warengruppe(n) binden';
 $lang['de_DE']['SilvercartVoucher']['VALUE']                                    = 'Wert';
 $lang['de_DE']['SilvercartVoucher']['VALUE_IN_PERCENT']                         = 'Rabatt in Prozent';
