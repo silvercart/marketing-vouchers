@@ -1156,4 +1156,20 @@ class SilvercartVoucher extends DataObject {
 
         return $foundKey;
     }
+
+    /**
+     * writes a log entry
+     *
+     * @param string $context the context for the log entry
+     * @param string $text    the text for the log entry
+     *
+     * @return void
+     *
+     * @author Sascha Koehler <skoehler@pixeltricks.de>, Sebastian Diel <sdiel@pixeltricks.de>
+     * @copyright 2010 pixeltricks GmbH
+     * @since 17.11.2010
+     */
+    public function Log($context, $text) {
+        SilvercartConfig::Log($context, $text, $this->ClassName);
+    }
 }

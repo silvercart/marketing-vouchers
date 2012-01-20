@@ -29,6 +29,9 @@
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  */
 class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
+
+    public static $alreadyHandledPositionIDs = array();
+    public static $alreadyHandledPositions = array();
     
     /**
      * Attributes.
@@ -118,7 +121,6 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
      */
     public function getSilvercartShoppingCartPositions(SilvercartShoppingCart $silvercartShoppingCart, $taxable = true, $excludeShoppingCartPositions = false, $createForms = true) {
         $positions = new DataObjectSet();
-        
         if ($excludeShoppingCartPositions !== false &&
             (
                 in_array($this->ID, $excludeShoppingCartPositions) ||
@@ -127,6 +129,7 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
            ) {
             return $positions;
         }
+
         $controller             = Controller::curr();
         $removeCartFormRendered = '';
         $tax                    = $this->SilvercartTax();
@@ -138,6 +141,13 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
         if ( (!$taxable && !$tax) ||
              (!$taxable && $tax->Rate == 0) ||
              ($taxable && $tax && $tax->Rate > 0) ) {
+
+            if (in_array($this->ID, self::$alreadyHandledPositionIDs)) {
+                $position = self::$alreadyHandledPositions->find('ID', $this->ID);
+                $removeCartFormRendered = Controller::curr()->InsertCustomHtmlForm('SilvercartVoucherRemoveFromCartForm'.$this->ID);
+                $position->removeFromCartForm = $removeCartFormRendered;
+                return $position;
+            }
 
             if ($createForms) {
                 $removeCartForm = $controller->getRegisteredCustomHtmlForm('SilvercartVoucherRemoveFromCartForm'.$this->ID);
@@ -151,8 +161,10 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
             $title = $this->singular_name().' (Code: '.$this->code.')';
 
             // The shopppingcart total may not be below 0
-            $shoppingcartTotal = $silvercartShoppingCart->getTaxableAmountGrossWithoutFeesAndCharges(array('SilvercartVoucher'));
-            $originalAmount    = $this->value->getAmount();
+            $excludeShoppingCartPositions[] = $this->ID;
+            $shoppingcartTotal              = $silvercartShoppingCart->getTaxableAmountGrossWithoutFeesAndCharges(false, $excludeShoppingCartPositions);
+            $originalAmount                 = $this->value->getAmount();
+
             if ($this->value->getAmount() >= $shoppingcartTotal->getAmount()) {
                 $this->value->setAmount(
                     $shoppingcartTotal->getAmount()
@@ -173,26 +185,45 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
                 );
             }
 
-            $positions->push(
-                new DataObject(
-                    array(
-                        'ID'                    => $this->ID,
-                        'Name'                  => $title,
-                        'ShortDescription'      => $this->code,
-                        'LongDescription'       => $this->code,
-                        'Currency'              => $this->value->getCurrency(),
-                        'Price'                 => $this->value->getAmount() * -1,
-                        'PriceFormatted'        => '-'.$this->value->Nice(),
-                        'PriceTotal'            => $this->value->getAmount() * -1,
-                        'PriceTotalFormatted'   => '-'.$this->value->Nice(),
-                        'Quantity'              => '1',
-                        'removeFromCartForm'    => $removeCartFormRendered,
-                        'TaxRate'               => $this->SilvercartTax()->Rate,
-                        'TaxAmount'             => - ($this->value->getAmount() - ($this->value->getAmount() / (100 + $this->SilvercartTax()->Rate) * 100)),
-                        'Tax'                   => $this->SilvercartTax()
-                    )
+            $taxAmount = (float) 0.0;
+
+            if ($this->value->getAmount() > 0) {
+                $amount = $this->value->getAmount();
+
+                if (SilvercartConfig::PriceType() == 'gross') {
+                    $taxAmount = (float) $amount - ($amount / (100 + $this->SilvercartTax()->Rate) * 100);
+                } else {
+                    $taxAmount = (float) (($amount / 100 * (100 + $this->SilvercartTax()->Rate)) - $amount);
+                }
+            }
+
+            $position = new DataObject(
+                array(
+                    'ID'                    => $this->ID,
+                    'Name'                  => $title,
+                    'ShortDescription'      => $this->code,
+                    'LongDescription'       => $this->code,
+                    'Currency'              => $this->value->getCurrency(),
+                    'Price'                 => $this->value->getAmount() * -1,
+                    'PriceFormatted'        => '-'.$this->value->Nice(),
+                    'PriceTotal'            => $this->value->getAmount() * -1,
+                    'PriceTotalFormatted'   => '-'.$this->value->Nice(),
+                    'Quantity'              => '1',
+                    'removeFromCartForm'    => $removeCartFormRendered,
+                    'TaxRate'               => $this->SilvercartTax()->Rate,
+                    'TaxAmount'             => -$taxAmount,
+                    'Tax'                   => $this->SilvercartTax()
                 )
             );
+            $positions->push($position);
+
+            self::$alreadyHandledPositionIDs[] = $this->ID;
+
+            if (is_array(self::$alreadyHandledPositions)) {
+                self::$alreadyHandledPositions = new DataObjectSet();
+            }
+
+            self::$alreadyHandledPositions->push($position);
         }
 
         return $positions;
