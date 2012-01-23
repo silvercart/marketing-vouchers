@@ -144,8 +144,13 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
 
             if (in_array($this->ID, self::$alreadyHandledPositionIDs)) {
                 $position = self::$alreadyHandledPositions->find('ID', $this->ID);
-                $removeCartFormRendered = Controller::curr()->InsertCustomHtmlForm('SilvercartVoucherRemoveFromCartForm'.$this->ID);
-                $position->removeFromCartForm = $removeCartFormRendered;
+
+                if (method_exists(Controller::curr(), 'getEditableShoppingCart') &&
+                    Controller::curr()->getEditableShoppingCart()) {
+
+                    $removeCartFormRendered = Controller::curr()->InsertCustomHtmlForm('SilvercartVoucherRemoveFromCartForm'.$this->ID);
+                    $position->removeFromCartForm = $removeCartFormRendered;
+                }
                 return $position;
             }
 
@@ -162,7 +167,11 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
 
             // The shopppingcart total may not be below 0
             $excludeShoppingCartPositions[] = $this->ID;
-            $shoppingcartTotal              = $silvercartShoppingCart->getTaxableAmountGrossWithoutFeesAndCharges(false, $excludeShoppingCartPositions);
+            if (SilvercartConfig::PriceType() == 'gross') {
+                $shoppingcartTotal = $silvercartShoppingCart->getTaxableAmountGrossWithoutFeesAndCharges(false, $excludeShoppingCartPositions);
+            } else {
+                $shoppingcartTotal = $silvercartShoppingCart->getTaxableAmountNetWithoutFeesAndCharges(false, $excludeShoppingCartPositions);
+            }
             $originalAmount                 = $this->value->getAmount();
 
             if ($this->value->getAmount() >= $shoppingcartTotal->getAmount()) {
@@ -185,6 +194,12 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
                 );
             }
 
+            $priceNetAmount = round($this->value->getAmount() / (100 + $this->SilvercartTax()->Rate) * 100, 4);
+            $priceNet = new Money();
+            $priceNet->setAmount($priceNetAmount);
+            $priceNet->setCurrency(SilvercartConfig::DefaultCurrency());
+            $priceNetTotal = $priceNet;
+
             $taxAmount = (float) 0.0;
 
             if ($this->value->getAmount() > 0) {
@@ -193,9 +208,10 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
                 if (SilvercartConfig::PriceType() == 'gross') {
                     $taxAmount = (float) $amount - ($amount / (100 + $this->SilvercartTax()->Rate) * 100);
                 } else {
-                    $taxAmount = (float) (($amount / 100 * (100 + $this->SilvercartTax()->Rate)) - $amount);
+                    $taxAmount = (float) ($priceNetAmount * ($this->SilvercartTax()->Rate) / 100);
                 }
             }
+
 
             $position = new DataObject(
                 array(
@@ -208,6 +224,10 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
                     'PriceFormatted'        => '-'.$this->value->Nice(),
                     'PriceTotal'            => $this->value->getAmount() * -1,
                     'PriceTotalFormatted'   => '-'.$this->value->Nice(),
+                    'PriceNet'              => $priceNet->getAmount() * -1,
+                    'PriceNetFormatted'     => '-'.$priceNet->Nice(),
+                    'PriceNetTotal'         => $priceNetTotal->getAmount() * -1,
+                    'PriceNetTotalFormatted'=> '-'.$priceNetTotal->Nice(),
                     'Quantity'              => '1',
                     'removeFromCartForm'    => $removeCartFormRendered,
                     'TaxRate'               => $this->SilvercartTax()->Rate,
@@ -217,7 +237,9 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
             );
             $positions->push($position);
 
-            self::$alreadyHandledPositionIDs[] = $this->ID;
+            if (!in_array($this->ID, self::$alreadyHandledPositionIDs)) {
+                self::$alreadyHandledPositionIDs[] = $this->ID;
+            }
 
             if (is_array(self::$alreadyHandledPositions)) {
                 self::$alreadyHandledPositions = new DataObjectSet();
