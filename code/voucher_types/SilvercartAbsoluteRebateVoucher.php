@@ -132,6 +132,7 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
 
         $controller             = Controller::curr();
         $removeCartFormRendered = '';
+        $removeCartFormName     = 'SilvercartVoucherRemoveFromCartForm'.$this->ID;
         $tax                    = $this->SilvercartTax();
 
         if (!$controller->isFrontendPage) {
@@ -148,36 +149,44 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
                 if (method_exists(Controller::curr(), 'getEditableShoppingCart') &&
                     Controller::curr()->getEditableShoppingCart()) {
 
-                    $removeCartFormRendered = Controller::curr()->InsertCustomHtmlForm('SilvercartVoucherRemoveFromCartForm'.$this->ID);
-                    $position->removeFromCartForm = $removeCartFormRendered;
+                    if (array_key_exists($removeCartFormName, Controller::curr()->getRegisteredCustomHtmlForms())) {
+                        $removeCartFormRendered       = Controller::curr()->InsertCustomHtmlForm($removeCartFormName);
+                        $position->removeFromCartForm = $removeCartFormRendered;
+                    }
                 }
                 return $position;
             }
 
             if ($createForms) {
-                $removeCartForm = $controller->getRegisteredCustomHtmlForm('SilvercartVoucherRemoveFromCartForm'.$this->ID);
+                $removeCartForm = $controller->getRegisteredCustomHtmlForm($removeCartFormName);
 
                 if ($removeCartForm) {
                     $removeCartForm->setFormFieldValue('SilvercartVoucherID', $this->ID);
-                    $removeCartFormRendered = Controller::curr()->InsertCustomHtmlForm('SilvercartVoucherRemoveFromCartForm'.$this->ID);
+                    $removeCartFormRendered = Controller::curr()->InsertCustomHtmlForm($removeCartFormName);
                 }
             }
 
             $title = $this->singular_name().' (Code: '.$this->code.')';
 
+            $priceNetAmount = round($this->value->getAmount() / (100 + $this->SilvercartTax()->Rate) * 100, 4);
+            $priceNet = new Money();
+            $priceNet->setAmount($priceNetAmount);
+            $priceNet->setCurrency(SilvercartConfig::DefaultCurrency());
+
             // The shopppingcart total may not be below 0
             $excludeShoppingCartPositions[] = $this->ID;
             if (SilvercartConfig::PriceType() == 'gross') {
                 $shoppingcartTotal = $silvercartShoppingCart->getTaxableAmountGrossWithoutFeesAndCharges(false, $excludeShoppingCartPositions);
+                $originalAmount = $this->value->getAmount();
+
             } else {
                 $shoppingcartTotal = $silvercartShoppingCart->getTaxableAmountNetWithoutFeesAndCharges(false, $excludeShoppingCartPositions);
+                $originalAmount = $priceNet->getAmount();
             }
-            $originalAmount                 = $this->value->getAmount();
 
-            if ($this->value->getAmount() >= $shoppingcartTotal->getAmount()) {
-                $this->value->setAmount(
-                    $shoppingcartTotal->getAmount()
-                );
+            if ($originalAmount >= $shoppingcartTotal->getAmount()) {
+                $this->value->setAmount($shoppingcartTotal->getAmount());
+                $priceNet->setAmount($shoppingcartTotal->getAmount());
 
                 $originalAmountObj = new Money();
                 $originalAmountObj->setAmount($originalAmount);
@@ -194,12 +203,6 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
                 );
             }
 
-            $priceNetAmount = round($this->value->getAmount() / (100 + $this->SilvercartTax()->Rate) * 100, 4);
-            $priceNet = new Money();
-            $priceNet->setAmount($priceNetAmount);
-            $priceNet->setCurrency(SilvercartConfig::DefaultCurrency());
-            $priceNetTotal = $priceNet;
-
             $taxAmount = (float) 0.0;
 
             if ($this->value->getAmount() > 0) {
@@ -208,26 +211,29 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
                 if (SilvercartConfig::PriceType() == 'gross') {
                     $taxAmount = (float) $amount - ($amount / (100 + $this->SilvercartTax()->Rate) * 100);
                 } else {
-                    $taxAmount = (float) ($priceNetAmount * ($this->SilvercartTax()->Rate) / 100);
+                    $taxAmount = (float) ($priceNet->getAmount() * ($this->SilvercartTax()->Rate) / 100);
                 }
             }
 
+            $priceNet->setAmount($priceNet->getAmount() * -1);
+            $this->value->setAmount($this->value->getAmount() * -1);
 
-            $position = new DataObject(
+            $priceNetTotal = $priceNet;
+            $position      = new DataObject(
                 array(
                     'ID'                    => $this->ID,
                     'Name'                  => $title,
                     'ShortDescription'      => $this->code,
                     'LongDescription'       => $this->code,
                     'Currency'              => $this->value->getCurrency(),
-                    'Price'                 => $this->value->getAmount() * -1,
-                    'PriceFormatted'        => '-'.$this->value->Nice(),
-                    'PriceTotal'            => $this->value->getAmount() * -1,
-                    'PriceTotalFormatted'   => '-'.$this->value->Nice(),
-                    'PriceNet'              => $priceNet->getAmount() * -1,
-                    'PriceNetFormatted'     => '-'.$priceNet->Nice(),
-                    'PriceNetTotal'         => $priceNetTotal->getAmount() * -1,
-                    'PriceNetTotalFormatted'=> '-'.$priceNetTotal->Nice(),
+                    'Price'                 => $this->value->getAmount(),
+                    'PriceFormatted'        => $this->value->Nice(),
+                    'PriceTotal'            => $this->value->getAmount(),
+                    'PriceTotalFormatted'   => $this->value->Nice(),
+                    'PriceNet'              => $priceNet->getAmount(),
+                    'PriceNetFormatted'     => $priceNet->Nice(),
+                    'PriceNetTotal'         => $priceNetTotal->getAmount(),
+                    'PriceNetTotalFormatted'=> $priceNetTotal->Nice(),
                     'Quantity'              => '1',
                     'removeFromCartForm'    => $removeCartFormRendered,
                     'TaxRate'               => $this->SilvercartTax()->Rate,

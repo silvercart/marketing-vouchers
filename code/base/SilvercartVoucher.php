@@ -301,7 +301,7 @@ class SilvercartVoucher extends DataObject {
      * @copyright 2011 pixeltricks GmbH
      * @since 24.01.2011
      */
-    public function performShoppingCartConditionsCheck(SilvercartShoppingCart $silvercartShoppingCart, Member $member, $excludeShoppingCartPositions = false) {
+    public function performShoppingCartConditionsCheck(SilvercartShoppingCart $silvercartShoppingCart, $member, $excludeShoppingCartPositions = false) {
         
         $status = $this->areShoppingCartConditionsMet($silvercartShoppingCart);
 
