@@ -34,6 +34,7 @@ class SilvercartVoucherMember extends DataObjectDecorator {
      * defines relations, attributes and some settings this class.
      *
      * @return array for denfining and configuring the class via the framework
+     * 
      * @author Roland Lehmann <rlehmann@pixeltricks.de>
      * @since 18.10.2010
      */
@@ -47,4 +48,40 @@ class SilvercartVoucherMember extends DataObjectDecorator {
             )
         );
     }
+    
+    /**
+     * Manipulating CMS fields
+     *
+     * @param FieldSet $fields Fields to update
+     * 
+     * @return void
+     *
+     * @author Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 20.06.2012 
+     */
+    public function updateCMSFields(FieldSet $fields) {
+        $fields->removeByName('SilvercartAbsoluteRebateGiftVouchers');
+        $fields->removeByName('SilvercartVouchers');
+    }
+    
+    /**
+     * Extended field labels
+     *
+     * @param array &$labels Field labels
+     * 
+     * @return void
+     * 
+     * @author Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 20.06.2012
+     */
+    public function updateFieldLabels(&$labels) {
+        $labels = array_merge(
+                $labels,
+                array(
+                    'SilvercartAbsoluteRebateGiftVouchers'  => _t('SilvercartAbsoluteRebateGiftVoucher.PLURALNAME'),
+                    'SilvercartVouchers'                    => _t('SilvercartVoucher.PLURALNAME'),
+                )
+        );
+    }
+    
 }
