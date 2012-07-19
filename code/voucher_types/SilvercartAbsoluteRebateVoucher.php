@@ -99,7 +99,7 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
         return array_merge(
             parent::fieldLabels($includerelations),
             array(
-                'value'                                 => _t('SilvercartAbsoluteRebateVoucher.VALUE'),
+                'value' => _t('SilvercartAbsoluteRebateVoucher.VALUE'),
             )
         );
     }
@@ -219,28 +219,27 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
             $this->value->setAmount($this->value->getAmount() * -1);
 
             $priceNetTotal = $priceNet;
-            $position      = new DataObject(
-                array(
-                    'ID'                    => $this->ID,
-                    'Name'                  => $title,
-                    'ShortDescription'      => $this->code,
-                    'LongDescription'       => $this->code,
-                    'Currency'              => $this->value->getCurrency(),
-                    'Price'                 => $this->value->getAmount(),
-                    'PriceFormatted'        => $this->value->Nice(),
-                    'PriceTotal'            => $this->value->getAmount(),
-                    'PriceTotalFormatted'   => $this->value->Nice(),
-                    'PriceNet'              => $priceNet->getAmount(),
-                    'PriceNetFormatted'     => $priceNet->Nice(),
-                    'PriceNetTotal'         => $priceNetTotal->getAmount(),
-                    'PriceNetTotalFormatted'=> $priceNetTotal->Nice(),
-                    'Quantity'              => '1',
-                    'removeFromCartForm'    => $removeCartFormRendered,
-                    'TaxRate'               => $this->SilvercartTax()->Rate,
-                    'TaxAmount'             => -$taxAmount,
-                    'Tax'                   => $this->SilvercartTax()
-                )
-            );
+            $position      = new SilvercartVoucherPrice();
+            
+            $position->ID = $this->ID;
+            $position->Name                  = $title;
+            $position->ShortDescription      = $this->code;
+            $position->LongDescription       = $this->code;
+            $position->Currency              = $this->value->getCurrency();
+            $position->Price                 = $this->value->getAmount();
+            $position->PriceFormatted        = $this->value->Nice();
+            $position->PriceTotal            = $this->value->getAmount();
+            $position->PriceTotalFormatted   = $this->value->Nice();
+            $position->PriceNet              = $priceNet->getAmount();
+            $position->PriceNetFormatted     = $priceNet->Nice();
+            $position->PriceNetTotal         = $priceNetTotal->getAmount();
+            $position->PriceNetTotalFormatted= $priceNetTotal->Nice();
+            $position->Quantity              = 1;
+            $position->removeFromCartForm    = $removeCartFormRendered;
+            $position->TaxRate               = $this->SilvercartTax()->Rate;
+            $position->TaxAmount             = -$taxAmount;
+            $position->Tax                   = $this->SilvercartTax();
+
             $positions->push($position);
 
             if (!in_array($this->ID, self::$alreadyHandledPositionIDs)) {

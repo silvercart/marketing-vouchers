@@ -163,26 +163,28 @@ class SilvercartRelativeRebateVoucher extends SilvercartVoucher {
                 }
             }
 
-            $positions->push(
-                new DataObject(
-                    array(
-                        'ID'                    => $this->ID,
-                        'Name'                  => self::$singular_name.' (Code: '.$this->code.')',
-                        'ShortDescription'      => $this->code,
-                        'LongDescription'       => $this->code,
-                        'Currency'              => $currency->getShortName(null, i18n::get_locale()),
-                        'Price'                 => $rebateAmount * -1,
-                        'PriceFormatted'        => '-'.$rebate->Nice(),
-                        'PriceTotal'            => $rebateAmount * -1,
-                        'PriceTotalFormatted'   => '-'.$rebate->Nice(),
-                        'Quantity'              => '1',
-                        'removeFromCartForm'    => $removeCartFormRendered,
-                        'TaxRate'               => $this->SilvercartTax()->Rate,
-                        'TaxAmount'             => $rebateAmount - ($rebateAmount / (100 + $this->SilvercartTax()->Rate) * 100),
-                        'Tax'                   => $this->SilvercartTax()
-                    )
-                )
-            );
+            $position = new SilvercartVoucherPrice();
+
+            $position->ID                    = $this->ID;
+            $position->Name                  = self::$singular_name.' (Code: '.$this->code.')';
+            $position->ShortDescription      = $this->code;
+            $position->LongDescription       = $this->code;
+            $position->Currency              = $currency->getShortName(null, i18n::get_locale());
+            $position->Price                 = $rebateAmount * -1;
+            $position->PriceFormatted        = '-'.$rebate->Nice();
+            $position->PriceTotal            = $rebateAmount * -1;
+            $position->PriceTotalFormatted   = '-'.$rebate->Nice();
+            $position->PriceNet              = $rebateAmount * -1;
+            $position->PriceNetFormatted     = '-'.$rebate->Nice();
+            $position->PriceNetTotal         = $rebateAmount * -1;
+            $position->PriceNetTotalFormatted= '-'.$rebate->Nice();
+            $position->Quantity              = 1;
+            $position->removeFromCartForm    = $removeCartFormRendered;
+            $position->TaxRate               = $this->SilvercartTax()->Rate;
+            $position->TaxAmount             = $rebateAmount - ($rebateAmount / (100 + $this->SilvercartTax()->Rate) * 100);
+            $position->Tax                   = $this->SilvercartTax();
+
+            $positions->push($position);
         }
 
         return $positions;

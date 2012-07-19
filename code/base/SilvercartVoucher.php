@@ -1057,8 +1057,7 @@ class SilvercartVoucher extends DataObject {
             'SilvercartProduct',
             null,
             'getCMSFields_forPopup',
-            null,
-            'SilvercartProduct.Title ASC'
+            null
         );
         $productGroupPageTableField = new ManyManyComplexTableField(
             $this,

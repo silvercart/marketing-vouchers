@@ -193,7 +193,7 @@ class SilvercartVoucherShoppingCartPosition extends DataObject {
      */
     public function setImplicationStatus($status) {
         $status = (bool) $status;
-        
+
         $this->setField('implicatePosition', $status);
         $this->write();
     }

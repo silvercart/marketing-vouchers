@@ -85,7 +85,7 @@ class SilvercartVoucherShoppingCartActionForm extends CustomHtmlForm {
 
         if ($sessionData) {
             if (isset($sessionData['Message'])) {
-                $this->addMessage($sessionData['Message']);
+                $this->addErrorMessage('SilvercartVoucherCode', $sessionData['Message']);
             }
 
             if (isset($sessionData['ErrorMessages'])) {
