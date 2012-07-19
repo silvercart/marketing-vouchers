@@ -302,7 +302,6 @@ class SilvercartVoucher extends DataObject {
      * @since 24.01.2011
      */
     public function performShoppingCartConditionsCheck(SilvercartShoppingCart $silvercartShoppingCart, $member, $excludeShoppingCartPositions = false) {
-        
         $status = $this->areShoppingCartConditionsMet($silvercartShoppingCart);
 
         if ($excludeShoppingCartPositions &&
@@ -773,15 +772,26 @@ class SilvercartVoucher extends DataObject {
      */
     public function ShoppingCartPositions(SilvercartShoppingCart $silvercartShoppingCart, Member $member, $taxable = true, $excludeShoppingCartPositions = false, $createForms = true) {
         $positions = array();
-        $vouchers  = DataObject::get(
-            'SilvercartVoucher',
-            "isActive = 1"
+        $records   = DB::query(
+            sprintf(
+                "
+                SELECT DISTINCT
+                    VHis.SilvercartVoucherObjectID
+                FROM
+                    SilvercartVoucherHistory VHis
+                WHERE
+                    VHis.SilvercartShoppingCartID = %d
+                ORDER BY
+                    VHis.LastEdited DESC
+                ",
+                $silvercartShoppingCart->ID
+            )
         );
 
-        if ($vouchers) {
-            foreach ($vouchers as $voucher) {
-                $voucher->performShoppingCartConditionsCheck($silvercartShoppingCart, $member, $excludeShoppingCartPositions);
+        foreach ($records as $record) {
+            $voucher = DataObject::get_by_id('SilvercartVoucher', $record['SilvercartVoucherObjectID']);
 
+            if ($voucher) {
                 $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::get($silvercartShoppingCart->ID, $voucher->ID);
 
                 if ($silvercartVoucherShoppingCartPosition &&
@@ -979,13 +989,33 @@ class SilvercartVoucher extends DataObject {
             );
         }
 
-        $vouchers = DataObject::get(
-            'SilvercartVoucher',
-            "isActive = 1"
+        $member = Member::currentUser();
+
+        if (!$member ||
+             $member->SilvercartShoppingCartID === 0) {
+
+            return false;
+        }
+
+        $records   = DB::query(
+            sprintf(
+                "
+                SELECT DISTINCT VHis.SilvercartVoucherObjectID
+                FROM
+                    SilvercartVoucherHistory VHis
+                WHERE
+                    VHis.SilvercartShoppingCartID = %d
+                ORDER BY
+                    VHis.LastEdited DESC
+                ",
+                $member->SilvercartShoppingCartID
+            )
         );
 
-        if ($vouchers) {
-            foreach ($vouchers as $voucher) {
+        foreach ($records as $record) {
+            $voucher = DataObject::get_by_id('SilvercartVoucher', $record['SilvercartVoucherObjectID']);
+
+            if ($voucher) {
                 $removeFromCartForm = new SilvercartVoucherRemoveFromCartForm($controller, array('SilvercartVoucherID' => $voucher->ID));
 
                 $controller->registerCustomHtmlForm(
@@ -1006,14 +1036,37 @@ class SilvercartVoucher extends DataObject {
      * @since 24.01.2011
      */
     public function ShoppingCartTotal() {
+        $member = Member::currentUser();
+
+        if (!$member ||
+             $member->SilvercartShoppingCartID === 0) {
+
+            return false;
+        }
+
         $amountObj = new Money();
         $amount    = 0;
-        $vouchers  = DataObject::get(
-            'SilvercartVoucher'
+
+        $records   = DB::query(
+            sprintf(
+                "
+                SELECT DISTINCT
+                    VHis.SilvercartVoucherObjectID
+                FROM
+                    SilvercartVoucherHistory VHis
+                WHERE
+                    VHis.SilvercartShoppingCartID = %d
+                ORDER BY
+                    VHis.LastEdited DESC
+                ",
+                $member->SilvercartShoppingCartID
+            )
         );
 
-        if ($vouchers) {
-            foreach ($vouchers as $voucher) {
+        foreach ($records as $record) {
+            $voucher = DataObject::get_by_id('SilvercartVoucher', $record['SilvercartVoucherObjectID']);
+
+            if ($voucher) {
                 $amount += $voucher->getSilvercartShoppingCartTotal()->getAmount();
             }
         }
@@ -1154,21 +1207,5 @@ class SilvercartVoucher extends DataObject {
         }
 
         return $foundKey;
-    }
-
-    /**
-     * writes a log entry
-     *
-     * @param string $context the context for the log entry
-     * @param string $text    the text for the log entry
-     *
-     * @return void
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>, Sebastian Diel <sdiel@pixeltricks.de>
-     * @copyright 2010 pixeltricks GmbH
-     * @since 17.11.2010
-     */
-    public function Log($context, $text) {
-        SilvercartConfig::Log($context, $text, $this->ClassName);
     }
 }
