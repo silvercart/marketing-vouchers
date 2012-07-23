@@ -35,14 +35,11 @@ class SilvercartVoucherMember extends DataObjectDecorator {
      *
      * @return array for denfining and configuring the class via the framework
      * 
-     * @author Roland Lehmann <rlehmann@pixeltricks.de>
-     * @since 18.10.2010
+     * @author Roland Lehmann <rlehmann@pixeltricks.de>, Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 23.07.2012
      */
     public function extraStatics() {
         return array(
-            'has_many' => array(
-                'SilvercartAbsoluteRebateGiftVouchers' => 'SilvercartAbsoluteRebateGiftVoucher'
-            ),
             'many_many' => array(
                 'SilvercartVouchers' => 'SilvercartVoucher'
             )
@@ -57,10 +54,9 @@ class SilvercartVoucherMember extends DataObjectDecorator {
      * @return void
      *
      * @author Sebastian Diel <sdiel@pixeltricks.de>
-     * @since 20.06.2012 
+     * @since 23.07.2012
      */
     public function updateCMSFields(FieldSet $fields) {
-        $fields->removeByName('SilvercartAbsoluteRebateGiftVouchers');
         $fields->removeByName('SilvercartVouchers');
     }
     
@@ -72,14 +68,13 @@ class SilvercartVoucherMember extends DataObjectDecorator {
      * @return void
      * 
      * @author Sebastian Diel <sdiel@pixeltricks.de>
-     * @since 20.06.2012
+     * @since 23.07.2012
      */
     public function updateFieldLabels(&$labels) {
         $labels = array_merge(
                 $labels,
                 array(
-                    'SilvercartAbsoluteRebateGiftVouchers'  => _t('SilvercartAbsoluteRebateGiftVoucher.PLURALNAME'),
-                    'SilvercartVouchers'                    => _t('SilvercartVoucher.PLURALNAME'),
+                    'SilvercartVouchers'    => _t('SilvercartVoucher.PLURALNAME'),
                 )
         );
     }
