@@ -138,15 +138,15 @@ class SilvercartVoucher extends DataObject {
      * @return array
      *
      * @author Sascha Koehler <skoehler@pixeltricks.de>, Sebastian Diel <sdiel@pixeltricks.de>
-     * @since 19.10.2011
+     * @since 28.08.2012
      */
     public function summaryFields() {
         return array(
-            'castedFormattedCreationDate'           => _t('SilvercartVoucher.CREATED'),
-            'code'                                  => _t('SilvercartVoucher.CODE'),
-            'isActive'                              => _t('SilvercartVoucher.ISACTIVE'),
-            'quantity'                              => _t('SilvercartVoucher.QUANTITY'),
-            'quantityRedeemed'                      => _t('SilvercartVoucher.QUANTITY_REDEEMED'),
+            'castedFormattedCreationDate'           => $this->fieldLabel('castedFormattedCreationDate'),
+            'code'                                  => $this->fieldLabel('code'),
+            'isActive'                              => $this->fieldLabel('isActive'),
+            'quantity'                              => $this->fieldLabel('quantity'),
+            'quantityRedeemed'                      => $this->fieldLabel('quantityRedeemed'),
         );
     }
     
@@ -155,23 +155,22 @@ class SilvercartVoucher extends DataObject {
      *
      * @return array
      *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @copyright 2011 pixeltricks GmbH
-     * @since 11.05.2011
+     * @author Sascha Koehler <skoehler@pixeltricks.de>, Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 28.08.2012
      */
     public function searchableFields() {
         $fields = array();
         
         $fields['code'] = array(
-            'title'     => _t('SilvercartVoucher.CODE'),
+            'title'     => $this->fieldLabel('code'),
             'filter'    => 'PartialMatchFilter'
         );
         $fields['quantity'] = array(
-            'title'     => _t('SilvercartVoucher.QUANTITY'),
+            'title'     => $this->fieldLabel('quantity'),
             'filter'    => 'PartialMatchFilter'
         );
         $fields['isActive'] = array(
-            'title'     => _t('SilvercartVoucher.ISACTIVE'),
+            'title'     => $this->fieldLabel('isActive'),
             'filter'    => 'ExactMatchFilter'
         );
         
@@ -1084,6 +1083,22 @@ class SilvercartVoucher extends DataObject {
      * @return FieldSet
      */
     public function  getCMSFields($params = null) {
+        $fieldClasses = array(
+                'minimumShoppingCartValue'  => 'SilvercartMoneyField',
+                'maximumShoppingCartValue'  => 'SilvercartMoneyField',
+        );
+        if (is_array($params) &&
+            array_key_exists('fieldClasses', $params)) {
+            $params['fieldClasses'] = array_merge(
+                    $params['fieldClasses'],
+                    $fieldClasses
+            );
+        } else {
+            if (!is_array($params)) {
+                $params = array();
+            }
+            $params['fieldClasses'] = $fieldClasses;
+        }
         $fields = parent::getCMSFields($params);
 
         $memberTableField = new ManyManyComplexTableField(

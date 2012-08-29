@@ -37,9 +37,6 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
      * Attributes.
      *
      * @var array
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 20.01.2011
      */
     public static $db = array(
         'value' => 'Money'
@@ -56,15 +53,10 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
      * @return string
      * 
      * @author Sebastian Diel <sdiel@pixeltricks.de>
-     * @since 19.10.2011
+     * @since 28.08.2012
      */
     public function plural_name() {
-        if (_t('SilvercartAbsoluteRebateVoucher.PLURALNAME')) {
-            $plural_name = _t('SilvercartAbsoluteRebateVoucher.PLURALNAME');
-        } else {
-            $plural_name = parent::plural_name();
-        }
-        return $plural_name;
+        return SilvercartTools::plural_name_for($this);
     }
     
     /**
@@ -74,15 +66,10 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
      * @return string
      * 
      * @author Sebastian Diel <sdiel@pixeltricks.de>
-     * @since 19.10.2011
+     * @since 28.08.2012
      */
     public function singular_name() {
-        if (_t('SilvercartAbsoluteRebateVoucher.SINGULARNAME')) {
-            $singular_name = _t('SilvercartAbsoluteRebateVoucher.SINGULARNAME');
-        } else {
-            $singular_name = parent::singular_name();
-        }
-        return $singular_name;
+        return SilvercartTools::singular_name_for($this);
     }
     
     /**
@@ -290,13 +277,18 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
      * @param array $params Additional parameters
      *
      * @return FieldSet
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @copyright 2011 pixeltricks GmbH
-     * @since 21.01.2011
      */
     public function getCMSFields($params = null) {
-        $fields = parent::getCMSFields($params);
+        $fields = parent::getCMSFields(
+                array_merge(
+                        array(
+                            'fieldClasses' => array(
+                                'value' => 'SilvercartMoneyField',
+                            ),
+                        ),
+                        (array) $params
+                )
+        );
 
         $fields->removeByName('quantityRedeemed');
         $quantityRedeemedField = new LiteralField('quantityRedeemed', '<br />' . _t('SilvercartVoucher.REDEEMED_VOUCHERS', 'Redeemed vouchers: ') . ($this->quantityRedeemed ? $this->quantityRedeemed : '0'));
