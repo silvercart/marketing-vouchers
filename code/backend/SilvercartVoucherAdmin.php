@@ -34,20 +34,13 @@ class SilvercartVoucherAdmin extends ModelAdmin {
      * The code of the menu under which this admin should be shown.
      * 
      * @var string
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 16.01.2012
      */
-    public static $menuCode = 'modules';
+    public static $menuCode = 'products';
 
     /**
      * The URL segment
      *
      * @var string
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @copyright 2011 pixeltricks GmbH
-     * @since 10.02.2011
      */
     public static $url_segment = 'silvercart-vouchers';
 
@@ -55,21 +48,13 @@ class SilvercartVoucherAdmin extends ModelAdmin {
      * The menu title
      *
      * @var string
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @copyright 2011 pixeltricks GmbH
-     * @since 10.02.2011
      */
-    public static $menu_title  = 'Silvercart Gutscheine';
+    public static $menu_title  = 'Vouchers';
     
     /**
      * Managed models
      *
      * @var array
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @copyright 2011 pixeltricks GmbH
-     * @since 10.02.2011
      */
     public static $managed_models = array(
         'SilvercartAbsoluteRebateVoucher' => array(
@@ -85,14 +70,12 @@ class SilvercartVoucherAdmin extends ModelAdmin {
      * 
      * @return void
      * 
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @copyright 2011 pixeltricks GmbH
-     * @since 26.05.2011
+     * @author Sascha Koehler <skoehler@pixeltricks.de>, Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 29.08.2012
      */
     public function __construct() {
-        parent::__construct();
-        
         self::$menu_title = _t('SilvercartVoucherAdmin.TITLE');
+        parent::__construct();
     }
 }
 /**

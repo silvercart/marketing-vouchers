@@ -41,7 +41,7 @@ $lang['de_DE']['SilvercartNaturalRebateVoucher']['PLURALNAME']                  
 $lang['de_DE']['SilvercartRelativeRebateVoucher']['SINGULARNAME']               = 'Rabattgutschein';
 $lang['de_DE']['SilvercartRelativeRebateVoucher']['PLURALNAME']                 = 'Rabattgutscheine';
 
-$lang['de_DE']['SilvercartVoucherAdmin']['TITLE']                               = 'SilverCart Gutscheine';
+$lang['de_DE']['SilvercartVoucherAdmin']['TITLE']                               = 'Gutscheine';
 
 $lang['de_DE']['SilvercartVoucher']['SINGULARNAME']                             = 'Gutschein';
 $lang['de_DE']['SilvercartVoucher']['PLURALNAME']                               = 'Gutscheine';
