@@ -821,9 +821,8 @@ class SilvercartVoucher extends DataObject {
      *
      * @return DataObjectSet
      *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @copyright 2011 pixeltricks GmbH
-     * @since 07.02.2011
+     * @author Sascha Koehler <skoehler@pixeltricks.de>, Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 29.08.2012
      */
     public function ShoppingCartConvert(SilvercartShoppingCart $silvercartShoppingCart, Member $member, $taxable = true) {
         $shoppingCartPositions  = DataObject::get(
@@ -842,7 +841,11 @@ class SilvercartVoucher extends DataObject {
                 }
 
                 $shoppingCartPosition->SilvercartVoucher()->quantityRedeemed += 1;
+                $originalRecord = DataObject::get_by_id('SilvercartVoucher', $shoppingCartPosition->SilvercartVoucher()->ID, false);
+                $amount = $shoppingCartPosition->SilvercartVoucher()->value->getAmount();
+                $shoppingCartPosition->SilvercartVoucher()->value->setAmount($originalRecord->value->getAmount());
                 $shoppingCartPosition->SilvercartVoucher()->write();
+                $shoppingCartPosition->SilvercartVoucher()->value->setAmount($amount);
                 
                 // Call conversion method on every voucher
                 if (method_exists($shoppingCartPosition->SilvercartVoucher(), 'convert')) {
