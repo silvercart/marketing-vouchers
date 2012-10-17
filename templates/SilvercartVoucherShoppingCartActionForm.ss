@@ -1,4 +1,4 @@
-<form class="yform" $FormAttributes >
+<form class="yform silvercart-voucher-cart-action-form" $FormAttributes >
       $CustomHtmlFormMetadata
 
       <fieldset>
