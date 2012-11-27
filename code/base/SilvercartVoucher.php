@@ -102,6 +102,20 @@ class SilvercartVoucher extends DataObject {
     );
     
     /**
+     * A list of already checked shopping cart amounts
+     *
+     * @var type 
+     */
+    protected $isShoppingCartAmountValid = array();
+    
+    /**
+     * A list of already checked shopping cart positions
+     *
+     * @var type 
+     */
+    protected $isValidForShoppingCartItems = array();
+    
+    /**
      * Field labels for display in tables.
      *
      * @param boolean $includerelations A boolean value to indicate if the labels returned include relation fields
@@ -296,48 +310,49 @@ class SilvercartVoucher extends DataObject {
      *
      * @return void
      *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @copyright 2011 pixeltricks GmbH
-     * @since 24.01.2011
+     * @author Sascha Koehler <skoehler@pixeltricks.de>, Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 27.11.2012
      */
     public function performShoppingCartConditionsCheck(SilvercartShoppingCart $silvercartShoppingCart, $member, $excludeShoppingCartPositions = false) {
-        $status = $this->areShoppingCartConditionsMet($silvercartShoppingCart);
+        if ($this->ID > 0) {
+            $status = $this->areShoppingCartConditionsMet($silvercartShoppingCart);
 
-        if ($excludeShoppingCartPositions &&
-            in_array($this->ID, $excludeShoppingCartPositions)) {
+            if ($excludeShoppingCartPositions &&
+                in_array($this->ID, $excludeShoppingCartPositions)) {
 
-            return true;
-        }
-        
-        if ($status['error']) {
-            $silvercartVoucherShoppingCartPosition = DataObject::get_one(
-                'SilvercartVoucherShoppingCartPosition',
-                sprintf(
-                    "SilvercartShoppingCartID = %d AND SilvercartVoucherID = %d",
-                    $silvercartShoppingCart->ID,
-                    $this->ID
-                )
-            );
-
-            if ($silvercartVoucherShoppingCartPosition &&
-                $silvercartVoucherShoppingCartPosition->implicatePosition) {
-                $silvercartVoucherShoppingCartPosition->setImplicationStatus(false);
-                
-                $voucherHistory = new SilvercartVoucherHistory();
-                $voucherHistory->add($this, $member, 'removed');
+                return true;
             }
-        } else {
-            $silvercartVoucherShoppingCartPosition = silvercartVoucherShoppingCartPosition::get($silvercartShoppingCart->ID, $this->ID);
 
-            if ($silvercartVoucherShoppingCartPosition &&
-                $silvercartVoucherShoppingCartPosition->implicatePosition == false) {
+            if ($status['error']) {
+                $silvercartVoucherShoppingCartPosition = DataObject::get_one(
+                    'SilvercartVoucherShoppingCartPosition',
+                    sprintf(
+                        "SilvercartShoppingCartID = %d AND SilvercartVoucherID = %d",
+                        $silvercartShoppingCart->ID,
+                        $this->ID
+                    )
+                );
 
-                $voucherHistory = new SilvercartVoucherHistory();
-                $voucherHistory->add($this, $member, 'redeemed');
-                
-                $silvercartVoucherShoppingCartPosition->setImplicationStatus(true);
+                if ($silvercartVoucherShoppingCartPosition &&
+                    $silvercartVoucherShoppingCartPosition->implicatePosition) {
+                    $silvercartVoucherShoppingCartPosition->setImplicationStatus(false);
 
-                $member->SilvercartVouchers()->add($this);
+                    $voucherHistory = new SilvercartVoucherHistory();
+                    $voucherHistory->add($this, $member, 'removed');
+                }
+            } else {
+                $silvercartVoucherShoppingCartPosition = silvercartVoucherShoppingCartPosition::get($silvercartShoppingCart->ID, $this->ID);
+
+                if ($silvercartVoucherShoppingCartPosition &&
+                    $silvercartVoucherShoppingCartPosition->implicatePosition == false) {
+
+                    $voucherHistory = new SilvercartVoucherHistory();
+                    $voucherHistory->add($this, $member, 'redeemed');
+
+                    $silvercartVoucherShoppingCartPosition->setImplicationStatus(true);
+
+                    $member->SilvercartVouchers()->add($this);
+                }
             }
         }
         
@@ -511,54 +526,48 @@ class SilvercartVoucher extends DataObject {
      *
      * @return bool
      *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @copyright 2011 pixeltricks GmbH
-     * @since 20.01.2011
+     * @author Sascha Koehler <skoehler@pixeltricks.de>, Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 27.11.2012
      */
     public function isShoppingCartAmountValid(Money $amount) {
-        $isMinimumValid          = false;
-        $isUndefinedMinimumValid = false;
-        $isMaximumValid          = false;
-        $isUndefinedMaximumValid = false;
+        $cacheKey = (string) $amount->getAmount();
+        if (!array_key_exists($cacheKey, $this->isShoppingCartAmountValid)) {
+            $isShoppingCartAmountValid  = false;
+            $isMinimumValid             = false;
+            $isUndefinedMinimumValid    = false;
+            $isMaximumValid             = false;
+            $isUndefinedMaximumValid    = false;
 
-        if ($this->minimumShoppingCartValue->getAmount() > 0) {
-            if ($amount->getAmount() >= $this->minimumShoppingCartValue->getAmount()) {
-                $isMinimumValid = true;
+            if ($this->minimumShoppingCartValue->getAmount() > 0) {
+                if ($amount->getAmount() >= $this->minimumShoppingCartValue->getAmount()) {
+                    $isMinimumValid = true;
+                }
+            } else {
+                $isUndefinedMinimumValid = true;
             }
-        } else {
-            $isUndefinedMinimumValid = true;
-        }
 
-        if ($this->maximumShoppingCartValue->getAmount() > 0) {
-            if ($amount->getAmount() <= $this->maximumShoppingCartValue->getAmount()) {
-                $isMaximumValid = true;
+            if ($this->maximumShoppingCartValue->getAmount() > 0) {
+                if ($amount->getAmount() <= $this->maximumShoppingCartValue->getAmount()) {
+                    $isMaximumValid = true;
+                }
+            } else {
+                $isUndefinedMaximumValid = true;
             }
-        } else {
-            $isUndefinedMaximumValid = true;
+
+            if (($isMinimumValid &&
+                 $isMaximumValid) ||
+                ($isUndefinedMinimumValid &&
+                 $isUndefinedMaximumValid) ||
+                ($isUndefinedMinimumValid &&
+                 $isMaximumValid) ||
+                ($isUndefinedMaximumValid &&
+                $isMinimumValid)) {
+                $isShoppingCartAmountValid = true;
+            }
+            $this->isShoppingCartAmountValid[$cacheKey] = $isShoppingCartAmountValid;
         }
 
-        if ($isMinimumValid &&
-            $isMaximumValid) {
-
-            return true;
-        }
-        if ($isUndefinedMinimumValid &&
-            $isUndefinedMaximumValid) {
-
-            return true;
-        }
-        if ($isUndefinedMinimumValid &&
-            $isMaximumValid) {
-
-            return true;
-        }
-        if ($isUndefinedMaximumValid &&
-            $isMinimumValid) {
-
-            return true;
-        }
-
-        return false;
+        return $this->isShoppingCartAmountValid[$cacheKey];
     }
 
     /**
@@ -569,71 +578,62 @@ class SilvercartVoucher extends DataObject {
      *
      * @return bool
      *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @copyright 2011 pixeltricks GmbH
-     * @since 20.01.2011
+     * @author Sascha Koehler <skoehler@pixeltricks.de>, Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 27.11.2012
      */
     public function isValidForShoppingCartItems(SilvercartShoppingCartPosition $silvercartShoppingCartPositions) {
-        $isValidByUndefinedProduct      = false;
-        $isValidByProduct               = false;
-        $isValidByUndefinedProductGroup = false;
-        $isValidByProductGroup          = false;
+        $cacheKey = (string) implode('_', $silvercartShoppingCartPositions->map('ID', 'ID'));
+        if (!array_key_exists($cacheKey, $this->isValidForShoppingCartItems)) {
+            $isValidForShoppingCartItems    = false;
+            $isValidByUndefinedProduct      = false;
+            $isValidByProduct               = false;
+            $isValidByUndefinedProductGroup = false;
+            $isValidByProductGroup          = false;
 
-        if ($this->RestrictToSilvercartProduct()->Count() > 0) {
-            foreach ($this->RestrictToSilvercartProduct() as $restrictedProduct) {
-                foreach ($silvercartShoppingCartPositions as $silvercartShoppingCartPosition) {
-                    if ($silvercartShoppingCartPosition->SilvercartProduct()->ID == $restrictedProduct->ID) {
-                        $isValidByProduct = true;
-                        break(2);
+            if ($this->RestrictToSilvercartProduct()->Count() > 0) {
+                foreach ($this->RestrictToSilvercartProduct() as $restrictedProduct) {
+                    foreach ($silvercartShoppingCartPositions as $silvercartShoppingCartPosition) {
+                        if ($silvercartShoppingCartPosition->SilvercartProduct()->ID == $restrictedProduct->ID) {
+                            $isValidByProduct = true;
+                            break(2);
+                        }
                     }
                 }
+            } else {
+                $isValidByUndefinedProduct = true;
             }
-        } else {
-            $isValidByUndefinedProduct = true;
-        }
 
-        if ($this->RestrictToSilvercartProductGroupPage()->Count() > 0) {
-            foreach ($this->RestrictToSilvercartProductGroupPage() as $restrictedProductGroup) {
-                foreach ($silvercartShoppingCartPositions as $silvercartShoppingCartPosition) {
-                    if ($silvercartShoppingCartPosition->SilvercartProduct()->SilvercartProductGroup()->ID == $restrictedProductGroup->ID) {
-                        $isValidByProductGroup = true;
-                        break(2);
+            if ($this->RestrictToSilvercartProductGroupPage()->Count() > 0) {
+                foreach ($this->RestrictToSilvercartProductGroupPage() as $restrictedProductGroup) {
+                    foreach ($silvercartShoppingCartPositions as $silvercartShoppingCartPosition) {
+                        if ($silvercartShoppingCartPosition->SilvercartProduct()->SilvercartProductGroup()->ID == $restrictedProductGroup->ID) {
+                            $isValidByProductGroup = true;
+                            break(2);
+                        }
                     }
                 }
+            } else {
+                $isValidByUndefinedProductGroup = true;
             }
-        } else {
-            $isValidByUndefinedProductGroup = true;
+
+            // --------------------------------------------------------------------
+            // check if product is valid for this cart
+            // --------------------------------------------------------------------
+            if (($isValidByProduct &&
+                 $isValidByProductGroup) ||
+                // exceptional case: no product and groups defined
+                ($isValidByUndefinedProduct &&
+                 $isValidByUndefinedProductGroup) ||
+                (!$isValidByProductGroup &&
+                 $isValidByProduct) ||
+                (!$isValidByProduct &&
+                 $isValidByProductGroup)) {
+                $isValidForShoppingCartItems = true;
+            }
+
+            $this->isValidForShoppingCartItems[$cacheKey] = $isValidForShoppingCartItems;
         }
-
-        // --------------------------------------------------------------------
-        // check if product is valid for this cart
-        // --------------------------------------------------------------------
-        if ($isValidByProduct &&
-            $isValidByProductGroup) {
-
-            return true;
-        }
-
-        // exceptional case: no product and groups defined
-        if ($isValidByUndefinedProduct &&
-            $isValidByUndefinedProductGroup) {
-
-            return true;
-        }
-
-        if (!$isValidByProductGroup &&
-             $isValidByProduct) {
-
-            return true;
-        }
-
-        if (!$isValidByProduct &&
-             $isValidByProductGroup) {
-
-            return true;
-        }
-
-        return false;
+        return $this->isValidForShoppingCartItems[$cacheKey];
     }
 
     /**
