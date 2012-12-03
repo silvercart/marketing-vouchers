@@ -298,6 +298,18 @@ class SilvercartVoucher extends DataObject {
     public function convert(SilvercartShoppingCart $silvercartShoppingCart) {
         // Implement in descendants
     }
+    
+    /**
+     * Split a voucher value
+     * 
+     * @return void
+     * 
+     * @author Patrick Schneider <pschneider@pixeltricks.de>
+     * @since 03.12.2012
+     */
+    protected function doSplitValue($shoppingCartPosition = null) {
+        // Implement in descendants
+    }
 
     /**
      * Performs checks related to the shopping cart entries to ensure that
@@ -839,13 +851,11 @@ class SilvercartVoucher extends DataObject {
                 if ($shoppingCartPosition->SilvercartVoucher()->quantity > 0) {
                     $shoppingCartPosition->SilvercartVoucher()->quantity -= 1;
                 }
-
-                $shoppingCartPosition->SilvercartVoucher()->quantityRedeemed += 1;
-                $originalRecord = DataObject::get_by_id('SilvercartVoucher', $shoppingCartPosition->SilvercartVoucher()->ID, false);
-                $amount = $shoppingCartPosition->SilvercartVoucher()->value->getAmount();
-                $shoppingCartPosition->SilvercartVoucher()->value->setAmount($originalRecord->value->getAmount());
-                $shoppingCartPosition->SilvercartVoucher()->write();
-                $shoppingCartPosition->SilvercartVoucher()->value->setAmount($amount);
+                
+                // split the value of the voucher
+                if (method_exists($shoppingCartPosition->SilvercartVoucher(), 'doSplitValue')) {
+                    $shoppingCartPosition->SilvercartVoucher()->doSplitValue($shoppingCartPosition);
+                }
                 
                 // Call conversion method on every voucher
                 if (method_exists($shoppingCartPosition->SilvercartVoucher(), 'convert')) {
@@ -854,7 +864,11 @@ class SilvercartVoucher extends DataObject {
 
                 // Connect voucher to customer
                 $member->SilvercartVouchers()->add($shoppingCartPosition->SilvercartVoucher());
-
+                
+                // increase redeemd quantity
+                $shoppingCartPosition->SilvercartVoucher()->quantityRedeemed += 1;
+                $shoppingCartPosition->SilvercartVoucher()->write();
+                
                 // And remove from the customers shopping cart
                 SilvercartVoucherShoppingCartPosition::remove($silvercartShoppingCart->ID, $shoppingCartPosition->SilvercartVoucher()->ID);
             }

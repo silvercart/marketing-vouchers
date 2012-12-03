@@ -297,4 +297,23 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
 
         return $fields;
     }
+    
+    /**
+     * splits a value of a voucher to make sure a voucher can be used until it
+     * has a value of 0
+     * 
+     * @return void
+     * 
+     * @author Patrick Schneider <pschneider@pixeltricks.de>
+     * @since 03.12.2012
+     */
+    protected function doSplitValue($shoppingCartPosition = null) {
+        if (!is_null($shoppingCartPosition)){
+            $originalRecord = DataObject::get_by_id('SilvercartVoucher', $shoppingCartPosition->SilvercartVoucher()->ID, false);
+            $amount = $shoppingCartPosition->SilvercartVoucher()->value->getAmount();
+            $shoppingCartPosition->SilvercartVoucher()->value->setAmount($originalRecord->value->getAmount());
+            $shoppingCartPosition->SilvercartVoucher()->write();
+            $shoppingCartPosition->SilvercartVoucher()->value->setAmount($amount);
+        }
+    }
 }
