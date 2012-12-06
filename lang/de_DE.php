@@ -47,6 +47,7 @@ $lang['de_DE']['SilvercartVoucher']['SINGULARNAME']                             
 $lang['de_DE']['SilvercartVoucher']['PLURALNAME']                               = 'Gutscheine';
 $lang['de_DE']['SilvercartVoucher']['CODE']                                     = 'Gutscheincode';
 $lang['de_DE']['SilvercartVoucher']['CREATED']                                  = 'Erstellt am';
+$lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY'] = 'Dieser Gutschein wurde vollständig eingelöst.';
 $lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID'] = 'Der Warenkorbwert ist nicht passend.';
 $lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID'] = 'Dieser Gutschein kann nicht für die Waren eingelöst werden, die sich in Ihrem Warenkorb befinden.';
 $lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-CODE_NOT_VALID']              = 'Dieser Gutscheincode ist nicht gültig.';
@@ -65,6 +66,7 @@ $lang['de_DE']['SilvercartVoucher']['QUANTITY']                                 
 $lang['de_DE']['SilvercartVoucher']['QUANTITY_REDEEMED']                        = 'Anzahl eingelöst';
 $lang['de_DE']['SilvercartVoucher']['REDEEM_VOUCHER']                           = 'Gutschein einlösen: ';
 $lang['de_DE']['SilvercartVoucher']['REDEEMED_VOUCHERS']                        = 'Eingelöste Gutscheine: ';
+$lang['de_DE']['SilvercartVoucher']['REMAINING_CREDIT']                         = 'Restliches Guthaben';
 $lang['de_DE']['SilvercartVoucher']['RESTRICT_TO_MEMBER']                       = 'An Kunde(n) binden';
 $lang['de_DE']['SilvercartVoucher']['RESTRICT_TO_GROUP']                        = 'An Kundenklasse(n) binden';
 $lang['de_DE']['SilvercartVoucher']['RESTRICT_TO_PRODUCT']                      = 'An Artikel binden';

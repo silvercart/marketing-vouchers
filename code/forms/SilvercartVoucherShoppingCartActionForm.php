@@ -75,8 +75,8 @@ class SilvercartVoucherShoppingCartActionForm extends CustomHtmlForm {
      * Setzt Initialwerte in Formularfeldern.
      *
      * @return void
-     * @author Roland Lehmann <rlehmann@pixeltricks.de>
-     * @since 21.01.2011
+     * @author Roland Lehmann <rlehmann@pixeltricks.de>, Patrick Schneider <pschneider@pixeltricks.de>
+     * @since 06.12.2012
      */
     protected function fillInFieldValues() {
         parent::fillInFieldValues();
@@ -94,7 +94,7 @@ class SilvercartVoucherShoppingCartActionForm extends CustomHtmlForm {
             Session::clear($this->sessionStatusMessageId);
         }
 
-        $this->preferences['submitButtonTitle'] = _t('SilvercartVoucher.LABEL-REDEEM', 'Einlösen');
+        $this->preferences['submitButtonTitle'] = _t('SilvercartVoucher.LABEL-REDEEM');
     }
 
     /**
@@ -105,8 +105,8 @@ class SilvercartVoucherShoppingCartActionForm extends CustomHtmlForm {
      * @param Form           $form     form object
      * @param array          $formData CustomHTMLForms session data
      *
-     * @author Roland Lehmann <rlehmann@pixeltricks.de>
-     * @since 21.01.2011
+     * @author Roland Lehmann <rlehmann@pixeltricks.de>, Patrick Schneider <pschneider@pixeltricks.de>
+     * @since 06.12.2012
      * @return void
      */
     protected function submitSuccess($data, $form, $formData) {
@@ -126,10 +126,10 @@ class SilvercartVoucherShoppingCartActionForm extends CustomHtmlForm {
         $shoppingCart   = $member->SilvercartShoppingCart();
 
         if ($voucher) {
-            $status = $voucher->checkifAllowedInShoppingCart($voucherCode, $member, $shoppingCart);
+            $status = $voucher->checkifAllowedInShoppingCart($voucher, $member, $shoppingCart);
         } else {
             $status['error']        = true;
-            $status['messages'][]   = _t('SilvercartVoucher.ERRORMESSAGE-CODE_NOT_VALID', 'Dieser Gutscheincode ist nicht gültig.');
+            $status['messages'][]   = _t('SilvercartVoucher.ERRORMESSAGE-CODE_NOT_VALID');
         }
 
         if ($status['error']) {

@@ -67,21 +67,11 @@ class SilvercartVoucherShoppingCartPosition extends DataObject {
      *
      * @return void
      *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @copyright 2011 pixeltricks GmbH
-     * @since 03.02.2011
+     * @author Sascha Koehler <skoehler@pixeltricks.de>, Patrick Schneider <pschneider@pixeltricks.de>
+     * @since 06.12.2012
      */
     public static function add($silvercartShoppingCartID, $voucherID) {
-        $silvercartVoucherShoppingCartPosition = DataObject::get_one(
-            'SilvercartVoucherShoppingCartPosition',
-            sprintf(
-                "`SilvercartShoppingCartID` = '%d' AND `SilvercartVoucherID` = '%d'",
-                $silvercartShoppingCartID,
-                $voucherID
-            )
-        );
-
-        if (!$silvercartVoucherShoppingCartPosition) {
+        if (!self::combinationExists($silvercartShoppingCartID, $voucherID)) {
             $silvercartVoucherShoppingCartPosition = new SilvercartVoucherShoppingCartPosition();
             $silvercartVoucherShoppingCartPosition->setField('SilvercartShoppingCartID',      $silvercartShoppingCartID);
             $silvercartVoucherShoppingCartPosition->setField('SilvercartVoucherID', $voucherID);

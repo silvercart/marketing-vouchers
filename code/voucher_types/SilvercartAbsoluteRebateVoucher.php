@@ -32,7 +32,7 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
 
     public static $alreadyHandledPositionIDs = array();
     public static $alreadyHandledPositions = array();
-    
+
     /**
      * Attributes.
      *
@@ -45,40 +45,40 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
     // ------------------------------------------------------------------------
     // Methods
     // ------------------------------------------------------------------------
-    
+
     /**
      * Returns the translated plural name of the object. If no translation exists
      * the class name will be returned.
-     * 
+     *
      * @return string
-     * 
+     *
      * @author Sebastian Diel <sdiel@pixeltricks.de>
      * @since 28.08.2012
      */
     public function plural_name() {
         return SilvercartTools::plural_name_for($this);
     }
-    
+
     /**
      * Returns the translated singular name of the object. If no translation exists
      * the class name will be returned.
-     * 
+     *
      * @return string
-     * 
+     *
      * @author Sebastian Diel <sdiel@pixeltricks.de>
      * @since 28.08.2012
      */
     public function singular_name() {
         return SilvercartTools::singular_name_for($this);
     }
-    
+
     /**
      * Field labels for display in tables.
      *
      * @param boolean $includerelations A boolean value to indicate if the labels returned include relation fields
      *
      * @return array
-     * 
+     *
      * @author Sebastian Diel <sdiel@pixeltricks.de>
      * @since 19.10.2011
      */
@@ -162,34 +162,44 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
 
             // The shopppingcart total may not be below 0
             $excludeShoppingCartPositions[] = $this->ID;
-            if (SilvercartConfig::PriceType() == 'gross') {
-                $shoppingcartTotal = $silvercartShoppingCart->getTaxableAmountGrossWithoutFeesAndCharges(false, $excludeShoppingCartPositions);
-                $originalAmount = $this->value->getAmount();
-
-            } else {
-                $shoppingcartTotal = $silvercartShoppingCart->getTaxableAmountNetWithoutFeesAndCharges(false, $excludeShoppingCartPositions);
-                $originalAmount = $priceNet->getAmount();
-            }
-
+            $shoppingcartTotal = $silvercartShoppingCart->getTaxableAmountGrossWithoutFeesAndCharges(false, $excludeShoppingCartPositions);
+            $originalAmount = $this->value->getAmount();
+            
             if ($originalAmount >= $shoppingcartTotal->getAmount()) {
-                $this->value->setAmount($shoppingcartTotal->getAmount());
-                $priceNet->setAmount($shoppingcartTotal->getAmount());
-
+                
                 $originalAmountObj = new Money();
                 $originalAmountObj->setAmount($originalAmount);
-
-                $restAmountObj = new Money();
-                $restAmountObj->setAmount(
-                    $originalAmount - $this->value->getAmount()
-                );
-
+                
                 $title .= sprintf(
                     "<br />%s: %s",
                     _t('SilvercartVoucher.ORIGINAL_VALUE'),
                     $originalAmountObj->Nice()
                 );
-            }
+                
+                $member = SilvercartCustomer::currentRegisteredCustomer();
+                if ($member &&
+                    !is_null($member->SilvercartVouchers()->find('ID', $this->ID))) {                
+                    
+                    $voucherOnMember = $member->SilvercartVouchers()->find('ID', $this->ID);
+                    $this->value->setAmount((float)$voucherOnMember->remainingAmount);
 
+                    $restAmountObj = new Money();
+                    $restAmountObj->setAmount(
+                        $voucherOnMember->remainingAmount
+                    );
+                    
+                    $title .= sprintf(
+                        "<br />%s: %s",
+                        _t('SilvercartVoucher.REMAINING_CREDIT'),
+                        $restAmountObj->Nice()
+                    );
+                    
+                } else {
+                    $this->value->setAmount($shoppingcartTotal->getAmount());
+                    $priceNet->setAmount($shoppingcartTotal->getAmount());
+                }
+            }
+            
             $taxAmount = (float) 0.0;
 
             if ($this->value->getAmount() > 0) {
@@ -201,32 +211,12 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
                     $taxAmount = (float) ($priceNet->getAmount() * ($this->SilvercartTax()->Rate) / 100);
                 }
             }
-
+            
             $priceNet->setAmount($priceNet->getAmount() * -1);
             $this->value->setAmount($this->value->getAmount() * -1);
-
-            $priceNetTotal = $priceNet;
-            $position      = new SilvercartVoucherPrice();
             
-            $position->ID = $this->ID;
-            $position->Name                  = $title;
-            $position->ShortDescription      = $this->code;
-            $position->LongDescription       = $this->code;
-            $position->Currency              = $this->value->getCurrency();
-            $position->Price                 = $this->value->getAmount();
-            $position->PriceFormatted        = $this->value->Nice();
-            $position->PriceTotal            = $this->value->getAmount();
-            $position->PriceTotalFormatted   = $this->value->Nice();
-            $position->PriceNet              = $priceNet->getAmount();
-            $position->PriceNetFormatted     = $priceNet->Nice();
-            $position->PriceNetTotal         = $priceNetTotal->getAmount();
-            $position->PriceNetTotalFormatted= $priceNetTotal->Nice();
-            $position->Quantity              = 1;
-            $position->removeFromCartForm    = $removeCartFormRendered;
-            $position->TaxRate               = $this->SilvercartTax()->Rate;
-            $position->TaxAmount             = -$taxAmount;
-            $position->Tax                   = $this->SilvercartTax();
-
+            
+            $position = $this->createSilvercartVoucherPricePosition($title, $priceNet, $removeCartFormRendered, $taxAmount);
             $positions->push($position);
 
             if (!in_array($this->ID, self::$alreadyHandledPositionIDs)) {
@@ -239,8 +229,47 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
 
             self::$alreadyHandledPositions->push($position);
         }
-
+        
         return $positions;
+    }
+    
+    /**
+     * creates a SilvercartVoucherPriceObj and returns it
+     * 
+     * @param string $title                  Title of the object
+     * @param Money  $priceNet               net price object
+     * @param string $removeCartFormRendered renderd form to remove position from cart
+     * @param Money  $taxAmount              tax amount obj
+     * 
+     * @return Money
+     * 
+     * @author Patrick Schneider <pschneider@pixeltricks.de>
+     * @since 05.12.2012
+     */
+    protected function createSilvercartVoucherPricePosition($title, $priceNet, $removeCartFormRendered, $taxAmount) {
+        $priceNetTotal = $priceNet;
+        $voucherPriceObj      = new SilvercartVoucherPrice();
+
+        $voucherPriceObj->ID = $this->ID;
+        $voucherPriceObj->Name                  = $title;
+        $voucherPriceObj->ShortDescription      = $this->code;
+        $voucherPriceObj->LongDescription       = $this->code;
+        $voucherPriceObj->Currency              = $this->value->getCurrency();
+        $voucherPriceObj->Price                 = $this->value->getAmount();
+        $voucherPriceObj->PriceFormatted        = $this->value->Nice();
+        $voucherPriceObj->PriceTotal            = $this->value->getAmount();
+        $voucherPriceObj->PriceTotalFormatted   = $this->value->Nice();
+        $voucherPriceObj->PriceNet              = $priceNet->getAmount();
+        $voucherPriceObj->PriceNetFormatted     = $priceNet->Nice();
+        $voucherPriceObj->PriceNetTotal         = $priceNetTotal->getAmount();
+        $voucherPriceObj->PriceNetTotalFormatted= $priceNetTotal->Nice();
+        $voucherPriceObj->Quantity              = 1;
+        $voucherPriceObj->removeFromCartForm    = $removeCartFormRendered;
+        $voucherPriceObj->TaxRate               = $this->SilvercartTax()->Rate;
+        $voucherPriceObj->TaxAmount             = -$taxAmount;
+        $voucherPriceObj->Tax                   = $this->SilvercartTax();
+        
+        return $voucherPriceObj;
     }
 
     /**
@@ -257,7 +286,7 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
         $member = Member::currentUser();
 
         $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::get($member->SilvercartShoppingCart()->ID, $this->ID);
-        
+
         if ($silvercartVoucherShoppingCartPosition &&
             $silvercartVoucherShoppingCartPosition->implicatePosition) {
 
@@ -297,23 +326,101 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
 
         return $fields;
     }
-    
+
     /**
      * splits a value of a voucher to make sure a voucher can be used until it
      * has a value of 0
      * 
-     * @return void
-     * 
+     * @param float $currentRemainingAmount current remaining amount for customer <->member
+     * @param float $amountToReduce         amount to reduce
+     *
+     * @return float
+     *
      * @author Patrick Schneider <pschneider@pixeltricks.de>
      * @since 03.12.2012
      */
-    protected function doSplitValue($shoppingCartPosition = null) {
-        if (!is_null($shoppingCartPosition)){
-            $originalRecord = DataObject::get_by_id('SilvercartVoucher', $shoppingCartPosition->SilvercartVoucher()->ID, false);
-            $amount = $shoppingCartPosition->SilvercartVoucher()->value->getAmount();
-            $shoppingCartPosition->SilvercartVoucher()->value->setAmount($originalRecord->value->getAmount());
-            $shoppingCartPosition->SilvercartVoucher()->write();
-            $shoppingCartPosition->SilvercartVoucher()->value->setAmount($amount);
+    protected function doSplitValue($currentRemainingAmount, $amountToReduce) {
+            (float)$remainingAmount = (float)$currentRemainingAmount - ($amountToReduce*-1);
+            if ($remainingAmount < 0.0) {
+                // this user can't reuse this voucher anymore
+                $remainingAmount = 0.0;
+            }
+            return $remainingAmount;
+    }
+
+    /**
+     * This method gets called when converting the shoppingcart positions to
+     * order positions.
+     *
+     * @param SilvercartShoppingCart         $silvercartShoppingCart the shoppingcart object
+     * @param SilvercartShoppingCartPosition $shoppingCartPosition   position of the shoppingcart which contains the voucher
+     * @param SilvercartVoucher              $originalVoucher        the original voucher
+     * @param Member                         $member                 member object
+     *
+     * @return void
+     *
+     * @author Patrick Schneider <pschneider@pixeltricks.de>
+     * @copyright 2012 pixeltricks GmbH
+     * @since 03.12.2012
+     *
+     */
+    public function convert(SilvercartShoppingCart $silvercartShoppingCart, SilvercartVoucherShoppingCartPosition $shoppingCartPosition, SilvercartVoucher $originalVoucher, Member $member) {
+        if (SilvercartCustomer::currentRegisteredCustomer()) {
+            // only do this for registered customers
+            $currentRemainingAmount = null;
+            $amountToReduce = $shoppingCartPosition->SilvercartVoucher()->value->getAmount();
+            $voucherOnMember = $member->SilvercartVouchers()->find('ID', $shoppingCartPosition->SilvercartVoucherID);
+            if (!$voucherOnMember) {
+                // this voucher is unused yet by this customer, connect to customer
+                $member->SilvercartVouchers()->add($originalVoucher);
+                $currentRemainingAmount = $originalVoucher->value->getAmount();
+            } else {
+                $currentRemainingAmount = $voucherOnMember->remainingAmount;
+            }
+            $newRemainingAmount = $this->doSplitValue($currentRemainingAmount, $amountToReduce);
+            $member->SilvercartVouchers()->update(
+                $originalVoucher, 
+                array(
+                    'remainingAmount' => $newRemainingAmount
+                )
+            );
         }
+    }
+    
+    /**
+     * returns the relation object for given member and voucherID
+     * null if it does not exist
+     * 
+     * @param Member $member    member object to search on
+     * @param int    $voucherID voucherID to search for
+     * 
+     * @return ViewableData
+     */
+    protected function getVoucherOnMember(Member $member, int $voucherID) {
+        return $member->SilvercartVouchers()->find('ID', $voucherID);
+    }
+    
+    /**
+     * can be used to return if a voucher is already fully redeemd,
+     * set error message in checkifAllowedInShoppingCart()
+     * 
+     * @param Member $member    the member object
+     * @param String $voucherID used voucher code to check for
+     * 
+     * @return bool
+     * 
+     * @author Patrick Schneider <pschneider@pixeltricks.de>
+     * @since 06.12.2012
+     */
+    protected function isCompletelyRedeemedAlready(Member $member, String $voucherID) {
+        $isFullyRedeemedAlready = false;
+        if (SilvercartCustomer::currentRegisteredCustomer()) {
+            $voucherOnMember = $member->SilvercartVouchers()->find('ID', $voucherID);
+            if ($voucherOnMember &&
+                $voucherOnMember->remainingAmount == 0.0) {
+                $isFullyRedeemedAlready = true;
+            }
+        }
+        return $isFullyRedeemedAlready;
     }
 }

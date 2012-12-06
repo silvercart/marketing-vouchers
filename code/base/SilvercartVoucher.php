@@ -59,7 +59,7 @@ class SilvercartVoucher extends DataObject {
     public static $has_one = array(
         'SilvercartTax' => 'SilvercartTax'
     );
-    
+
     /**
      * Casted fields
      *
@@ -100,28 +100,28 @@ class SilvercartVoucher extends DataObject {
     public static $belongs_many_many = array(
         'Members' => 'Member'
     );
-    
+
     /**
      * A list of already checked shopping cart amounts
      *
-     * @var type 
+     * @var type
      */
     protected $isShoppingCartAmountValid = array();
-    
+
     /**
      * A list of already checked shopping cart positions
      *
-     * @var type 
+     * @var type
      */
     protected $isValidForShoppingCartItems = array();
-    
+
     /**
      * Field labels for display in tables.
      *
      * @param boolean $includerelations A boolean value to indicate if the labels returned include relation fields
      *
      * @return array
-     * 
+     *
      * @author Sebastian Diel <sdiel@pixeltricks.de>
      * @since 19.10.2011
      */
@@ -145,7 +145,7 @@ class SilvercartVoucher extends DataObject {
             )
         );
     }
-    
+
     /**
      * Returns the summary fields for table overviews.
      *
@@ -163,7 +163,7 @@ class SilvercartVoucher extends DataObject {
             'quantityRedeemed'                      => $this->fieldLabel('quantityRedeemed'),
         );
     }
-    
+
     /**
      * Returns the searchable fields.
      *
@@ -174,7 +174,7 @@ class SilvercartVoucher extends DataObject {
      */
     public function searchableFields() {
         $fields = array();
-        
+
         $fields['code'] = array(
             'title'     => $this->fieldLabel('code'),
             'filter'    => 'PartialMatchFilter'
@@ -187,7 +187,7 @@ class SilvercartVoucher extends DataObject {
             'title'     => $this->fieldLabel('isActive'),
             'filter'    => 'ExactMatchFilter'
         );
-        
+
         return $fields;
     }
 
@@ -197,9 +197,9 @@ class SilvercartVoucher extends DataObject {
 
     /**
      * Returns a nicely formatted date that respects the local settings.
-     * 
+     *
      * @return string
-     * 
+     *
      * @author Sascha Koehler <skoehler@pixeltricks.de>
      * @copyright 2011 pixeltricks GmbH
      * @since 11.05.2011
@@ -207,14 +207,14 @@ class SilvercartVoucher extends DataObject {
     public function castedFormattedCreationDate() {
         $old_locale = setlocale(LC_TIME, null);
         $new_locale = setlocale(LC_TIME, i18n::get_locale(), i18n::get_locale().'.utf8');
-        
+
         $date = strftime("%x %X", strtotime($this->Created));
-        
+
         setlocale(LC_TIME, $old_locale);
-        
+
         return $date;
     }
-    
+
     /**
      * Initialisation
      *
@@ -238,22 +238,24 @@ class SilvercartVoucher extends DataObject {
      * Performs all checks to make sure, that this voucher is allowed in the
      * shopping cart. Returns an array with status and messages.
      *
-     * @param string       $voucherCode            the vouchers code
-     * @param Member       $member                 the member object to check against
-     * @param ShoppingCart $silvercartShoppingCart the shopping cart to check against
+     * @param SilvercartVoucher $voucher                the vouchers code
+     * @param Member            $member                 the member object to check against
+     * @param ShoppingCart      $silvercartShoppingCart the shopping cart to check against
      *
      * @return array:
      *  'error'     => bool,
      *  'messages'  => array()
      *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @copyright 2011 pixeltricks GmbH
-     * @since 24.01.2011
+     * @author Sascha Koehler <skoehler@pixeltricks.de>, Patrick Schneider <pschneider@pixeltricks.de>
+     * @since 06.12.2012
      */
-    public function checkifAllowedInShoppingCart($voucherCode, Member $member, SilvercartShoppingCart $silvercartShoppingCart) {
+    public function checkifAllowedInShoppingCart(SilvercartVoucher $voucher, Member $member, SilvercartShoppingCart $silvercartShoppingCart) {
         $status     = $this->areShoppingCartConditionsMet($silvercartShoppingCart);
         $error      = $status['error'];
         $messages   = $status['messages'];
+        
+        $voucherCode = $voucher->code;
+        $voucherID   = $voucher->ID;
 
         if (!$error && !$this->isCodeValid($voucherCode)) {
             $error      = true;
@@ -269,7 +271,12 @@ class SilvercartVoucher extends DataObject {
             $error      = true;
             $messages[] = _t('SilvercartVoucher.ERRORMESSAGE-NOT_REDEEMABLE', 'This voucher can\'t be redeemed.');
         }
-
+        
+        if (!$error && $this->isCompletelyRedeemedAlready($member, $voucherID)) {
+            $error = true;
+            $messages[] = _t('SilvercartVoucher.ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY', 'This voucher is completely redeemed.');
+        }
+        
         if (!$error && $this->isInShoppingCartAlready($silvercartShoppingCart)) {
             $error      = true;
             $messages[] = _t('SilvercartVoucher.ERRORMESSAGE-ALREADY_IN_SHOPPINGCART', 'This voucher is already in your shoppingcart.');
@@ -280,34 +287,24 @@ class SilvercartVoucher extends DataObject {
             'messages'  => $messages
         );
     }
-    
+
     /**
      * This method gets called when converting the shoppingcart positions to
      * order positions.
      * Implement it in your own voucher types if needed.
      *
-     * @param SilvercartShoppingCart $silvercartShoppingCart the shoppingcart object
+     * @param SilvercartShoppingCart                $silvercartShoppingCart the shoppingcart object
+     * @param SilvercartVoucherShoppingCartPosition $shoppingCartPosition   shoppingcart position with voucher
+     * @param SilvercartVoucher                     $originalVoucher        the original voucher
+     * @param Member                                $member                 member object
      *
      * @return void
      *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @copyright 2011 pixeltricks GmbH
-     * @since 10.05.2011
+     * @author Sascha Koehler <skoehler@pixeltricks.de>, Patrick Schneider <pschneider@pixeltricks.de>
+     * @since 06.12.2012
      *
      */
-    public function convert(SilvercartShoppingCart $silvercartShoppingCart) {
-        // Implement in descendants
-    }
-    
-    /**
-     * Split a voucher value
-     * 
-     * @return void
-     * 
-     * @author Patrick Schneider <pschneider@pixeltricks.de>
-     * @since 03.12.2012
-     */
-    protected function doSplitValue($shoppingCartPosition = null) {
+    public function convert(SilvercartShoppingCart $silvercartShoppingCart, SilvercartVoucherShoppingCartPosition $shoppingCartPosition, SilvercartVoucher $originalVoucher, Member $member) {
         // Implement in descendants
     }
 
@@ -529,6 +526,21 @@ class SilvercartVoucher extends DataObject {
 
         return false;
     }
+    
+    /**
+     * can be used to return if a voucher is already fully redeemd,
+     * set error message in checkifAllowedInShoppingCart()
+     * 
+     * @param Member $member      the member object
+     * @param String $voucherCode used voucher code to check for
+     * 
+     * @author Patrick Schneider <pschneider@pixeltricks.de>
+     * @since 06.12.2012
+     */
+    protected function isCompletelyRedeemedAlready(Member $member, String $voucherID) {
+        // Implement in descendants if needed
+        return false;
+    }
 
     /**
      * Checks if the shoppingcart total amount is within the boundaries of
@@ -720,16 +732,13 @@ class SilvercartVoucher extends DataObject {
      *
      * @return void
      *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @copyright 2011 pixeltricks GmbH
-     * @since 24.01.2011
+     * @author Sascha Koehler <skoehler@pixeltricks.de>, Patrick Schneider <pschneider@pixeltricks.de>
+     * @since 06.12.2012
      *
      */
     public function removeFromShoppingCart(Member $member, $action = 'removed') {
         $voucherHistory = new SilvercartVoucherHistory();
         $voucherHistory->add($this, $member, $action);
-
-        $member->SilvercartVouchers()->remove($this);
 
         // Disconnect voucher from shopping cart
         SilvercartVoucherShoppingCartPosition::remove($member->SilvercartShoppingCart()->ID, $this->ID);
@@ -747,7 +756,7 @@ class SilvercartVoucher extends DataObject {
      * @copyright 2011 pixeltricks GmbH
      * @since 24.01.2011
      */
-    public function loadObjectForShoppingCart(SilvercartShoppingcart $silvercartShoppingCart) {
+    public function loadObjectForShoppingCart(SilvercartShoppingCart $silvercartShoppingCart) {
         $voucherHistory = $this->getLastHistoryEntry($silvercartShoppingCart);
 
         if ($voucherHistory) {
@@ -760,7 +769,7 @@ class SilvercartVoucher extends DataObject {
                 return $voucher;
             }
         }
-
+        
         return $this;
     }
 
@@ -798,7 +807,7 @@ class SilvercartVoucher extends DataObject {
                 $silvercartShoppingCart->ID
             )
         );
-
+        
         foreach ($records as $record) {
             $voucher = DataObject::get_by_id('SilvercartVoucher', $record['SilvercartVoucherObjectID']);
 
@@ -818,14 +827,14 @@ class SilvercartVoucher extends DataObject {
                 }
             }
         }
-
+        
         return new DataObjectSet($positions);
     }
 
     /**
      * This method is a hook that gets called by the shoppingcart.
      *
-     * It disconnects the voucher from the shopping cart.
+     * It disconnects the voucher from the shopping cart after they are converted to order positions
      *
      * @param ShoppingCart $silvercartShoppingCart The shoppingcart object
      * @param Member       $member                 The customer object
@@ -843,34 +852,31 @@ class SilvercartVoucher extends DataObject {
                 "SilvercartShoppingCartID = %d",
                 $silvercartShoppingCart->ID
             )
-        );
+        );        
 
         if ($shoppingCartPositions) {
             foreach ($shoppingCartPositions as $shoppingCartPosition) {
+                $originalVoucher = DataObject::get_by_id('SilvercartVoucher', $shoppingCartPosition->SilvercartVoucherID, false);
                 // Adjust quantity
-                if ($shoppingCartPosition->SilvercartVoucher()->quantity > 0) {
-                    $shoppingCartPosition->SilvercartVoucher()->quantity -= 1;
+                if ($originalVoucher->quantity > 0) {
+                    $originalVoucher->quantity -= 1;
                 }
-                
-                // split the value of the voucher
-                if (method_exists($shoppingCartPosition->SilvercartVoucher(), 'doSplitValue')) {
-                    $shoppingCartPosition->SilvercartVoucher()->doSplitValue($shoppingCartPosition);
+
+                if (!$member->SilvercartVouchers()->find('ID', $originalVoucher->ID)) {
+                    // increase redeemd quantity only if no relation exists
+                    $originalVoucher->quantityRedeemed += 1;
                 }
                 
                 // Call conversion method on every voucher
                 if (method_exists($shoppingCartPosition->SilvercartVoucher(), 'convert')) {
-                    $shoppingCartPosition->SilvercartVoucher()->convert($silvercartShoppingCart, $member);
+                    $shoppingCartPosition->SilvercartVoucher()->convert($silvercartShoppingCart, $shoppingCartPosition, $originalVoucher, $member);
                 }
-
-                // Connect voucher to customer
-                $member->SilvercartVouchers()->add($shoppingCartPosition->SilvercartVoucher());
                 
-                // increase redeemd quantity
-                $shoppingCartPosition->SilvercartVoucher()->quantityRedeemed += 1;
-                $shoppingCartPosition->SilvercartVoucher()->write();
+                // save changes to original voucher
+                $originalVoucher->write();
                 
                 // And remove from the customers shopping cart
-                SilvercartVoucherShoppingCartPosition::remove($silvercartShoppingCart->ID, $shoppingCartPosition->SilvercartVoucher()->ID);
+                SilvercartVoucherShoppingCartPosition::remove($silvercartShoppingCart->ID, $shoppingCartPosition->SilvercartVoucherID);
             }
         }
     }

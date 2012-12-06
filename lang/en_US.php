@@ -47,6 +47,7 @@ $lang['en_US']['SilvercartVoucher']['SINGULARNAME']                             
 $lang['en_US']['SilvercartVoucher']['PLURALNAME']                               = 'Vouchers';
 $lang['en_US']['SilvercartVoucher']['CODE']                                     = 'Voucher code';
 $lang['en_US']['SilvercartVoucher']['CREATED']                                  = 'Created on';
+$lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY'] = 'This voucher is completely redeemed.';
 $lang['en_US']['SilvercartVoucher']['ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID'] = 'The shoppingcart value is not valid.';
 $lang['en_US']['SilvercartVoucher']['ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID'] = 'Your cart doesn\'t contain the appropriate products for this voucher.';
 $lang['en_US']['SilvercartVoucher']['ERRORMESSAGE-CODE_NOT_VALID']              = 'This voucher code is not valid.';
@@ -65,6 +66,7 @@ $lang['en_US']['SilvercartVoucher']['QUANTITY']                                 
 $lang['en_US']['SilvercartVoucher']['QUANTITY_REDEEMED']                        = 'Quantity redeemed';
 $lang['en_US']['SilvercartVoucher']['REDEEM_VOUCHER']                           = 'Redeem voucher: ';
 $lang['en_US']['SilvercartVoucher']['REDEEMED_VOUCHERS']                        = 'Redeemed vouchers: ';
+$lang['en_US']['SilvercartVoucher']['REMAINING_CREDIT']                         = 'Remaining credit';
 $lang['en_US']['SilvercartVoucher']['RESTRICT_TO_MEMBER']                       = 'Restrict to customer(s)';
 $lang['en_US']['SilvercartVoucher']['RESTRICT_TO_GROUP']                        = 'Restrict to customergroup(s)';
 $lang['en_US']['SilvercartVoucher']['RESTRICT_TO_PRODUCT']                      = 'Restrict to product(s)';

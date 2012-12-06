@@ -35,14 +35,19 @@ class SilvercartVoucherMember extends DataObjectDecorator {
      *
      * @return array for denfining and configuring the class via the framework
      * 
-     * @author Roland Lehmann <rlehmann@pixeltricks.de>, Sebastian Diel <sdiel@pixeltricks.de>
-     * @since 23.07.2012
+     * @author Sebastian Diel <sdiel@pixeltricks.de>, Patrick Schneider <pschneider@pixeltricks.de>
+     * @since 06.12.2012
      */
     public function extraStatics() {
         return array(
             'many_many' => array(
                 'SilvercartVouchers' => 'SilvercartVoucher'
-            )
+            ),
+            'many_many_extraFields' => array(
+                'SilvercartVouchers' => array(
+                    'remainingAmount' => 'Float',     // Amount remaining on an actual voucher
+                ),
+            ),
         );
     }
     
