@@ -152,6 +152,7 @@ class SilvercartRelativeRebateVoucher extends SilvercartVoucher {
             }
             $silvercartShoppingCartAmount = $silvercartShoppingCart->getTaxableAmountGrossWithoutFees(array('SilvercartVoucher'))->getAmount();
             $rebateAmount       = ($silvercartShoppingCartAmount / 100 * $this->valueInPercent);
+            $rebateAmount       = round($rebateAmount, 2);
             $rebate             = new Money();
             $rebate->setAmount($rebateAmount);
             $rebate->setCurrency($currency->getShortName(null, i18n::get_locale()));
@@ -164,7 +165,7 @@ class SilvercartRelativeRebateVoucher extends SilvercartVoucher {
             }
 
             $position = new SilvercartVoucherPrice();
-
+            
             $position->ID                    = $this->ID;
             $position->Name                  = self::$singular_name.' (Code: '.$this->code.')';
             $position->ShortDescription      = $this->code;
