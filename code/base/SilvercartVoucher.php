@@ -44,7 +44,8 @@ class SilvercartVoucher extends DataObject {
         'minimumShoppingCartValue'  => 'Money',
         'maximumShoppingCartValue'  => 'Money',
         'quantity'                  => 'Int',
-        'quantityRedeemed'          => 'Int'
+        'quantityRedeemed'          => 'Int',
+        'ProductNumber'             => 'Varchar(50)'
     );
 
     /**
@@ -142,6 +143,7 @@ class SilvercartVoucher extends DataObject {
                 'RestrictToSilvercartProduct'           => _t('SilvercartVoucher.RESTRICT_TO_PRODUCTGROUP'),
                 'SilvercartVoucherHistory'              => _t('SilvercartVoucherHistory.SINGULARNAME'),
                 'castedFormattedCreationDate'           => _t('SilvercartVoucher.CREATED'),
+                'ProductNumber'                         => _t('SilvercartVoucher.PRODUCTNUMBER'),537
             )
         );
     }
@@ -531,8 +533,10 @@ class SilvercartVoucher extends DataObject {
      * can be used to return if a voucher is already fully redeemd,
      * set error message in checkifAllowedInShoppingCart()
      * 
-     * @param Member $member      the member object
-     * @param String $voucherCode used voucher code to check for
+     * @param Member $member    the member object
+     * @param String $voucherID id of the voucher
+     * 
+     * @return boolean
      * 
      * @author Patrick Schneider <pschneider@pixeltricks.de>
      * @since 06.12.2012

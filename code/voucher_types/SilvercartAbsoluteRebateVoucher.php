@@ -268,6 +268,7 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
         $voucherPriceObj->TaxRate               = $this->SilvercartTax()->Rate;
         $voucherPriceObj->TaxAmount             = -$taxAmount;
         $voucherPriceObj->Tax                   = $this->SilvercartTax();
+        $voucherPriceObj->ProductNumber         = $this->ProductNumber;
         
         return $voucherPriceObj;
     }

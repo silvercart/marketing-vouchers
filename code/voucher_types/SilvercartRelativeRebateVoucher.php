@@ -184,6 +184,7 @@ class SilvercartRelativeRebateVoucher extends SilvercartVoucher {
             $position->TaxRate               = $this->SilvercartTax()->Rate;
             $position->TaxAmount             = $rebateAmount - ($rebateAmount / (100 + $this->SilvercartTax()->Rate) * 100);
             $position->Tax                   = $this->SilvercartTax();
+            $position->ProductNumber         = $this->ProductNumber;
 
             $positions->push($position);
         }
