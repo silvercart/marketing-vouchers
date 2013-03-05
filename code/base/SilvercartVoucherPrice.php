@@ -60,13 +60,13 @@ class SilvercartVoucherPrice extends DataObject {
      *                                  or for one product only.
      * @param boolean $priceType        'gross' or 'net'. If undefined it'll be automatically chosen.
      *
-     * @return Money
+     * @return SilvercartMoney
      *
      * @author Sascha Koehler <skoehler@pixeltricks.de>
      * @since 19.07.2012
      */
     public function getPrice($forSingleProduct = false, $priceType = false) {
-        $moneyObj = new Money();
+        $moneyObj = new SilvercartMoney();
         $moneyObj->setCurrency($this->Currency);
 
         if ($priceType === false) {

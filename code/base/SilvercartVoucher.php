@@ -41,8 +41,8 @@ class SilvercartVoucher extends DataObject {
     public static $db = array(
         'code'                      => 'Varchar(50)',
         'isActive'                  => 'Boolean',
-        'minimumShoppingCartValue'  => 'Money',
-        'maximumShoppingCartValue'  => 'Money',
+        'minimumShoppingCartValue'  => 'SilvercartMoney',
+        'maximumShoppingCartValue'  => 'SilvercartMoney',
         'quantity'                  => 'Int',
         'quantityRedeemed'          => 'Int',
         'ProductNumber'             => 'Varchar(50)'
@@ -325,7 +325,7 @@ class SilvercartVoucher extends DataObject {
      * @since 27.11.2012
      */
     public function performShoppingCartConditionsCheck(SilvercartShoppingCart $silvercartShoppingCart, $member, $excludeShoppingCartPositions = false) {
-        if ($this->ID > 0) {
+        if ($this->isInDB()) {
             $status = $this->areShoppingCartConditionsMet($silvercartShoppingCart);
 
             if ($excludeShoppingCartPositions &&
@@ -467,7 +467,7 @@ class SilvercartVoucher extends DataObject {
 
         // check if voucher is restricted to single members and if so, if
         // customer is one of those members.
-        if ($this->RestrictToMember()->Count() > 0) {
+        if ($this->RestrictToMember()->count() > 0) {
             if ($this->RestrictToMember()->find('ID', $member->ID)) {
                 $isEligibleByMembership = true;
             }
@@ -478,7 +478,7 @@ class SilvercartVoucher extends DataObject {
 
         // check if voucher is restricted to groups and if so, if customer is
         // in allowed groups
-        if ($this->RestrictToGroup()->Count() > 0) {
+        if ($this->RestrictToGroup()->count() > 0) {
 
             if ($member->ClassName == 'AnonymousCustomer') {
                 $memberGroups = DataObject::get('Group', sprintf("Code LIKE '%s'", 'anonymous'));
@@ -610,7 +610,7 @@ class SilvercartVoucher extends DataObject {
      * @since 27.11.2012
      */
     public function isValidForShoppingCartItems(SilvercartShoppingCartPosition $silvercartShoppingCartPositions) {
-        $cacheKey = (string) implode('_', $silvercartShoppingCartPositions->map('ID', 'ID'));
+        $cacheKey = (string) implode('_', $silvercartShoppingCartPositions->map('ID', 'ID')->toArray());
         if (!array_key_exists($cacheKey, $this->isValidForShoppingCartItems)) {
             $isValidForShoppingCartItems    = false;
             $isValidByUndefinedProduct      = false;
@@ -618,7 +618,7 @@ class SilvercartVoucher extends DataObject {
             $isValidByUndefinedProductGroup = false;
             $isValidByProductGroup          = false;
 
-            if ($this->RestrictToSilvercartProduct()->Count() > 0) {
+            if ($this->RestrictToSilvercartProduct()->exists()) {
                 foreach ($this->RestrictToSilvercartProduct() as $restrictedProduct) {
                     foreach ($silvercartShoppingCartPositions as $silvercartShoppingCartPosition) {
                         if ($silvercartShoppingCartPosition->SilvercartProduct()->ID == $restrictedProduct->ID) {
@@ -631,7 +631,7 @@ class SilvercartVoucher extends DataObject {
                 $isValidByUndefinedProduct = true;
             }
 
-            if ($this->RestrictToSilvercartProductGroupPage()->Count() > 0) {
+            if ($this->RestrictToSilvercartProductGroupPage()->exists()) {
                 foreach ($this->RestrictToSilvercartProductGroupPage() as $restrictedProductGroup) {
                     foreach ($silvercartShoppingCartPositions as $silvercartShoppingCartPosition) {
                         if ($silvercartShoppingCartPosition->SilvercartProduct()->SilvercartProductGroup()->ID == $restrictedProductGroup->ID) {
@@ -764,10 +764,7 @@ class SilvercartVoucher extends DataObject {
         $voucherHistory = $this->getLastHistoryEntry($silvercartShoppingCart);
 
         if ($voucherHistory) {
-            $voucher = DataObject::get_by_id(
-                'SilvercartVoucher',
-                $voucherHistory->SilvercartVoucherObjectID
-            );
+            $voucher = SilvercartVoucher::get()->byID($voucherHistory->SilvercartVoucherObjectID);
 
             if ($voucher) {
                 return $voucher;
@@ -813,10 +810,9 @@ class SilvercartVoucher extends DataObject {
         );
         
         foreach ($records as $record) {
-            $voucher = DataObject::get_by_id('SilvercartVoucher', $record['SilvercartVoucherObjectID']);
-
+            $voucher = SilvercartVoucher::get()->byID($record['SilvercartVoucherObjectID']);
             if ($voucher) {
-                $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::get($silvercartShoppingCart->ID, $voucher->ID);
+                $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::getVoucherShoppingCartPosition($silvercartShoppingCart->ID, $voucher->ID);
 
                 if ($silvercartVoucherShoppingCartPosition &&
                     $silvercartVoucherShoppingCartPosition->implicatePosition) {
@@ -832,7 +828,7 @@ class SilvercartVoucher extends DataObject {
             }
         }
         
-        return new DataObjectSet($positions);
+        return new ArrayList($positions);
     }
 
     /**
@@ -858,9 +854,9 @@ class SilvercartVoucher extends DataObject {
             )
         );        
 
-        if ($shoppingCartPositions) {
+        if ($shoppingCartPositions->exists()) {
             foreach ($shoppingCartPositions as $shoppingCartPosition) {
-                $originalVoucher = DataObject::get_by_id('SilvercartVoucher', $shoppingCartPosition->SilvercartVoucherID, false);
+                $originalVoucher = SilvercartVoucher::get()->byID($shoppingCartPosition->SilvercartVoucherID);
                 // Adjust quantity
                 if ($originalVoucher->quantity > 0) {
                     $originalVoucher->quantity -= 1;
@@ -973,7 +969,7 @@ class SilvercartVoucher extends DataObject {
             return false;
         }
 
-        $actions                        = new DataObjectSet();
+        $actions                        = new ArrayList();
         $silvercartShoppingCartActions  = $controller->getRegisteredCustomHtmlForm('SilvercartVoucherShoppingCartActionForm');
 
         $actions->push(
@@ -1039,7 +1035,7 @@ class SilvercartVoucher extends DataObject {
         );
 
         foreach ($records as $record) {
-            $voucher = DataObject::get_by_id('SilvercartVoucher', $record['SilvercartVoucherObjectID']);
+            $voucher = SilvercartVoucher::get()->byID($record['SilvercartVoucherObjectID']);
 
             if ($voucher) {
                 $removeFromCartForm = new SilvercartVoucherRemoveFromCartForm($controller, array('SilvercartVoucherID' => $voucher->ID));
@@ -1070,7 +1066,7 @@ class SilvercartVoucher extends DataObject {
             return false;
         }
 
-        $amountObj = new Money();
+        $amountObj = new SilvercartMoney();
         $amount    = 0;
 
         $records   = DB::query(
@@ -1105,79 +1101,10 @@ class SilvercartVoucher extends DataObject {
     /**
      * Define the backend administration masks.
      *
-     * @param array $params Additional parameters
-     *
-     * @return FieldSet
+     * @return FieldList
      */
-    public function  getCMSFields($params = null) {
-        $fieldClasses = array(
-                'minimumShoppingCartValue'  => 'SilvercartMoneyField',
-                'maximumShoppingCartValue'  => 'SilvercartMoneyField',
-        );
-        if (is_array($params) &&
-            array_key_exists('fieldClasses', $params)) {
-            $params['fieldClasses'] = array_merge(
-                    $params['fieldClasses'],
-                    $fieldClasses
-            );
-        } else {
-            if (!is_array($params)) {
-                $params = array();
-            }
-            $params['fieldClasses'] = $fieldClasses;
-        }
-        $fields = parent::getCMSFields($params);
-
-        $memberTableField = new ManyManyComplexTableField(
-            $this,
-            'RestrictToMember',
-            'Member',
-            null,
-            'getCMSFields_forPopup',
-            'Member.Surname IS NOT NULL',
-            'Member.Surname ASC, Member.FirstName ASC'
-        );
-        $groupTableField = new ManyManyComplexTableField(
-            $this,
-            'RestrictToGroup',
-            'Group',
-            null,
-            'getCMSFields_forPopup',
-            null,
-            'Group.Title ASC'
-        );
-        $productTableField = new ManyManyComplexTableField(
-            $this,
-            'RestrictToSilvercartProduct',
-            'SilvercartProduct',
-            null,
-            'getCMSFields_forPopup',
-            null
-        );
-        $productGroupPageTableField = new ManyManyComplexTableField(
-            $this,
-            'RestrictToSilvercartProductGroupPage',
-            'SilvercartProductGroupPage',
-            null,
-            'getCMSFields_forPopup',
-            null,
-            'SiteTree.Title ASC'
-        );
-
-        $fields->removeByName('RestrictToMember');
-        $fields->removeByName('RestrictToGroup');
-        $fields->removeByName('RestrictToSilvercartProduct');
-        $fields->removeByName('RestrictToSilvercartProductGroupPage');
-
-        $fields->findOrMakeTab('Root.RestrictToMember',                         _t('SilvercartVoucher.RESTRICT_TO_MEMBER'));
-        $fields->addFieldToTab('Root.RestrictToMember',                         $memberTableField);
-        $fields->findOrMakeTab('Root.RestrictToGroup',                          _t('SilvercartVoucher.RESTRICT_TO_GROUP'));
-        $fields->addFieldToTab('Root.RestrictToGroup',                          $groupTableField);
-        $fields->findOrMakeTab('Root.RestrictToSilvercartProduct',              _t('SilvercartVoucher.RESTRICT_TO_PRODUCT'));
-        $fields->addFieldToTab('Root.RestrictToSilvercartProduct',              $productTableField);
-        $fields->findOrMakeTab('Root.RestrictToSilvercartProductGroupPage',     _t('SilvercartVoucher.RESTRICT_TO_PRODUCTGROUP'));
-        $fields->addFieldToTab('Root.RestrictToSilvercartProductGroupPage',     $productGroupPageTableField);
-
+    public function  getCMSFields() {
+        $fields = SilvercartDataObject::getCMSFields($this);
         return $fields;
     }
 
@@ -1228,9 +1155,9 @@ class SilvercartVoucher extends DataObject {
      * Check if a value of a key of a DataObjectSet is contained in another
      * DataObjectSet.
      *
-     * @param DataObjectSet $set1 the first set to search in
-     * @param DataObjectSet $set2 the second set to search in
-     * @param string        $key  the key to search for
+     * @param SS_List $set1 the first set to search in
+     * @param SS_List $set2 the second set to search in
+     * @param string  $key  the key to search for
      *
      * @return boolean
      *
@@ -1238,7 +1165,7 @@ class SilvercartVoucher extends DataObject {
      * @copyright 2011 pixeltricks GmbH
      * @since 21.01.2011
      */
-    private function findDataObjectSetInSetByKey(DataObjectSet $set1, DataObjectSet $set2, $key) {
+    private function findDataObjectSetInSetByKey(SS_List $set1, SS_List $set2, $key) {
         $foundKey = false;
 
         foreach ($set2 as $iteratorSet) {

@@ -96,7 +96,7 @@ class SilvercartVoucherShoppingCartPosition extends DataObject {
         $silvercartVoucherShoppingCartPosition = DataObject::get_one(
             'SilvercartVoucherShoppingCartPosition',
             sprintf(
-                "`SilvercartShoppingCartID` = '%d' AND `SilvercartVoucherID` = '%d'",
+                "\"SilvercartShoppingCartID\" = '%d' AND \"SilvercartVoucherID\" = '%d'",
                 $silvercartShoppingCartID,
                 $voucherID
             )
@@ -122,17 +122,13 @@ class SilvercartVoucherShoppingCartPosition extends DataObject {
      */
     public static function combinationExists($silvercartShoppingCartID, $voucherID) {
         $recordExists = false;
-
-        $silvercartVoucherShoppingCartPosition = DataObject::get_one(
-            'SilvercartVoucherShoppingCartPosition',
-            sprintf(
-                "`SilvercartShoppingCartID` = '%d' AND `SilvercartVoucherID` = '%d'",
-                $silvercartShoppingCartID,
-                $voucherID
-            )
+        $filter = array(
+            'SilvercartShoppingCartID' => $silvercartShoppingCartID,
+            'SilvercartVoucherID' => $voucherID
         );
+        $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::get()->filter($filter);
 
-        if ($silvercartVoucherShoppingCartPosition) {
+        if ($silvercartVoucherShoppingCartPosition->exists()) {
             $recordExists = true;
         }
 
@@ -151,13 +147,13 @@ class SilvercartVoucherShoppingCartPosition extends DataObject {
      * @copyright 2011 pixeltricks GmbH
      * @since 03.02.2011
      */
-    public static function get($silvercartShoppingCartID, $voucherID) {
+    public static function getVoucherShoppingCartPosition($silvercartShoppingCartID, $voucherID) {
         $record = false;
 
         $silvercartVoucherShoppingCartPosition = DataObject::get_one(
             'SilvercartVoucherShoppingCartPosition',
             sprintf(
-                "`SilvercartShoppingCartID` = '%d' AND `SilvercartVoucherID` = '%d'",
+                "\"SilvercartShoppingCartID\" = '%d' AND \"SilvercartVoucherID\" = '%d'",
                 $silvercartShoppingCartID,
                 $voucherID
             )

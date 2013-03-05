@@ -202,14 +202,14 @@ class SilvercartRelativeRebateVoucher extends SilvercartVoucher {
      * @since 24.01.2011
      */
     public function getSilvercartShoppingCartTotal() {
-        $amount             = new Money();
+        $amount             = new SilvercartMoney();
         $member             = Member::currentUser();
         $silvercartShoppingCartAmount = $member->SilvercartShoppingCart()->getTaxableAmountGrossWithoutFees(array('SilvercartVoucher'))->getAmount();
         $rebateAmount       = ($silvercartShoppingCartAmount / 100 * $this->valueInPercent);
-        $rebate             = new Money();
+        $rebate             = new SilvercartMoney();
         $rebate->setAmount($rebateAmount);
 
-        $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::get($member->SilvercartShoppingCart()->ID, $this->ID);
+        $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::getVoucherShoppingCartPosition($member->SilvercartShoppingCart()->ID, $this->ID);
 
         if ($silvercartVoucherShoppingCartPosition &&
             $silvercartVoucherShoppingCartPosition->implicatePosition) {

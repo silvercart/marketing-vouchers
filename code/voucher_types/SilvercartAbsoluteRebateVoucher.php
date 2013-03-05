@@ -286,7 +286,7 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
         $amount = new Money();
         $member = Member::currentUser();
 
-        $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::get($member->SilvercartShoppingCart()->ID, $this->ID);
+        $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::getVoucherShoppingCartPosition($member->SilvercartShoppingCart()->ID, $this->ID);
 
         if ($silvercartVoucherShoppingCartPosition &&
             $silvercartVoucherShoppingCartPosition->implicatePosition) {
