@@ -47,7 +47,7 @@ $lang['de_DE']['SilvercartVoucher']['SINGULARNAME']                             
 $lang['de_DE']['SilvercartVoucher']['PLURALNAME']                               = 'Gutscheine';
 $lang['de_DE']['SilvercartVoucher']['CODE']                                     = 'Gutscheincode';
 $lang['de_DE']['SilvercartVoucher']['CREATED']                                  = 'Erstellt am';
-$lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY'] = 'Dieser Gutschein wurde vollständig eingelöst.';
+$lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY'] = 'Dieser Gutschein wurde bereits vollständig eingelöst.';
 $lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID'] = 'Der Warenkorbwert ist nicht passend.';
 $lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID'] = 'Dieser Gutschein kann nicht für die Waren eingelöst werden, die sich in Ihrem Warenkorb befinden.';
 $lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-CODE_NOT_VALID']              = 'Dieser Gutscheincode ist nicht gültig.';
