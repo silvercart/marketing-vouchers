@@ -861,26 +861,29 @@ class SilvercartVoucher extends DataObject {
         if ($shoppingCartPositions) {
             foreach ($shoppingCartPositions as $shoppingCartPosition) {
                 $originalVoucher = DataObject::get_by_id('SilvercartVoucher', $shoppingCartPosition->SilvercartVoucherID, false);
-                // Adjust quantity
-                if ($originalVoucher->quantity > 0) {
-                    $originalVoucher->quantity -= 1;
-                }
 
-                if (!$member->SilvercartVouchers()->find('ID', $originalVoucher->ID)) {
-                    // increase redeemd quantity only if no relation exists
-                    $originalVoucher->quantityRedeemed += 1;
+                if ($originalVoucher) {
+                    // Adjust quantity
+                    if ($originalVoucher->quantity > 0) {
+                        $originalVoucher->quantity -= 1;
+                    }
+
+                    if (!$member->SilvercartVouchers()->find('ID', $originalVoucher->ID)) {
+                        // increase redeemd quantity only if no relation exists
+                        $originalVoucher->quantityRedeemed += 1;
+                    }
+
+                    // Call conversion method on every voucher
+                    if (method_exists($shoppingCartPosition->SilvercartVoucher(), 'convert')) {
+                        $shoppingCartPosition->SilvercartVoucher()->convert($silvercartShoppingCart, $shoppingCartPosition, $originalVoucher, $member);
+                    }
+
+                    // save changes to original voucher
+                    $originalVoucher->write();
+
+                    // And remove from the customers shopping cart
+                    SilvercartVoucherShoppingCartPosition::remove($silvercartShoppingCart->ID, $shoppingCartPosition->SilvercartVoucherID);
                 }
-                
-                // Call conversion method on every voucher
-                if (method_exists($shoppingCartPosition->SilvercartVoucher(), 'convert')) {
-                    $shoppingCartPosition->SilvercartVoucher()->convert($silvercartShoppingCart, $shoppingCartPosition, $originalVoucher, $member);
-                }
-                
-                // save changes to original voucher
-                $originalVoucher->write();
-                
-                // And remove from the customers shopping cart
-                SilvercartVoucherShoppingCartPosition::remove($silvercartShoppingCart->ID, $shoppingCartPosition->SilvercartVoucherID);
             }
         }
     }
