@@ -84,3 +84,34 @@ $lang['de_DE']['SilvercartVoucherOrderDetailPage']['SINGULARVOUCHERVALUETITLE'] 
 $lang['de_DE']['SilvercartVoucherOrderDetailPage']['PLURALVOUCHERVALUETITLE']   = 'Der Wert jedes Gutscheins beträgt';
 $lang['de_DE']['SilvercartVoucherOrderDetailPage']['WARNING_PAYBEFOREREDEEMING_SINGULAR']   = 'Beachten Sie bitte, dass die Bestellung erst bezahlt werden muss, bevor der Gutscheine eingelöst werden kann.';
 $lang['de_DE']['SilvercartVoucherOrderDetailPage']['WARNING_PAYBEFOREREDEEMING_PLURAL']     = 'Beachten Sie bitte, dass die Bestellung erst bezahlt werden muss, bevor die Gutscheine eingelöst werden können.';
+
+$lang['de_DE']['SilvercartVoucherGeneratorAdmin']['TITLE']                      = 'Automatische Gutscheine';
+
+$lang['de_DE']['SilvercartAutoVoucherGenerator']['SINGULARNAME']                = 'Automatischer Gutschein';
+$lang['de_DE']['SilvercartAutoVoucherGenerator']['PLURALNAME']                  = 'Automatische Gutscheine';
+$lang['de_DE']['SilvercartAutoVoucherGenerator']['Title']                       = 'Bezeichnung der Aktion (intern)';
+$lang['de_DE']['SilvercartAutoVoucherGenerator']['ValidFrom']                   = 'Gültig ab';
+$lang['de_DE']['SilvercartAutoVoucherGenerator']['ValidUntil']                  = 'Gültig bis';
+$lang['de_DE']['SilvercartAutoVoucherGenerator']['AlwaysValid']                 = 'Immer gültig';
+$lang['de_DE']['SilvercartAutoVoucherGenerator']['CartPositionAbsolute']        = 'Für diesen Warenkorb erhalten Sie einen <strong>Gutschein über %s</strong>, den Sie bei Ihrem nächsten Einkauf einlösen können.';
+$lang['de_DE']['SilvercartAutoVoucherGenerator']['CartPositionRelative']        = 'Für diesen Warenkorb erhalten Sie einen <strong>Gutschein über %s</strong>, den Sie bei Ihrem nächsten Einkauf einlösen können.';
+$lang['de_DE']['SilvercartAutoVoucherGenerator']['CartPositionNatural']         = 'Für diesen Warenkorb erhalten Sie <strong>%s <u>gratis</u></strong> zu Ihrem Einkauf dazu.';
+$lang['de_DE']['SilvercartAutoVoucherGenerator']['NextCartPositionAbsolute']    = 'Ab einem Bestellwert von %s erhalten Sie einen <strong>Gutschein über %s</strong> für Ihren nächsten Einkauf.';
+$lang['de_DE']['SilvercartAutoVoucherGenerator']['NextCartPositionRelative']    = 'Ab einem Bestellwert von %s erhalten Sie einen <strong>Gutschein über %s</strong> für Ihren nächsten Einkauf.';
+$lang['de_DE']['SilvercartAutoVoucherGenerator']['NextCartPositionNatural']     = 'Ab einem Bestellwert von %s erhalten Sie <strong>%s <u>gratis</u></strong> zu Ihrem Einkauf dazu.';
+$lang['de_DE']['SilvercartAutoVoucherGenerator']['ForFree']                     = 'Gratis';
+$lang['de_DE']['SilvercartAutoVoucherGenerator']['UseURLParamForActivation']    = 'URL-Parameter ist erforderlich, damit Angebot aktiv wird';
+$lang['de_DE']['SilvercartAutoVoucherGenerator']['URLParamForActivation']       = 'URL-Parameter (Key/Value)';
+$lang['de_DE']['SilvercartAutoVoucherGenerator']['URLParamForActivationInfo']   = 'z.B. "newsletter=' . date('Y') . '-' . date('m') . '"';
+
+$lang['de_DE']['SilvercartAutoVoucherGenerator']['POSITION_TITLE']              = '<strong>Gutschein für Ihren nächsten Einkauf in unserem Online-Shop</strong>';
+$lang['de_DE']['SilvercartAutoVoucherGenerator']['POSITION_DESCRIPTION_1']      = 'Gutschein-Wert: <strong>%s</strong>';
+$lang['de_DE']['SilvercartAutoVoucherGenerator']['POSITION_DESCRIPTION_2']      = 'Gutschein-Code: <strong>%s</strong>';
+
+$lang['de_DE']['SilvercartAutoVoucherGeneratorRule']['SINGULARNAME']            = 'Automatische Gutschein Regeln';
+$lang['de_DE']['SilvercartAutoVoucherGeneratorRule']['PLURALNAME']              = 'Automatische Gutschein Regel';
+$lang['de_DE']['SilvercartAutoVoucherGeneratorRule']['MinimumOrderAmount']      = 'Mindestbestellwert';
+$lang['de_DE']['SilvercartAutoVoucherGeneratorRule']['VoucherValue']            = 'Wert';
+$lang['de_DE']['SilvercartAutoVoucherGeneratorRule']['VoucherType']             = 'Typ';
+$lang['de_DE']['SilvercartAutoVoucherGeneratorRule']['NaturalProductNumber']    = 'Artikelnummer';
+$lang['de_DE']['SilvercartAutoVoucherGeneratorRule']['NaturalProductTitle']     = 'Artikelbezeichnung';

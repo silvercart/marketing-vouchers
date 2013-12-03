@@ -47,7 +47,7 @@ $lang['en_US']['SilvercartVoucher']['SINGULARNAME']                             
 $lang['en_US']['SilvercartVoucher']['PLURALNAME']                               = 'Vouchers';
 $lang['en_US']['SilvercartVoucher']['CODE']                                     = 'Voucher code';
 $lang['en_US']['SilvercartVoucher']['CREATED']                                  = 'Created on';
-$lang['de_DE']['SilvercartVoucher']['ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY'] = 'This voucher is completely redeemed.';
+$lang['en_US']['SilvercartVoucher']['ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY'] = 'This voucher is completely redeemed.';
 $lang['en_US']['SilvercartVoucher']['ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID'] = 'The shoppingcart value is not valid.';
 $lang['en_US']['SilvercartVoucher']['ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID'] = 'Your cart doesn\'t contain the appropriate products for this voucher.';
 $lang['en_US']['SilvercartVoucher']['ERRORMESSAGE-CODE_NOT_VALID']              = 'This voucher code is not valid.';
@@ -73,7 +73,7 @@ $lang['en_US']['SilvercartVoucher']['RESTRICT_TO_GROUP']                        
 $lang['en_US']['SilvercartVoucher']['RESTRICT_TO_PRODUCT']                      = 'Restrict to product(s)';
 $lang['en_US']['SilvercartVoucher']['RESTRICT_TO_PRODUCTGROUP']                 = 'Restrict to productgroups(s)';
 $lang['en_US']['SilvercartVoucher']['VALUE']                                    = 'Value';
-$lang['de_DE']['SilvercartVoucher']['VALUE_IN_PERCENT']                         = 'Rebate value in percent';
+$lang['en_US']['SilvercartVoucher']['VALUE_IN_PERCENT']                         = 'Rebate value in percent';
 
 $lang['en_US']['SilvercartVoucherHistory']['SINGULARNAME']                      = 'Voucher history';
 $lang['en_US']['SilvercartVoucherHistory']['PLURALNAME']                        = 'Voucher histories';
@@ -84,3 +84,34 @@ $lang['en_US']['SilvercartVoucherOrderDetailPage']['SINGULARVOUCHERVALUETITLE'] 
 $lang['en_US']['SilvercartVoucherOrderDetailPage']['PLURALVOUCHERVALUETITLE']   = 'The value of each voucher is';
 $lang['en_US']['SilvercartVoucherOrderDetailPage']['WARNING_PAYBEFOREREDEEMING_SINGULAR']   = 'Please note that you have to pay this order first before the voucher can be redeemed.';
 $lang['en_US']['SilvercartVoucherOrderDetailPage']['WARNING_PAYBEFOREREDEEMING_PLURAL']     = 'Please note that you have to pay this order first before the vouchers can be redeemed.';
+
+$lang['en_US']['SilvercartVoucherGeneratorAdmin']['TITLE']                      = 'Automatic Vouchers';
+
+$lang['en_US']['SilvercartAutoVoucherGenerator']['SINGULARNAME']                = 'Automatic Voucher';
+$lang['en_US']['SilvercartAutoVoucherGenerator']['PLURALNAME']                  = 'Automatic Vouchers';
+$lang['en_US']['SilvercartAutoVoucherGenerator']['Title']                       = 'Title of campaign (internal)';
+$lang['en_US']['SilvercartAutoVoucherGenerator']['ValidFrom']                   = 'Valid from';
+$lang['en_US']['SilvercartAutoVoucherGenerator']['ValidUntil']                  = 'Valid until';
+$lang['en_US']['SilvercartAutoVoucherGenerator']['AlwaysValid']                 = 'Always valid';
+$lang['en_US']['SilvercartAutoVoucherGenerator']['CartPositionAbsolute']        = 'For your current shopping cart you will receive a <strong>%s voucher</strong> to redeem on your next visit of our online shop.';
+$lang['en_US']['SilvercartAutoVoucherGenerator']['CartPositionRelative']        = 'For your current shopping cart you will receive a <strong>%s voucher</strong> to redeem on your next visit of our online shop.';
+$lang['en_US']['SilvercartAutoVoucherGenerator']['CartPositionNatural']         = 'For your current shopping cart you will receive <strong>%s <u>for free</u></strong>.';
+$lang['en_US']['SilvercartAutoVoucherGenerator']['NextCartPositionAbsolute']    = 'For a minimum order amount of %s you will receive a <strong>%s voucher</strong> for your next visit of our online shop.';
+$lang['en_US']['SilvercartAutoVoucherGenerator']['NextCartPositionRelative']    = 'For a minimum order amount of %s you will receive a <strong>%s voucher</strong> for your next visit of our online shop.';
+$lang['en_US']['SilvercartAutoVoucherGenerator']['NextCartPositionNatural']     = 'For a minimum order amount of %s you will receive <strong>%s <u>for free</u></strong>.';
+$lang['en_US']['SilvercartAutoVoucherGenerator']['ForFree']                     = 'Free';
+$lang['en_US']['SilvercartAutoVoucherGenerator']['UseURLParamForActivation']    = 'URL-Parameter is required to activate campaign';
+$lang['en_US']['SilvercartAutoVoucherGenerator']['URLParamForActivation']       = 'URL-Parameter (Key/Value)';
+$lang['en_US']['SilvercartAutoVoucherGenerator']['URLParamForActivationInfo']   = 'e.g. "newsletter=' . date('Y') . '-' . date('m') . '"';
+
+$lang['en_US']['SilvercartAutoVoucherGenerator']['POSITION_TITLE']              = '<strong>Voucher for your next visit in our online shop</strong>';
+$lang['en_US']['SilvercartAutoVoucherGenerator']['POSITION_DESCRIPTION_1']      = 'Value: <strong>%s</strong>';
+$lang['en_US']['SilvercartAutoVoucherGenerator']['POSITION_DESCRIPTION_2']      = 'Code: <strong>%s</strong>';
+
+$lang['en_US']['SilvercartAutoVoucherGeneratorRule']['SINGULARNAME']            = 'Automatic Voucher Rules';
+$lang['en_US']['SilvercartAutoVoucherGeneratorRule']['PLURALNAME']              = 'Automatic Voucher Rule';
+$lang['en_US']['SilvercartAutoVoucherGeneratorRule']['MinimumOrderAmount']      = 'Minimum order amount';
+$lang['en_US']['SilvercartAutoVoucherGeneratorRule']['VoucherValue']            = 'Value';
+$lang['en_US']['SilvercartAutoVoucherGeneratorRule']['VoucherType']             = 'Type';
+$lang['en_US']['SilvercartAutoVoucherGeneratorRule']['NaturalProductNumber']    = 'Product number';
+$lang['en_US']['SilvercartAutoVoucherGeneratorRule']['NaturalProductTitle']     = 'Product title';

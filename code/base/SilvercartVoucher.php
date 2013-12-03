@@ -1253,4 +1253,69 @@ class SilvercartVoucher extends DataObject {
 
         return $foundKey;
     }
+    
+    /**
+     * Returns a voucher with the given code.
+     * 
+     * @param string $code Voucher code
+     * 
+     * @return SilvercartVoucher
+     */
+    public static function get_by_code($code) {
+        $voucher = DataObject::get_one(
+            'SilvercartVoucher',
+            sprintf(
+                "code = '%s'",
+                $code
+            )
+        );
+        return $voucher;
+    }
+
+    /**
+     * Generates a single voucher code.
+     * 
+     * @return string
+     * 
+     * @author Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 02.12.2013
+     */
+    public static function generate_code() {
+        $code       = '';
+        $codeParts  = 4;
+        $partLength = 5;
+        
+        for ($i = 0; $i < $codeParts; $i++) {
+            for ($j = 0; $j < $partLength; $j++) {
+                $code .= strtoupper(dechex(rand(0,15)));
+            }
+            $code .= '-';
+        }
+        
+        $code = substr($code, 0, strlen($code) - 1);
+        
+        if (SilvercartVoucher::get_by_code($code) instanceof SilvercartVoucher) {
+            $code = self::generate_code();
+        }
+        
+        return $code;
+    }
+    
+    /**
+     * Generates voucher codes.
+     * 
+     * @param int $count Count of voucher codes to generate
+     * 
+     * @return array
+     * 
+     * @author Sebastian Diel <sdiel@pixeltricks.de>
+     * @since 02.12.2013
+     */
+    public static function generate_codes($count = 1) {
+        $codes = array();
+        for ($x = 0; $x < $count; $x++) {
+            $codes[] = self::generate_code();
+        }
+        return $codes;
+    }
 }

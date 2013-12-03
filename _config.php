@@ -27,8 +27,13 @@ CustomHtmlForm::registerModule('silvercart_marketing_vouchers', 50);
 // Register extensions
 // ----------------------------------------------------------------------------
 Object::add_extension('Member',                                 'SilvercartVoucherMember');
+Object::add_extension('SilvercartPage_Controller',              'SilvercartVoucherPage_Controller');
+Object::add_extension('SilvercartOrder',                        'SilvercartVoucherOrder');
 Object::add_extension('SilvercartOrderPosition',                'SilvercartVoucherOrderPosition');
 Object::add_extension('SilvercartOrderDetailPage_Controller',   'SilvercartVoucherOrderDetailPage_Controller');
+Object::add_extension('SilvercartShoppingCart',                 'SilvercartVoucherShoppingCart');
+
+SilvercartShoppingCart::registerModule('SilvercartVoucherShoppingCart');
 
 // ----------------------------------------------------------------------------
 // Register SilvercartPlugins
