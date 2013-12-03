@@ -578,7 +578,7 @@ class SilvercartAutoVoucherGenerator extends DataObject {
                 if ($generator != false) {
                     $cart = Member::currentUser()->getCart();
                     /* @var $cart SilvercartShoppingCart */
-                    $totalAmount = $cart->getAmountTotal();
+                    $totalAmount = $cart->getAmountTotalWithoutFees();
                     /* @var $totalAmount Money */
                     $sql = sprintf(
                             'SELECT "VoucherValue","VoucherType","MinimumOrderAmountAmount","NaturalProductTitle","NaturalProductNumber" FROM "SilvercartAutoVoucherGeneratorRule" WHERE "SilvercartAutoVoucherGeneratorID" = %s AND "MinimumOrderAmountAmount" <= %s ORDER BY "MinimumOrderAmountAmount" DESC LIMIT 0,1',
@@ -626,7 +626,7 @@ class SilvercartAutoVoucherGenerator extends DataObject {
             if ($rule != false) {
                 $cart = Member::currentUser()->getCart();
                 /* @var $cart SilvercartShoppingCart */
-                $totalAmount = $cart->getAmountTotal();
+                $totalAmount = $cart->getAmountTotalWithoutFees();
                 /* @var $totalAmount Money */
                 
                 $price = new Money();
@@ -680,7 +680,7 @@ class SilvercartAutoVoucherGenerator extends DataObject {
                 if ($generator != false) {
                     $cart = Member::currentUser()->getCart();
                     /* @var $cart SilvercartShoppingCart */
-                    $totalAmount = $cart->getAmountTotal();
+                    $totalAmount = $cart->getAmountTotalWithoutFees();
                     /* @var $totalAmount Money */
                     $sql = sprintf(
                             'SELECT "VoucherValue","VoucherType","MinimumOrderAmountAmount","NaturalProductTitle","NaturalProductNumber" FROM "SilvercartAutoVoucherGeneratorRule" WHERE "SilvercartAutoVoucherGeneratorID" = %s AND "MinimumOrderAmountAmount" > %s ORDER BY "MinimumOrderAmountAmount" ASC LIMIT 0,1',
@@ -728,7 +728,7 @@ class SilvercartAutoVoucherGenerator extends DataObject {
             if ($rule != false) {
                 $cart = Member::currentUser()->getCart();
                 /* @var $cart SilvercartShoppingCart */
-                $totalAmount = $cart->getAmountTotal();
+                $totalAmount = $cart->getAmountTotalWithoutFees();
                 /* @var $totalAmount Money */
                 
                 $price = new Money();

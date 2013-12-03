@@ -38,6 +38,13 @@ class SilvercartVoucherAdmin extends ModelAdmin {
     public static $menuCode = 'products';
 
     /**
+     * The section of the menu under which this admin should be grouped.
+     * 
+     * @var string
+     */
+    public static $menuSortIndex = 150;
+
+    /**
      * The URL segment
      *
      * @var string

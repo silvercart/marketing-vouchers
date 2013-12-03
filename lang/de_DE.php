@@ -96,9 +96,9 @@ $lang['de_DE']['SilvercartAutoVoucherGenerator']['AlwaysValid']                 
 $lang['de_DE']['SilvercartAutoVoucherGenerator']['CartPositionAbsolute']        = 'Für diesen Warenkorb erhalten Sie einen <strong>Gutschein über %s</strong>, den Sie bei Ihrem nächsten Einkauf einlösen können.';
 $lang['de_DE']['SilvercartAutoVoucherGenerator']['CartPositionRelative']        = 'Für diesen Warenkorb erhalten Sie einen <strong>Gutschein über %s</strong>, den Sie bei Ihrem nächsten Einkauf einlösen können.';
 $lang['de_DE']['SilvercartAutoVoucherGenerator']['CartPositionNatural']         = 'Für diesen Warenkorb erhalten Sie <strong>%s <u>gratis</u></strong> zu Ihrem Einkauf dazu.';
-$lang['de_DE']['SilvercartAutoVoucherGenerator']['NextCartPositionAbsolute']    = 'Ab einem Bestellwert von %s erhalten Sie einen <strong>Gutschein über %s</strong> für Ihren nächsten Einkauf.';
-$lang['de_DE']['SilvercartAutoVoucherGenerator']['NextCartPositionRelative']    = 'Ab einem Bestellwert von %s erhalten Sie einen <strong>Gutschein über %s</strong> für Ihren nächsten Einkauf.';
-$lang['de_DE']['SilvercartAutoVoucherGenerator']['NextCartPositionNatural']     = 'Ab einem Bestellwert von %s erhalten Sie <strong>%s <u>gratis</u></strong> zu Ihrem Einkauf dazu.';
+$lang['de_DE']['SilvercartAutoVoucherGenerator']['NextCartPositionAbsolute']    = 'Ab einem Warenwert von %s erhalten Sie einen <strong>Gutschein über %s</strong> für Ihren nächsten Einkauf.';
+$lang['de_DE']['SilvercartAutoVoucherGenerator']['NextCartPositionRelative']    = 'Ab einem Warenwert von %s erhalten Sie einen <strong>Gutschein über %s</strong> für Ihren nächsten Einkauf.';
+$lang['de_DE']['SilvercartAutoVoucherGenerator']['NextCartPositionNatural']     = 'Ab einem Warenwert von %s erhalten Sie <strong>%s <u>gratis</u></strong> zu Ihrem Einkauf dazu.';
 $lang['de_DE']['SilvercartAutoVoucherGenerator']['ForFree']                     = 'Gratis';
 $lang['de_DE']['SilvercartAutoVoucherGenerator']['UseURLParamForActivation']    = 'URL-Parameter ist erforderlich, damit Angebot aktiv wird';
 $lang['de_DE']['SilvercartAutoVoucherGenerator']['URLParamForActivation']       = 'URL-Parameter (Key/Value)';
