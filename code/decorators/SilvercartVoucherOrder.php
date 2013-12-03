@@ -57,7 +57,6 @@ class SilvercartVoucherOrder extends DataObjectDecorator {
             
             if ($currentVoucher->IsNatural) {
                 $productTitle  = _t('SilvercartAutoVoucherGenerator.ForFree') . ': ' . $currentVoucher->NaturalProductTitle;
-                $productNumber = $currentVoucher->NaturalProductNumber;
             } else {
                 $voucher = $generator->generateVoucher();
                 if (!is_null($voucher)) {
@@ -77,7 +76,7 @@ class SilvercartVoucherOrder extends DataObjectDecorator {
                 $voucherPosition->ProductDescription    = '';
                 $voucherPosition->Quantity              = 1;
                 $voucherPosition->Title                 = $productTitle;
-                $voucherPosition->ProductNumber         = $productNumber;
+                $voucherPosition->ProductNumber         = $currentVoucher->NaturalProductNumber;
                 $voucherPosition->numberOfDecimalPlaces = 0;
                 $voucherPosition->SilvercartOrderID     = $order->ID;
                 $voucherPosition->write();

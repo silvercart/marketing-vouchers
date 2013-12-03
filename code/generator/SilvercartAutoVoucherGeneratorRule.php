@@ -132,7 +132,6 @@ class SilvercartAutoVoucherGeneratorRule extends DataObject {
         );
         
         if ($this->VoucherType != 'Natural') {
-            $fields->removeByName('NaturalProductNumber');
             $fields->removeByName('NaturalProductTitle');
         } else {
             $fields->removeByName('VoucherValue');
@@ -152,6 +151,7 @@ class SilvercartAutoVoucherGeneratorRule extends DataObject {
     public function summaryFields() {
         $summaryFields = array(
             'MinimumOrderAmountNice' => $this->fieldLabel('MinimumOrderAmount'),
+            'NaturalProductNumber'   => $this->fieldLabel('NaturalProductNumber'),
             'VoucherSummary'         => $this->fieldLabel('VoucherType'),
         );
         $this->extend('updateSummaryFields', $summaryFields);
