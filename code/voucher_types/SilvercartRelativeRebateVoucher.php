@@ -127,9 +127,9 @@ class SilvercartRelativeRebateVoucher extends SilvercartVoucher {
      *
      * @return DataObjectSet
      *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @copyright 2011 pixeltricks GmbH
-     * @since 20.01.2011
+     * @author Sebastian Diel <sdiel@pixeltricks.de>,
+     *         Sascha Koehler <skoehler@pixeltricks.de>
+     * @since 25.03.2014
      */
     public function getSilvercartShoppingCartPositions(SilvercartShoppingCart $silvercartShoppingCart, $taxable = true, $excludeShoppingCartPositions = false, $createForms = true) {
         $positions = new DataObjectSet();
@@ -150,10 +150,33 @@ class SilvercartRelativeRebateVoucher extends SilvercartVoucher {
             if ($createForms) {
                 $removeCartForm = $controller->getRegisteredCustomHtmlForm('SilvercartVoucherRemoveFromCartForm'.$this->ID);
             }
-            $silvercartShoppingCartAmount = $silvercartShoppingCart->getTaxableAmountGrossWithoutFees(array('SilvercartVoucher'))->getAmount();
-            $rebateAmount       = ($silvercartShoppingCartAmount / 100 * $this->valueInPercent);
-            $rebateAmount       = round($rebateAmount, 2);
-            $rebate             = new Money();
+
+            if ($this->RestrictValueToProduct &&
+                $this->RestrictToSilvercartProduct()->Count() > 0) {
+                $amountToReduce = 0;
+                $positionNums   = array();
+                $productIDs     = array_keys($this->RestrictToSilvercartProduct()->map());
+                foreach ($silvercartShoppingCart->SilvercartShoppingCartPositions() as $position) {
+                    if (in_array($position->SilvercartProductID, $productIDs)) {
+                        $amountToReduce += $position->getPrice()->getAmount();
+                        $positionNums[] = $position->SilvercartProduct()->ProductNumberShop;
+                    }
+                }
+                $addToTitle = sprintf(
+                        _t('SilvercartVoucher.ValueForPositions'),
+                        $this->valueInPercent,
+                        implode(', ', $positionNums)
+                );
+            } else {
+                $amountToReduce = $silvercartShoppingCart->getTaxableAmountGrossWithoutFees(array('SilvercartVoucher'))->getAmount();
+                $addToTitle     = sprintf(
+                        _t('SilvercartVoucher.ValueForCart'),
+                        $this->valueInPercent
+                );
+            }
+            
+            $rebateAmount = round($amountToReduce / 100 * $this->valueInPercent, 2);
+            $rebate       = new Money();
             $rebate->setAmount($rebateAmount);
             $rebate->setCurrency($currency->getShortName(null, i18n::get_locale()));
 
@@ -167,7 +190,7 @@ class SilvercartRelativeRebateVoucher extends SilvercartVoucher {
             $position = new SilvercartVoucherPrice();
             
             $position->ID                    = $this->ID;
-            $position->Name                  = self::$singular_name.' (Code: '.$this->code.')';
+            $position->Name                  = $this->singular_name() . ' (Code: '.$this->code.') ' . $addToTitle;
             $position->ShortDescription      = $this->code;
             $position->LongDescription       = $this->code;
             $position->Currency              = $currency->getShortName(null, i18n::get_locale());
@@ -196,17 +219,32 @@ class SilvercartRelativeRebateVoucher extends SilvercartVoucher {
      * Returns the amount to consider in the shopping cart total calculation.
      *
      * @return Money
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @copyright 2011 pixeltricks GmbH
-     * @since 24.01.2011
+     * 
+     * @author Sebastian Diel <sdiel@pixeltricks.de>,
+     *         Sascha Koehler <skoehler@pixeltricks.de>
+     * @since 25.03.2014
      */
     public function getSilvercartShoppingCartTotal() {
-        $amount             = new Money();
-        $member             = Member::currentUser();
-        $silvercartShoppingCartAmount = $member->SilvercartShoppingCart()->getTaxableAmountGrossWithoutFees(array('SilvercartVoucher'))->getAmount();
-        $rebateAmount       = ($silvercartShoppingCartAmount / 100 * $this->valueInPercent);
-        $rebate             = new Money();
+        
+        $amount = new Money();
+        $member = Member::currentUser();
+
+        if ($this->RestrictValueToProduct &&
+            $this->RestrictToSilvercartProduct()->Count() > 0) {
+            $amountToReduce = 0;
+            $productIDs     = array_keys($this->RestrictToSilvercartProduct()->map());
+            foreach ($productIDs as $productID) {
+                $position = $member->SilvercartShoppingCart()->SilvercartShoppingCartPositions()->find('SilvercartProductID', $productID);
+                if ($position instanceof SilvercartShoppingCartPosition) {
+                    $amountToReduce += $position->getPrice()->getAmount();
+                }
+            }
+        } else {
+            $amountToReduce = $member->SilvercartShoppingCart()->getTaxableAmountGrossWithoutFees(array('SilvercartVoucher'))->getAmount();
+        }
+        
+        $rebateAmount = ($amountToReduce / 100 * $this->valueInPercent);
+        $rebate       = new Money();
         $rebate->setAmount($rebateAmount);
 
         $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::get($member->SilvercartShoppingCart()->ID, $this->ID);

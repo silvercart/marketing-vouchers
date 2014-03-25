@@ -74,6 +74,9 @@ $lang['de_DE']['SilvercartVoucher']['RESTRICT_TO_PRODUCT']                      
 $lang['de_DE']['SilvercartVoucher']['RESTRICT_TO_PRODUCTGROUP']                 = 'An Warengruppe(n) binden';
 $lang['de_DE']['SilvercartVoucher']['VALUE']                                    = 'Wert';
 $lang['de_DE']['SilvercartVoucher']['VALUE_IN_PERCENT']                         = 'Rabatt in Prozent';
+$lang['de_DE']['SilvercartVoucher']['RestrictValueToProduct']                   = 'Gutscheinwert bezieht sich ausschließlich auf verknüpfte Artikel';
+$lang['de_DE']['SilvercartVoucher']['ValueForPositions']                        = '%s%% auf die Position(en): %s';
+$lang['de_DE']['SilvercartVoucher']['ValueForCart']                             = '%s%% auf den Warenwert';
 
 $lang['de_DE']['SilvercartVoucherHistory']['SINGULARNAME']                      = 'Gutschein Historie';
 $lang['de_DE']['SilvercartVoucherHistory']['PLURALNAME']                        = 'Gutschein Historien';

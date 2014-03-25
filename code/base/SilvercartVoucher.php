@@ -45,7 +45,8 @@ class SilvercartVoucher extends DataObject {
         'maximumShoppingCartValue'  => 'Money',
         'quantity'                  => 'Int',
         'quantityRedeemed'          => 'Int',
-        'ProductNumber'             => 'Varchar(50)'
+        'ProductNumber'             => 'Varchar(50)',
+        'RestrictValueToProduct'    => 'Boolean(0)',
     );
 
     /**
@@ -124,7 +125,7 @@ class SilvercartVoucher extends DataObject {
      * @return array
      *
      * @author Sebastian Diel <sdiel@pixeltricks.de>
-     * @since 19.10.2011
+     * @since 25.03.2014
      */
     public function fieldLabels($includerelations = true) {
         return array_merge(
@@ -141,6 +142,7 @@ class SilvercartVoucher extends DataObject {
                 'RestrictToGroup'                       => _t('SilvercartVoucher.RESTRICT_TO_GROUP'),
                 'RestrictToSilvercartProductGroupPage'  => _t('SilvercartVoucher.RESTRICT_TO_PRODUCT'),
                 'RestrictToSilvercartProduct'           => _t('SilvercartVoucher.RESTRICT_TO_PRODUCTGROUP'),
+                'RestrictValueToProduct'                => _t('SilvercartVoucher.RestrictValueToProduct'),
                 'SilvercartVoucherHistory'              => _t('SilvercartVoucherHistory.SINGULARNAME'),
                 'castedFormattedCreationDate'           => _t('SilvercartVoucher.CREATED'),
                 'ProductNumber'                         => _t('SilvercartVoucher.PRODUCTNUMBER'),537
@@ -1177,9 +1179,14 @@ class SilvercartVoucher extends DataObject {
         $fields->findOrMakeTab('Root.RestrictToGroup',                          _t('SilvercartVoucher.RESTRICT_TO_GROUP'));
         $fields->addFieldToTab('Root.RestrictToGroup',                          $groupTableField);
         $fields->findOrMakeTab('Root.RestrictToSilvercartProduct',              _t('SilvercartVoucher.RESTRICT_TO_PRODUCT'));
+        $fields->addFieldToTab('Root.RestrictToSilvercartProduct',              $fields->dataFieldByName('RestrictValueToProduct'));
         $fields->addFieldToTab('Root.RestrictToSilvercartProduct',              $productTableField);
         $fields->findOrMakeTab('Root.RestrictToSilvercartProductGroupPage',     _t('SilvercartVoucher.RESTRICT_TO_PRODUCTGROUP'));
         $fields->addFieldToTab('Root.RestrictToSilvercartProductGroupPage',     $productGroupPageTableField);
+        
+        if ($this->ClassName == 'SilvercartAbsoluteRebateVoucher') {
+            $fields->removeByName('RestrictValueToProduct');
+        }
 
         return $fields;
     }
