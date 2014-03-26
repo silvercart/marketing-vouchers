@@ -139,7 +139,7 @@ class SilvercartRelativeRebateVoucher extends SilvercartVoucher {
                 foreach ($cart->SilvercartShoppingCartPositions() as $position) {
                     if (in_array($position->SilvercartProductID, $productIDs)) {
                         $amountToReduce += $position->getPrice()->getAmount();
-                        $positionNums[] = $position->SilvercartProduct()->ProductNumberShop;
+                        $positionNums[] = $position->getProductNumberShop();
                     }
                 }
 
@@ -153,23 +153,17 @@ class SilvercartRelativeRebateVoucher extends SilvercartVoucher {
                         $product->isInDB()) {
                         if (in_array($product->SilvercartProductGroupID, $productGroupIDs)) {
                             $amountToReduce += $position->getPrice()->getAmount();
-                            $positionNums[] = $position->SilvercartProduct()->ProductNumberShop;
+                            $positionNums[] = $position->getProductNumberShop();
                         } elseif ($product->SilvercartProductGroupMirrorPages()->Count() > 0) {
                             foreach ($product->SilvercartProductGroupMirrorPages() as $mirroredGroup) {
                                 if (in_array($mirroredGroup->ID, $productGroupIDs)) {
                                     $amountToReduce += $position->getPrice()->getAmount();
-                                    $positionNums[] = $position->SilvercartProduct()->ProductNumberShop;
+                                    $positionNums[] = $position->getProductNumberShop();
                                 }
                             }
                         }
                     }
                 }
-                $this->addToTitle = sprintf(
-                        _t('SilvercartVoucher.ValueForPositions'),
-                        $this->valueInPercent,
-                        implode(', ', $positionNums)
-                );
-
             }
         } else {
             $amountToReduce   = $cart->getTaxableAmountGrossWithoutFees(array('SilvercartVoucher'))->getAmount();
