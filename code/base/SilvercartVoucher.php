@@ -140,8 +140,8 @@ class SilvercartVoucher extends DataObject {
                 'SilvercartTax'                         => _t('SilvercartTax.SINGULARNAME'),
                 'RestrictToMember'                      => _t('SilvercartVoucher.RESTRICT_TO_MEMBER'),
                 'RestrictToGroup'                       => _t('SilvercartVoucher.RESTRICT_TO_GROUP'),
-                'RestrictToSilvercartProductGroupPage'  => _t('SilvercartVoucher.RESTRICT_TO_PRODUCT'),
-                'RestrictToSilvercartProduct'           => _t('SilvercartVoucher.RESTRICT_TO_PRODUCTGROUP'),
+                'RestrictToSilvercartProduct'           => _t('SilvercartVoucher.RESTRICT_TO_PRODUCT'),
+                'RestrictToSilvercartProductGroupPage'  => _t('SilvercartVoucher.RESTRICT_TO_PRODUCTGROUP'),
                 'RestrictValueToProduct'                => _t('SilvercartVoucher.RestrictValueToProduct'),
                 'SilvercartVoucherHistory'              => _t('SilvercartVoucherHistory.SINGULARNAME'),
                 'castedFormattedCreationDate'           => _t('SilvercartVoucher.CREATED'),
@@ -1159,15 +1159,19 @@ class SilvercartVoucher extends DataObject {
             'getCMSFields_forPopup',
             null
         );
-        $productGroupPageTableField = new ManyManyComplexTableField(
-            $this,
-            'RestrictToSilvercartProductGroupPage',
-            'SilvercartProductGroupPage',
-            null,
-            'getCMSFields_forPopup',
-            null,
-            'SiteTree.Title ASC'
+        $productGroupHolder    = SilvercartTools::PageByIdentifierCode('SilvercartProductGroupHolder');
+        $productGroupPageField = new TreeMultiselectField(
+                'RestrictToSilvercartProductGroupPage',
+                $this->fieldLabel('RestrictToSilvercartProductGroupPage'),
+                'SiteTree'
         );
+        $productGroupPageField->setTreeBaseID($productGroupHolder->ID);
+
+        
+        $restrictValueToProductCopy = clone $fields->dataFieldByName('RestrictValueToProduct');
+        $restrictValueToProductCopy->setName('RestrictValueToProduct_Copy');
+        $restrictValueToProductCopy->setValue($this->RestrictValueToProduct);
+        Requirements::javascript('silvercart_marketing_vouchers/js/RestrictValueToProduct.js');
 
         $fields->removeByName('RestrictToMember');
         $fields->removeByName('RestrictToGroup');
@@ -1182,7 +1186,8 @@ class SilvercartVoucher extends DataObject {
         $fields->addFieldToTab('Root.RestrictToSilvercartProduct',              $fields->dataFieldByName('RestrictValueToProduct'));
         $fields->addFieldToTab('Root.RestrictToSilvercartProduct',              $productTableField);
         $fields->findOrMakeTab('Root.RestrictToSilvercartProductGroupPage',     _t('SilvercartVoucher.RESTRICT_TO_PRODUCTGROUP'));
-        $fields->addFieldToTab('Root.RestrictToSilvercartProductGroupPage',     $productGroupPageTableField);
+        $fields->addFieldToTab('Root.RestrictToSilvercartProductGroupPage',     $restrictValueToProductCopy);
+        $fields->addFieldToTab('Root.RestrictToSilvercartProductGroupPage',     $productGroupPageField);
         
         if ($this->ClassName == 'SilvercartAbsoluteRebateVoucher') {
             $fields->removeByName('RestrictValueToProduct');
