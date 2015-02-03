@@ -379,7 +379,7 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
                 $currentRemainingAmount = $voucherOnMember->remainingAmount;
             }
             $newRemainingAmount = $this->doSplitValue($currentRemainingAmount, $amountToReduce);
-            $member->SilvercartVouchers()->update(
+            $member->SilvercartVouchers()->add(
                 $originalVoucher, 
                 array(
                     'remainingAmount' => $newRemainingAmount
