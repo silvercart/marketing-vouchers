@@ -34,7 +34,7 @@ class SilvercartVoucherOrderPosition extends DataExtension {
     /**
      * Returns the voucher codes for this order position.
      *
-     * @return DataObjectSet
+     * @return ArrayList
      */
     public function getVoucherCodes() {
         $voucherCodes = array();
@@ -53,6 +53,6 @@ class SilvercartVoucherOrderPosition extends DataExtension {
             );
         }
 
-        return new DataObjectSet($voucherCodes);
+        return new ArrayList($voucherCodes);
     }
 }

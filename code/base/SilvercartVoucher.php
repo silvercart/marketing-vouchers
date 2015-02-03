@@ -352,7 +352,7 @@ class SilvercartVoucher extends DataObject {
                     $voucherHistory->add($this, $member, 'removed');
                 }
             } else {
-                $silvercartVoucherShoppingCartPosition = silvercartVoucherShoppingCartPosition::get($silvercartShoppingCart->ID, $this->ID);
+                $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::getVoucherShoppingCartPosition($silvercartShoppingCart->ID, $this->ID);
 
                 if ($silvercartVoucherShoppingCartPosition &&
                     $silvercartVoucherShoppingCartPosition->implicatePosition == false) {
@@ -785,7 +785,7 @@ class SilvercartVoucher extends DataObject {
      * @param array        $excludeShoppingCartPositions Positions that shall not be counted; can contain the ID or the className of the position
      * @param Bool         $createForms                  Indicates wether the form objects should be created or not
      *
-     * @return DataObjectSet
+     * @return ArrayList
      *
      * @author Sascha Koehler <skoehler@pixeltricks.de>
      * @copyright 2011 pixeltricks GmbH
@@ -840,7 +840,7 @@ class SilvercartVoucher extends DataObject {
      * @param Member       $member                 The customer object
      * @param Bool         $taxable                Indicates if taxable or nontaxable entries should be returned
      *
-     * @return DataObjectSet
+     * @return void
      *
      * @author Sascha Koehler <skoehler@pixeltricks.de>, Sebastian Diel <sdiel@pixeltricks.de>
      * @since 29.08.2012
@@ -889,10 +889,9 @@ class SilvercartVoucher extends DataObject {
      * @param SilvercartShoppingCart $silvercartShoppingCart The Silvercart shoppingcart object
      * @param Member                 $member                 The member object
      *
-     * @return DataObjectSet
+     * @return ArrayList
      *
      * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @copyright 2011 pixeltricks GmbH
      * @since 04.02.2011
      */
     public function TaxableShoppingCartPositions(SilvercartShoppingCart $silvercartShoppingCart, Member $member) {
@@ -909,10 +908,9 @@ class SilvercartVoucher extends DataObject {
      * @param SilvercartShoppingCart $silvercartShoppingCart The Silvercart shoppingcart object
      * @param Member                 $member                 The member object
      *
-     * @return DataObjectSet
+     * @return ArrayList
      *
      * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @copyright 2011 pixeltricks GmbH
      * @since 04.02.2011
      */
     public function NonTaxableShoppingCartPositions(SilvercartShoppingCart $silvercartShoppingCart, Member $member) {
@@ -955,7 +953,7 @@ class SilvercartVoucher extends DataObject {
      *
      * @param SilvercartShoppingCart $silvercartShoppingCart the shoppingcart object
      *
-     * @return DataObjectSet
+     * @return ArrayList
      *
      * @author Sascha Koehler <skoehler@pixeltricks.de>
      * @copyright 2011 pixeltricks GmbH
@@ -1152,8 +1150,8 @@ class SilvercartVoucher extends DataObject {
     }
 
     /**
-     * Check if a value of a key of a DataObjectSet is contained in another
-     * DataObjectSet.
+     * Check if a value of a key of a SS_List is contained in another
+     * SS_List.
      *
      * @param SS_List $set1 the first set to search in
      * @param SS_List $set2 the second set to search in
@@ -1162,7 +1160,6 @@ class SilvercartVoucher extends DataObject {
      * @return boolean
      *
      * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @copyright 2011 pixeltricks GmbH
      * @since 21.01.2011
      */
     private function findDataObjectSetInSetByKey(SS_List $set1, SS_List $set2, $key) {

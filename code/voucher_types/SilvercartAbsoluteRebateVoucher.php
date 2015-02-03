@@ -92,7 +92,7 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
     }
 
     /**
-     * Returns a dataobjectset for the display of the voucher positions in the
+     * Returns a SS_List for the display of the voucher positions in the
      * shoppingcart.
      *
      * @param SilvercartShoppingCart $silvercartShoppingCart       The shoppingcart object
@@ -100,14 +100,14 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
      * @param array                  $excludeShoppingCartPositions Positions that shall not be counted; can be the ID or the className of the position
      * @param Bool                   $createForms                  Indicates wether the form objects should be created or not
      *
-     * @return DataObjectSet
+     * @return SS_List
      *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @copyright 2011 pixeltricks GmbH
-     * @since 20.01.2011
+     * @author Sebastian Diel <sdiel@pixeltricks.de>,
+     *         Sascha Koehler <skoehler@pixeltricks.de>
+     * @since 03.02.2015
      */
     public function getSilvercartShoppingCartPositions(SilvercartShoppingCart $silvercartShoppingCart, $taxable = true, $excludeShoppingCartPositions = false, $createForms = true) {
-        $positions = new DataObjectSet();
+        $positions = new ArrayList();
         if ($excludeShoppingCartPositions !== false &&
             (
                 in_array($this->ID, $excludeShoppingCartPositions) ||
@@ -224,7 +224,7 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
             }
 
             if (is_array(self::$alreadyHandledPositions)) {
-                self::$alreadyHandledPositions = new DataObjectSet();
+                self::$alreadyHandledPositions = new ArrayList();
             }
 
             self::$alreadyHandledPositions->push($position);
