@@ -113,6 +113,6 @@ class SilvercartVoucherRemoveFromCartForm extends CustomHtmlForm {
             $voucher->removeFromShoppingCart($member, 'manuallyRemoved');
         }
 
-        Director::redirect($this->controller->Link());
+        $this->Controller()->redirect($this->Controller()->Link());
     }
 }

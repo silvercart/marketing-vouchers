@@ -143,7 +143,7 @@ class SilvercartVoucherShoppingCartActionForm extends CustomHtmlForm {
         } else {
             $voucher->redeem($member, 'manuallyRedeemed');
         }
-        Director::redirect($this->controller->Link());
+        $this->Controller()->redirect($this->Controller()->Link());
     }
 
     /**
