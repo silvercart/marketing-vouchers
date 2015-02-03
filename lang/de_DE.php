@@ -3,21 +3,10 @@
  * German (Germany) language pack
  *
  * @package Silvercart
- * @author Sascha Koehler <skoehler@pixeltricks.de>
- * @copyright 2011 pixeltricks GmbH
- * @since 24.01.2011
- * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @subpackage i18n
  * @ignore
  */
-i18n::include_locale_file('silvercart_marketing_vouchers', 'en_US');
-
 global $lang;
-
-if (array_key_exists('de_DE', $lang) && is_array($lang['de_DE'])) {
-    $lang['de_DE'] = array_merge($lang['en_US'], $lang['de_DE']);
-} else {
-    $lang['de_DE'] = $lang['en_US'];
-}
 
 $lang['de_DE']['SilvercartAbsoluteRebateGiftVoucher']['SINGULARNAME']           = 'Geschenkgutschein';
 $lang['de_DE']['SilvercartAbsoluteRebateGiftVoucher']['PLURALNAME']             = 'Geschenkgutscheine';
@@ -42,6 +31,7 @@ $lang['de_DE']['SilvercartRelativeRebateVoucher']['SINGULARNAME']               
 $lang['de_DE']['SilvercartRelativeRebateVoucher']['PLURALNAME']                 = 'Rabattgutscheine';
 
 $lang['de_DE']['SilvercartVoucherAdmin']['TITLE']                               = 'Gutscheine';
+$lang['de_DE']['SilvercartVoucherAdmin']['MENUTITLE']                           = 'Gutscheine';
 
 $lang['de_DE']['SilvercartVoucher']['SINGULARNAME']                             = 'Gutschein';
 $lang['de_DE']['SilvercartVoucher']['PLURALNAME']                               = 'Gutscheine';

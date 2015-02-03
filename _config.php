@@ -36,3 +36,5 @@ Object::add_extension('SilvercartOrderDetailPage_Controller',   'SilvercartVouch
 Object::add_extension('SilvercartVoucherRemoveFromCartForm', 'SilvercartPluginObjectExtension');
 
 SilvercartPlugin::registerPluginProvider('SilvercartVoucherRemoveFromCartForm', 'SilvercartVoucherRemoveFromCartFormPluginProvider');
+
+SilvercartLeftAndMainExtension::add_additional_css_file('silvercart_marketing_vouchers/css/SilvercartVoucherAdmin.css');

@@ -3,21 +3,10 @@
  * English (US) language pack
  *
  * @package Silvercart
- * @author Sascha Koehler <skoehler@pixeltricks.de>
- * @copyright 2011 pixeltricks GmbH
- * @since 24.01.2011
- * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @subpackage i18n
  * @ignore
  */
 global $lang;
-
-
-
-
-
-
-
-
 
 $lang['en_US']['SilvercartAbsoluteRebateGiftVoucher']['SINGULARNAME']           = 'Gift voucher';
 $lang['en_US']['SilvercartAbsoluteRebateGiftVoucher']['PLURALNAME']             = 'Gift vouchers';
@@ -42,6 +31,7 @@ $lang['en_US']['SilvercartRelativeRebateVoucher']['SINGULARNAME']               
 $lang['en_US']['SilvercartRelativeRebateVoucher']['PLURALNAME']                 = 'Relative rebate vouchers';
 
 $lang['en_US']['SilvercartVoucherAdmin']['TITLE']                               = 'Vouchers';
+$lang['en_US']['SilvercartVoucherAdmin']['MENUTITLE']                           = 'Vouchers';
 
 $lang['en_US']['SilvercartVoucher']['SINGULARNAME']                             = 'Voucher';
 $lang['en_US']['SilvercartVoucher']['PLURALNAME']                               = 'Vouchers';
