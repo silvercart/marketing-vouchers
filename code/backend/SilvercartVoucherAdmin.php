@@ -28,7 +28,7 @@
  * @since 21.01.2011
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  */
-class SilvercartVoucherAdmin extends ModelAdmin {
+class SilvercartVoucherAdmin extends SilvercartModelAdmin {
 
     /**
      * The code of the menu under which this admin should be shown.
