@@ -26,6 +26,7 @@ de:
     CREATED: "Erstellt am"
     ERRORMESSAGE-ALREADY_IN_SHOPPINGCART: "Dieser Gutschein befindet sich schon in Ihrem Warenkorb."
     ERRORMESSAGE-CODE_NOT_VALID: "Dieser Gutscheincode ist nicht gültig."
+    ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY: "Dieser Gutschein wurde vollständig eingelöst."
     ERRORMESSAGE-CUSTOMER_MUST_BE_REGISTERED: "Sie müssen sich registrieren, um diesen Gutschein einzulösen, da dieser Gutschein bei Einlösung an den Kunde gebunden wird.<br />Dadurch können Sie diesen Gutschein für mehrere Einkäufe verwenden, falls Ihr Einkaufswert niedriger ist als der Gutscheinwert.<br /><a href=\"%s\">Klicken Sie hier, um zum Registrierungsformular zu gelangen.</a>"
     ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE: "Sie dürfen diesen Gutschein nicht einlösen."
     ERRORMESSAGE-NOT_REDEEMABLE: "Der Gutschein kann nicht eingelöst werden."
@@ -51,6 +52,7 @@ de:
     RESTRICT_TO_PRODUCTGROUP: "An Warengruppe(n) binden"
     SINGULARNAME: "Gutschein"
     VALUE: "Wert"
+    VALUE_IN_PERCENT: "Rabatt in Prozent"
   SilvercartVoucherAdmin:
     MENUTITLE: "Gutscheine"
     TITLE: "Gutscheine"
