@@ -167,7 +167,7 @@ class SilvercartRelativeRebateVoucher extends SilvercartVoucher {
             $position = new SilvercartVoucherPrice();
             
             $position->ID                    = $this->ID;
-            $position->Name                  = self::$singular_name.' (Code: '.$this->code.')';
+            $position->Name                  = $this->singular_name() . ' (Code: '.$this->code.')';
             $position->ShortDescription      = $this->code;
             $position->LongDescription       = $this->code;
             $position->Currency              = $currency->getShortName(null, i18n::get_locale());
