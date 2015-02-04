@@ -39,7 +39,7 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
      * @var array
      */
     public static $db = array(
-        'value' => 'Money'
+        'value' => 'SilvercartMoney'
     );
 
     // ------------------------------------------------------------------------
