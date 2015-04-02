@@ -146,7 +146,6 @@ class SilvercartRelativeRebateVoucher extends SilvercartVoucher {
              (!$taxable && $tax->Rate == 0) ||
              ($taxable && $tax && $tax->Rate > 0) ) {
 
-            $currency           = new Zend_Currency(null, i18n::get_locale());
             if ($createForms) {
                 $removeCartForm = $controller->getRegisteredCustomHtmlForm('SilvercartVoucherRemoveFromCartForm'.$this->ID);
             }
@@ -155,7 +154,7 @@ class SilvercartRelativeRebateVoucher extends SilvercartVoucher {
             $rebateAmount       = round($rebateAmount, 2);
             $rebate             = new Money();
             $rebate->setAmount($rebateAmount);
-            $rebate->setCurrency($currency->getShortName(null, i18n::get_locale()));
+            $rebate->setCurrency(SilvercartConfig::DefaultCurrency());
 
             if ($createForms) {
                 if ($removeCartForm) {
@@ -170,7 +169,7 @@ class SilvercartRelativeRebateVoucher extends SilvercartVoucher {
             $position->Name                  = $this->singular_name() . ' (Code: '.$this->code.')';
             $position->ShortDescription      = $this->code;
             $position->LongDescription       = $this->code;
-            $position->Currency              = $currency->getShortName(null, i18n::get_locale());
+            $position->Currency              = SilvercartConfig::DefaultCurrency();
             $position->Price                 = $rebateAmount * -1;
             $position->PriceFormatted        = '-'.$rebate->Nice();
             $position->PriceTotal            = $rebateAmount * -1;
@@ -208,6 +207,7 @@ class SilvercartRelativeRebateVoucher extends SilvercartVoucher {
         $rebateAmount       = ($silvercartShoppingCartAmount / 100 * $this->valueInPercent);
         $rebate             = new SilvercartMoney();
         $rebate->setAmount($rebateAmount);
+        $rebate->setCurrency(SilvercartConfig::DefaultCurrency());
 
         $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::getVoucherShoppingCartPosition($member->SilvercartShoppingCart()->ID, $this->ID);
 
