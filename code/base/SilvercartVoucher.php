@@ -534,14 +534,14 @@ class SilvercartVoucher extends DataObject {
      * set error message in checkifAllowedInShoppingCart()
      * 
      * @param Member $member    the member object
-     * @param String $voucherID id of the voucher
+     * @param int    $voucherID id of the voucher
      * 
      * @return boolean
      * 
      * @author Patrick Schneider <pschneider@pixeltricks.de>
      * @since 06.12.2012
      */
-    protected function isCompletelyRedeemedAlready(Member $member, String $voucherID) {
+    protected function isCompletelyRedeemedAlready(Member $member, $voucherID) {
         // Implement in descendants if needed
         return false;
     }
@@ -602,14 +602,14 @@ class SilvercartVoucher extends DataObject {
      * Checks if there are restrictions for this voucher in regars to the
      * items in the shopping cart.
      *
-     * @param ShoppingCartPosition $silvercartShoppingCartPositions the shoppingcartposition object
+     * @param SS_List $silvercartShoppingCartPositions the shoppingcartposition object
      *
      * @return bool
      *
      * @author Sascha Koehler <skoehler@pixeltricks.de>, Sebastian Diel <sdiel@pixeltricks.de>
      * @since 27.11.2012
      */
-    public function isValidForShoppingCartItems(SilvercartShoppingCartPosition $silvercartShoppingCartPositions) {
+    public function isValidForShoppingCartItems(SS_List $silvercartShoppingCartPositions) {
         $cacheKey = (string) implode('_', $silvercartShoppingCartPositions->map('ID', 'ID')->toArray());
         if (!array_key_exists($cacheKey, $this->isValidForShoppingCartItems)) {
             $isValidForShoppingCartItems    = false;

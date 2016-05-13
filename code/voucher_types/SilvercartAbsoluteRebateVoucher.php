@@ -406,14 +406,14 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
      * set error message in checkifAllowedInShoppingCart()
      * 
      * @param Member $member    the member object
-     * @param String $voucherID used voucher code to check for
+     * @param int    $voucherID used voucher code to check for
      * 
      * @return bool
      * 
      * @author Patrick Schneider <pschneider@pixeltricks.de>
      * @since 06.12.2012
      */
-    protected function isCompletelyRedeemedAlready(Member $member, String $voucherID) {
+    protected function isCompletelyRedeemedAlready(Member $member, $voucherID) {
         $isFullyRedeemedAlready = false;
         if (SilvercartCustomer::currentRegisteredCustomer()) {
             $voucherOnMember = $member->SilvercartVouchers()->find('ID', $voucherID);
