@@ -229,11 +229,7 @@ class SilvercartRelativeRebateVoucher extends SilvercartVoucher {
      *
      * @param array $params Additional parameters
      *
-     * @return FieldSet
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @copyright 2011 pixeltricks GmbH
-     * @since 21.01.2011
+     * @return FieldList
      */
     public function getCMSFields($params = null) {
         $fields = parent::getCMSFields($params);

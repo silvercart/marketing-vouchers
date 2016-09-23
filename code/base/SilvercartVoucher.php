@@ -791,7 +791,7 @@ class SilvercartVoucher extends DataObject {
      * @copyright 2011 pixeltricks GmbH
      * @since 21.01.2011
      */
-    public function ShoppingCartPositions(SilvercartShoppingCart $silvercartShoppingCart, Member $member, $taxable = true, $excludeShoppingCartPositions = false, $createForms = true) {
+    public function ShoppingCartPositions(SilvercartShoppingCart $silvercartShoppingCart, Member $member = null, $taxable = true, $excludeShoppingCartPositions = false, $createForms = true) {
         $positions = array();
         $records   = DB::query(
             sprintf(
@@ -1133,7 +1133,7 @@ class SilvercartVoucher extends DataObject {
     }
 
     /**
-     * Returns a dataobjectset for the display of the voucher positions in the
+     * Returns a SS_List for the display of the voucher positions in the
      * shoppingcart.
      *
      * @param SilvercartShoppingCart $silvercartShoppingCart the shoppingcart object

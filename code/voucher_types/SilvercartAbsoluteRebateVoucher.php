@@ -306,7 +306,7 @@ class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
      *
      * @param array $params Additional parameters
      *
-     * @return FieldSet
+     * @return FieldList
      */
     public function getCMSFields($params = null) {
         $fields = parent::getCMSFields(
