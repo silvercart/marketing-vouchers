@@ -33,23 +33,112 @@
  */
 class SilvercartVoucherPrice extends DataObject {
 
+    /**
+     * ID of the voucher
+     * @var Int
+     */
     public $ID = null;
+    
+    /**
+     * Name of the voucher
+     * @var String 
+     */
     public $Name = null;
+    
+    /**
+     * Short description of the voucher
+     * @var String
+     */
     public $ShortDescription = null;
+    
+    /**
+     * Long description of the voucher
+     * @var String
+     */
     public $LongDescription = null;
+    
+    /**
+     * Currency of the voucher
+     * @var String 
+     */
     public $Currency = null;
+    
+    /**
+     * Price of the voucher
+     * @var Float 
+     */
     public $Price = null;
+    
+    /**
+     * Formatted price of the voucher
+     * @var String 
+     */
     public $PriceFormatted = null;
+    
+    /**
+     * Total price of the voucher
+     * @var Float 
+     */
     public $PriceTotal = null;
+    
+    /**
+     * Formatted total price of the voucher
+     * @var String 
+     */
     public $PriceTotalFormatted = null;
+    
+    /**
+     * Net price of the voucher
+     * @var Float 
+     */
     public $PriceNet = null;
+    
+    /**
+     * Formatted net price of the voucher
+     * @var String
+     */
     public $PriceNetFormatted = null;
+    
+    /**
+     * Total net price of the voucher
+     * @var Float 
+     */
     public $PriceNetTotal = null;
+    
+    /**
+     * Formatted total net price of the voucher
+     * @var String 
+     */
     public $PriceNetTotalFormatted = null;
+    
+    /**
+     * Quantity
+     * @var Int 
+     */
     public $Quantity = null;
+    
+    /**
+     * Rendered remove SilvercartVoucherRemoveFromCartForm
+     * @var SilvercartVoucherRemoveFromCartForm 
+     */
     public $removeFromCartForm = null;
+    
+    /**
+     * Tax rate of the voucher
+     * @var Float
+     */
     public $TaxRate = null;
+    
+    /**
+     * Tax amount of the voucher
+     * @var Float
+     */
     public $TaxAmount = null;
+    
+    /**
+     *Tax object of the voucher
+     * @var SilvercartTax
+     */
     public $Tax = null;
 
     /**

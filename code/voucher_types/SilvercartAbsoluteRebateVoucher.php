@@ -30,7 +30,16 @@
  */
 class SilvercartAbsoluteRebateVoucher extends SilvercartVoucher {
 
+    /**
+     * IDs of positions that have already been handled
+     * @var Array
+     */
     public static $alreadyHandledPositionIDs = array();
+    
+    /**
+     * The actual positions that have already been handled
+     * @var Array
+     */
     public static $alreadyHandledPositions = array();
 
     /**

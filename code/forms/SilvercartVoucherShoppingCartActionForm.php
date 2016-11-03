@@ -31,21 +31,6 @@
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  */
 class SilvercartVoucherShoppingCartActionForm extends CustomHtmlForm {
-    /**
-     * Enthaelt die zu pruefenden und zu verarbeitenden Formularfelder.
-     *
-     * @var array
-     */
-    protected $formFields = array(
-        'SilvercartVoucherCode' => array(
-            'type'              => 'TextField',
-            'title'             => 'Gutschein Code',
-            'value'             => '',
-            'checkRequirements' => array(
-                'isFilledIn'    => true
-            )
-        )
-    );
 
     /**
      * The session id used for saving status messages specific to this form.
@@ -70,6 +55,27 @@ class SilvercartVoucherShoppingCartActionForm extends CustomHtmlForm {
         'submitButtonTitle'         => 'Einlösen',
         'doJsValidationScrolling'   => false
     );
+
+    /**
+     * Returns the form fields.
+     * 
+     * @param bool $withUpdate Get fields with extension updates?
+     * 
+     * @return array
+     */
+    public function getFormFields($withUpdate = true) {
+        if (!array_key_exists('SilvercartVoucherCode', $this->formFields)) {
+            $this->formFields['SilvercartVoucherCode'] = array(
+                'type'              => 'TextField',
+                'title'             => _t('SilvercartVoucher.CODE', 'Voucher code'),
+                'value'             => '',
+                'checkRequirements' => array(
+                    'isFilledIn'    => true
+                )
+            );
+        }
+        return parent::getFormFields($withUpdate);
+    }
 
     /**
      * Setzt Initialwerte in Formularfeldern.
