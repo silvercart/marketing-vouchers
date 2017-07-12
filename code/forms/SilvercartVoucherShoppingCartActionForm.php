@@ -36,9 +36,6 @@ class SilvercartVoucherShoppingCartActionForm extends CustomHtmlForm {
      * The session id used for saving status messages specific to this form.
      *
      * @var string
-     * 
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 24.01.2011
      */
     protected $sessionStatusMessageId = 'SilvercartShoppingCartVoucher';
 
@@ -46,10 +43,6 @@ class SilvercartVoucherShoppingCartActionForm extends CustomHtmlForm {
      * form settings, mainly submit button´s name
      *
      * @var array
-     *
-     * @author Roland Lehmann <rlehmann@pixeltricks.de>
-     * @since 1.11.2010
-     * @return void
      */
     protected $preferences = array(
         'submitButtonTitle'         => 'Einlösen',
@@ -66,8 +59,9 @@ class SilvercartVoucherShoppingCartActionForm extends CustomHtmlForm {
     public function getFormFields($withUpdate = true) {
         if (!array_key_exists('SilvercartVoucherCode', $this->formFields)) {
             $this->formFields['SilvercartVoucherCode'] = array(
-                'type'              => 'TextField',
+                'type'              => 'SilvercartTextField',
                 'title'             => _t('SilvercartVoucher.CODE', 'Voucher code'),
+                'placeholder'       => _t('SilvercartVoucher.CODE', 'Voucher code'),
                 'value'             => '',
                 'checkRequirements' => array(
                     'isFilledIn'    => true
@@ -81,7 +75,9 @@ class SilvercartVoucherShoppingCartActionForm extends CustomHtmlForm {
      * Setzt Initialwerte in Formularfeldern.
      *
      * @return void
-     * @author Roland Lehmann <rlehmann@pixeltricks.de>, Patrick Schneider <pschneider@pixeltricks.de>
+     * 
+     * @author Roland Lehmann <rlehmann@pixeltricks.de>,
+     *         Patrick Schneider <pschneider@pixeltricks.de>
      * @since 06.12.2012
      */
     protected function fillInFieldValues() {
@@ -111,7 +107,9 @@ class SilvercartVoucherShoppingCartActionForm extends CustomHtmlForm {
      * @param Form           $form     form object
      * @param array          $formData CustomHTMLForms session data
      *
-     * @author Roland Lehmann <rlehmann@pixeltricks.de>, Patrick Schneider <pschneider@pixeltricks.de>
+     * @author Roland Lehmann <rlehmann@pixeltricks.de>,
+     *         Patrick Schneider <pschneider@pixeltricks.de>
+     * 
      * @since 06.12.2012
      * @return void
      */
@@ -159,10 +157,6 @@ class SilvercartVoucherShoppingCartActionForm extends CustomHtmlForm {
      * @param string $text Der Text der  Meldung, der angezeigt werden soll.
      *
      * @return void
-     *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @copyright 2010 pixeltricks GmbH
-     * @since 02.12.2010
      */
     protected function setSessionStatus($text) {
         Session::set($this->sessionStatusMessageId,
