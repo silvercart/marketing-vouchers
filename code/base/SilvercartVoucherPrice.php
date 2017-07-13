@@ -218,4 +218,14 @@ class SilvercartVoucherPrice extends DataObject {
     public function getTaxAmount() {
         return $this->TaxAmount;
     }
+
+    /**
+     * Returns the quantity according to the SilvercartProduct quantity type
+     * setting.
+     *
+     * @return mixed
+     */
+    public function getTypeSafeQuantity() {
+       return (int) $this->Quantity;
+    }
 }
