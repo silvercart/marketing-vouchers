@@ -21,7 +21,7 @@
  * @ignore
  */
 SilvercartShoppingCart::registerModule('SilvercartVoucher');
-CustomHtmlForm::registerModule('silvercart_marketing_vouchers', 50);
+CustomHtmlForm::registerModule(SilvercartTools::get_module_name(), 50);
 
 // ----------------------------------------------------------------------------
 // Register extensions
@@ -37,4 +37,4 @@ Object::add_extension('SilvercartVoucherRemoveFromCartForm', 'SilvercartPluginOb
 
 SilvercartPlugin::registerPluginProvider('SilvercartVoucherRemoveFromCartForm', 'SilvercartVoucherRemoveFromCartFormPluginProvider');
 
-SilvercartLeftAndMainExtension::add_additional_css_file('silvercart_marketing_vouchers/css/SilvercartVoucherAdmin.css');
+SilvercartLeftAndMainExtension::add_additional_css_file(SilvercartTools::get_module_name() . '/css/SilvercartVoucherAdmin.css');
