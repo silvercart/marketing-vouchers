@@ -787,9 +787,9 @@ class SilvercartVoucher extends DataObject {
      *
      * @return ArrayList
      *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>
-     * @copyright 2011 pixeltricks GmbH
-     * @since 21.01.2011
+     * @author Sebastian Diel <sdiel@pixeltricks.de>,
+     *         Sascha Koehler <skoehler@pixeltricks.de>
+     * @since 14.12.2016
      */
     public function ShoppingCartPositions(SilvercartShoppingCart $silvercartShoppingCart, Member $member = null, $taxable = true, $excludeShoppingCartPositions = false, $createForms = true) {
         $positions = array();
@@ -797,7 +797,7 @@ class SilvercartVoucher extends DataObject {
             sprintf(
                 "
                 SELECT DISTINCT
-                    VHis.SilvercartVoucherObjectID
+                    VHis.SilvercartVoucherObjectID, VHis.LastEdited
                 FROM
                     SilvercartVoucherHistory VHis
                 WHERE
@@ -809,8 +809,13 @@ class SilvercartVoucher extends DataObject {
             )
         );
         
+        $addedIDs = array();
         foreach ($records as $record) {
-            $voucher = SilvercartVoucher::get()->byID($record['SilvercartVoucherObjectID']);
+            if (in_array($record['SilvercartVoucherObjectID'], $addedIDs)) {
+                continue;
+            }
+            $addedIDs[] = $record['SilvercartVoucherObjectID'];
+            $voucher    = SilvercartVoucher::get()->byID($record['SilvercartVoucherObjectID']);
             if ($voucher) {
                 $silvercartVoucherShoppingCartPosition = SilvercartVoucherShoppingCartPosition::getVoucherShoppingCartPosition($silvercartShoppingCart->ID, $voucher->ID);
 
@@ -842,8 +847,9 @@ class SilvercartVoucher extends DataObject {
      *
      * @return void
      *
-     * @author Sascha Koehler <skoehler@pixeltricks.de>, Sebastian Diel <sdiel@pixeltricks.de>
-     * @since 29.08.2012
+     * @author Sebastian Diel <sdiel@pixeltricks.de>
+     *         Sascha Koehler <skoehler@pixeltricks.de>
+     * @since 28.11.2016
      */
     public function ShoppingCartConvert(SilvercartShoppingCart $silvercartShoppingCart, Member $member, $taxable = true) {
         $shoppingCartPositions  = DataObject::get(
@@ -856,7 +862,13 @@ class SilvercartVoucher extends DataObject {
 
         if ($shoppingCartPositions->exists()) {
             foreach ($shoppingCartPositions as $shoppingCartPosition) {
+                if (!$shoppingCartPosition->SilvercartVoucher()->exists()) {
+                    continue;
+                }
                 $originalVoucher = SilvercartVoucher::get()->byID($shoppingCartPosition->SilvercartVoucherID);
+                if (!($originalVoucher instanceof SilvercartVoucher)) {
+                    continue;
+                }
                 // Adjust quantity
                 if ($originalVoucher->quantity > 0) {
                     $originalVoucher->quantity -= 1;
@@ -1020,7 +1032,8 @@ class SilvercartVoucher extends DataObject {
         $records   = DB::query(
             sprintf(
                 "
-                SELECT DISTINCT VHis.SilvercartVoucherObjectID
+                SELECT DISTINCT 
+                    VHis.SilvercartVoucherObjectID, VHis.LastEdited
                 FROM
                     SilvercartVoucherHistory VHis
                 WHERE
@@ -1032,8 +1045,13 @@ class SilvercartVoucher extends DataObject {
             )
         );
 
+        $addedIDs = array();
         foreach ($records as $record) {
-            $voucher = SilvercartVoucher::get()->byID($record['SilvercartVoucherObjectID']);
+            if (in_array($record['SilvercartVoucherObjectID'], $addedIDs)) {
+                continue;
+            }
+            $addedIDs[] = $record['SilvercartVoucherObjectID'];
+            $voucher    = SilvercartVoucher::get()->byID($record['SilvercartVoucherObjectID']);
 
             if ($voucher) {
                 $removeFromCartForm = new SilvercartVoucherRemoveFromCartForm($controller, array('SilvercartVoucherID' => $voucher->ID));
@@ -1071,7 +1089,7 @@ class SilvercartVoucher extends DataObject {
             sprintf(
                 "
                 SELECT DISTINCT
-                    VHis.SilvercartVoucherObjectID
+                    VHis.SilvercartVoucherObjectID, VHis.LastEdited
                 FROM
                     SilvercartVoucherHistory VHis
                 WHERE
@@ -1083,8 +1101,13 @@ class SilvercartVoucher extends DataObject {
             )
         );
 
+        $addedIDs = array();
         foreach ($records as $record) {
-            $voucher = DataObject::get_by_id('SilvercartVoucher', $record['SilvercartVoucherObjectID']);
+            if (in_array($record['SilvercartVoucherObjectID'], $addedIDs)) {
+                continue;
+            }
+            $addedIDs[] = $record['SilvercartVoucherObjectID'];
+            $voucher    = SilvercartVoucher::get()->byID($record['SilvercartVoucherObjectID']);
 
             if ($voucher) {
                 $amount += $voucher->getSilvercartShoppingCartTotal()->getAmount();
