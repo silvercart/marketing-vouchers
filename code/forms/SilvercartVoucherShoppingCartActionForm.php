@@ -107,10 +107,10 @@ class SilvercartVoucherShoppingCartActionForm extends CustomHtmlForm {
      * @param Form           $form     form object
      * @param array          $formData CustomHTMLForms session data
      *
-     * @author Roland Lehmann <rlehmann@pixeltricks.de>,
+     * @author Sebastian Diel <sdiel@pixeltricks.de>,
+     *         Roland Lehmann <rlehmann@pixeltricks.de>,
      *         Patrick Schneider <pschneider@pixeltricks.de>
-     * 
-     * @since 06.12.2012
+     * @since 14.12.2016
      * @return void
      */
     protected function submitSuccess($data, $form, $formData) {
@@ -118,18 +118,13 @@ class SilvercartVoucherShoppingCartActionForm extends CustomHtmlForm {
             'error' => false,
             'messages' => array()
         );
-        $voucherCode = Convert::raw2sql($formData['SilvercartVoucherCode']);
-        $voucher     = DataObject::get_one(
-            'SilvercartVoucher',
-            sprintf(
-                "code LIKE '%s'",
-                $voucherCode
-            )
-        );
-        $member         = Member::currentUser();
-        $shoppingCart   = $member->SilvercartShoppingCart();
+        $voucherCode  = Convert::raw2sql($formData['SilvercartVoucherCode']);
+        $voucher      = SilvercartVoucher::get()->filter('code', $voucherCode)->first();
+        $member       = Member::currentUser();
+        $shoppingCart = $member->SilvercartShoppingCart();
 
-        if ($voucher) {
+        if ($voucher instanceof SilvercartVoucher &&
+            $voucher->exists()) {
             $status = $voucher->checkifAllowedInShoppingCart($voucher, $member, $shoppingCart);
         } else {
             $status['error']        = true;
