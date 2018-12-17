@@ -20,6 +20,9 @@
  * @package Silvercart
  * @ignore
  */
+if (!class_exists('SS_Object')) {
+    class_alias('Object', 'SS_Object');
+}
 SilvercartShoppingCart::registerModule('SilvercartVoucher');
 CustomHtmlForm::registerModule(SilvercartTools::get_module_name(), 50);
 
