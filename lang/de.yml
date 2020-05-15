@@ -1,27 +1,27 @@
 de:
-  SilvercartAbsoluteRebateGiftVoucher:
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucher:
     IS_BOUND_TO_CUSTOMER: "Ist an Kunden gebunden"
     PLURALNAME: "Geschenkgutscheine"
     SINGULARNAME: "Geschenkgutschein"
     VALUE: "Wert"
-  SilvercartAbsoluteRebateGiftVoucherBlueprint:
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucherBlueprint:
     PLURALNAME: "Geschenkgutschein Vorlagen"
     SINGULARNAME: "Geschenkgutschein Vorlage"
     VALUE: "Wert"
-  SilvercartAbsoluteRebateVoucher:
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateVoucher:
     PLURALNAME: "Wertgutscheine"
     SINGULARNAME: "Wertgutschein"
     VALUE: "Wert"
-  SilvercartGiftVoucherProduct:
+  SilverCart\Voucher\Model\Voucher\GiftVoucherProduct:
     PLURALNAME: "Gutschein Artikel"
     SINGULARNAME: "Gutschein Artikel"
-  SilvercartNaturalRebateVoucher:
+  SilverCart\Voucher\Model\Voucher\NaturalRebateVoucher:
     PLURALNAME: "Warengutscheine"
     SINGULARNAME: "Warengutschein"
-  SilvercartRelativeRebateVoucher:
+  SilverCart\Voucher\Model\Voucher\RelativeRebateVoucher:
     PLURALNAME: "Rabattgutscheine"
     SINGULARNAME: "Rabattgutschein"
-  SilvercartVoucher:
+  SilverCart\Voucher\Model\Voucher:
     CODE: "Gutscheincode"
     CREATED: "Erstellt am"
     ERRORMESSAGE-ALREADY_IN_SHOPPINGCART: "Dieser Gutschein befindet sich schon in Ihrem Warenkorb."
@@ -53,13 +53,13 @@ de:
     SINGULARNAME: "Gutschein"
     VALUE: "Wert"
     VALUE_IN_PERCENT: "Rabatt in Prozent"
-  SilvercartVoucherAdmin:
+  SilverCart\Voucher\Admin\Controllers\VoucherAdmin:
     MENUTITLE: "Gutscheine"
     TITLE: "Gutscheine"
-  SilvercartVoucherHistory:
+  SilverCart\Voucher\Model\VoucherHistory:
     PLURALNAME: "Gutschein Historien"
     SINGULARNAME: "Gutschein Historie"
-  SilvercartVoucherOrderDetailPage:
+  SilverCart\Voucher\Extensions\Model\Pages\OrderDetailPageExtension:
     PLURALVOUCHERTITLE: "Die Gutschein-Codes lauten:"
     PLURALVOUCHERVALUETITLE: "Der Wert jedes Gutscheins beträgt"
     SINGULARVOUCHERTITLE: "Der Gutschein-Code lautet"

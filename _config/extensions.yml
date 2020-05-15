@@ -1,0 +1,12 @@
+SilverCart\Forms\CustomRequiredFields:
+    extensions:
+        - SilverCart\Voucher\Extensions\Forms\CustomRequiredFieldsExtension
+SilverCart\Model\Order\OrderPosition:
+    extensions:
+        - SilverCart\Voucher\Extensions\Model\Order\OrderPositionExtension
+SilverCart\Model\Pages\CartPageController:
+    extensions:
+        - SilverCart\Voucher\Extensions\Model\Pages\CartPageControllerExtension
+SilverStripe\Security\Member:
+    extensions:
+        - SilverCart\Voucher\Extensions\Model\Security\MemberExtension

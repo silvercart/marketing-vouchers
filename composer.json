@@ -1,0 +1,21 @@
+{
+	"name": "silvercart/marketing-vouchers",
+	"type": "silverstripe-module",
+	"description": "Voucher module for the SilverCart ecommerce module for SilverStripe",
+	"homepage": "http://www.silvercart.org",
+	"license": "LGPL-3.0",
+	"keywords": ["silverstripe", "silvercart", "ecommerce", "shop", "webshop", "online shop", "voucher", "vouchers"],
+	"authors": [
+		{
+			"name": "SilverCart",
+			"homepage": "http://www.silvercart.org"
+		},
+		{
+			"name": "pixeltricks",
+			"homepage": "http://www.pixeltricks.de"
+		}
+	],
+	"require": {
+		"silvercart/silvercart": "~4.0"
+	}
+}

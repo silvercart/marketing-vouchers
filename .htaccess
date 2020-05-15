@@ -1,0 +1,26 @@
+<Files *.ss>
+    Order deny,allow
+    Deny from all
+    Allow from 127.0.0.1
+</Files>
+
+<Files *.php>
+    Order deny,allow
+    Deny from all
+    Allow from 127.0.0.1
+</Files>
+
+<Files *.log>
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files composer.json>
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files ~ "\.ya?ml$">
+    Order allow,deny
+    Deny from all
+</Files>

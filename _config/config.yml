@@ -1,0 +1,3 @@
+SilverCart\Model\Order\ShoppingCart:
+    exclude_modules_from_most_valuable_tax_rate:
+        - SilverCart\Voucher\Model\Voucher

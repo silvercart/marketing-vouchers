@@ -1,27 +1,27 @@
 en:
-  SilvercartAbsoluteRebateGiftVoucher:
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucher:
     IS_BOUND_TO_CUSTOMER: "Is bound to customer"
     PLURALNAME: "Gift vouchers"
     SINGULARNAME: "Gift voucher"
     VALUE: "Amount"
-  SilvercartAbsoluteRebateGiftVoucherBlueprint:
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucherBlueprint:
     PLURALNAME: "Gift voucher blueprints"
     SINGULARNAME: "Gift voucher blueprint"
     VALUE: "Amount"
-  SilvercartAbsoluteRebateVoucher:
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateVoucher:
     PLURALNAME: "Absolute rebate vouchers"
     SINGULARNAME: "Absolute rebate voucher"
     VALUE: "Amount"
-  SilvercartGiftVoucherProduct:
+  SilverCart\Voucher\Model\Voucher\GiftVoucherProduct:
     PLURALNAME: "Voucher products"
     SINGULARNAME: "Voucher product"
-  SilvercartNaturalRebateVoucher:
+  SilverCart\Voucher\Model\Voucher\NaturalRebateVoucher:
     PLURALNAME: "Natural rebate vouchers"
     SINGULARNAME: "Natural rebate voucher"
-  SilvercartRelativeRebateVoucher:
+  SilverCart\Voucher\Model\Voucher\RelativeRebateVoucher:
     PLURALNAME: "Relative rebate vouchers"
     SINGULARNAME: "Relative rebate voucher"
-  SilvercartVoucher:
+  SilverCart\Voucher\Model\Voucher:
     CODE: "Voucher code"
     CREATED: "Created on"
     ERRORMESSAGE-ALREADY_IN_SHOPPINGCART: "This voucher is already in your shoppingcart."
@@ -53,13 +53,13 @@ en:
     SINGULARNAME: "Voucher"
     VALUE: "Value"
     VALUE_IN_PERCENT: "Rebate value in percent"
-  SilvercartVoucherAdmin:
+  SilverCart\Voucher\Admin\Controllers\VoucherAdmin:
     MENUTITLE: "Vouchers"
     TITLE: "Vouchers"
-  SilvercartVoucherHistory:
+  SilverCart\Voucher\Model\VoucherHistory:
     PLURALNAME: "Voucher histories"
     SINGULARNAME: "Voucher history"
-  SilvercartVoucherOrderDetailPage:
+  SilverCart\Voucher\Extensions\Model\Pages\OrderDetailPageExtension:
     PLURALVOUCHERTITLE: "The voucher codes are:"
     PLURALVOUCHERVALUETITLE: "The value of each voucher is"
     SINGULARVOUCHERTITLE: "The voucher code ist"
