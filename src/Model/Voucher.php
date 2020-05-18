@@ -110,6 +110,12 @@ class Voucher extends DataObject
         'castedFormattedCreationDate' => 'VarChar(10)',
     ];
     /**
+     * Config property to enable or disable the voucher module.
+     *
+     * @var bool
+     */
+    private static $enable_voucher_module = true;
+    /**
      * A list of already checked shopping cart amounts
      *
      * @var array
