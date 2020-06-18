@@ -113,21 +113,21 @@ class VoucherPrice extends ViewableData
     /**
      * Returns the price sum for this voucher.
      *
-     * @param bool $forSingleProduct Indicates wether the price for the total
-     *                                  quantity of products should be returned
-     *                                  or for one product only.
-     * @param bool $priceType        'gross' or 'net'. If undefined it'll be automatically chosen.
+     * @param bool   $forSingleProduct Indicates wether the price for the total
+     *                                 quantity of products should be returned
+     *                                 or for one product only.
+     * @param string $priceType       'gross' or 'net'. If undefined it'll be automatically chosen.
      *
      * @return DBMoney
      */
-    public function getPrice(bool $forSingleProduct = false, bool $priceType = false) : DBMoney
+    public function getPrice(bool $forSingleProduct = false, string $priceType = null) : DBMoney
     {
         $moneyObj = DBMoney::create();
         $moneyObj->setCurrency($this->Currency);
-        if ($priceType === false) {
+        if ($priceType === null) {
             $priceType = Config::PriceType();
         }
-        if ($priceType == 'net') {
+        if ($priceType === 'net') {
             $moneyObj->setAmount($this->PriceNetTotal);
         } else {
             $moneyObj->setAmount($this->PriceTotal);
