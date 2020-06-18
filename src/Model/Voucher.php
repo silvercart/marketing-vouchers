@@ -352,7 +352,7 @@ class Voucher extends DataObject
                 }
             } else {
                 if ($position instanceof ShoppingCartPosition
-                 && $position->implicatePosition === false
+                 && (bool) $position->implicatePosition === false
                 ) {
                     $voucherHistory = VoucherHistory::create();
                     $voucherHistory->add($this, $member, 'redeemed');

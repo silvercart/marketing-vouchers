@@ -63,7 +63,7 @@ class ShoppingCartPosition extends DataObject
             $position = self::create();
             $position->ShoppingCartID    = $shoppingCartID;
             $position->VoucherID         = $voucherID;
-            $position->implicatePosition = 1;
+            $position->implicatePosition = true;
             $position->write();
         }
     }
