@@ -41,8 +41,6 @@ use SilverStripe\View\ArrayData;
  * @param int     $quantityRedeemed         quantity redeemed
  * @param string  $ProductNumber            Product number
  * 
- * @method Tax Tax() Returns the related tax.
- * 
  * @method \SilverStripe\ORM\ManyManyList RestrictToMember()        Returns a list of related members to restrict this voucher to.
  * @method \SilverStripe\ORM\ManyManyList RestrictToGroup()         Returns a list of related groups to restrict this voucher to.
  * @method \SilverStripe\ORM\ManyManyList RestrictToProductGroups() Returns a list of related product groups to restrict this voucher to.
@@ -213,6 +211,20 @@ class Voucher extends DataObject
     public function getTitle() : string
     {
         return "{$this->singular_name()} (Code: {$this->code})";
+    }
+    
+    /**
+     * Returns the related tax.
+     * 
+     * @return Tax
+     */
+    public function Tax() : Tax
+    {
+        $tax = $this->getComponent('Tax');
+        if (!$tax->exists()) {
+            $tax = Tax::getDefault();
+        }
+        return $tax;
     }
 
     /**
