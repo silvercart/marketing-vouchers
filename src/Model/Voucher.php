@@ -2,6 +2,7 @@
 
 namespace SilverCart\Voucher\Model;
 
+use SilverCart\Admin\Forms\GridField\GridFieldAddExistingAutocompleter;
 use SilverCart\Model\Customer\Customer;
 use SilverCart\Model\Order\Order;
 use SilverCart\Model\Order\ShoppingCart;
@@ -12,11 +13,16 @@ use SilverCart\ORM\DataObjectExtension;
 use SilverCart\ORM\FieldType\DBMoney;
 use SilverStripe\Control\Controller;
 use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\GridField\GridFieldAddNewButton;
+use SilverStripe\Forms\GridField\GridFieldFilterHeader;
 use SilverStripe\i18n\i18n;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DB;
 use SilverStripe\ORM\FieldType\DBMoney as SilverStripeDBMoney;
+use SilverStripe\ORM\Filters\ExactMatchFilter;
+use SilverStripe\ORM\Filters\PartialMatchFilter;
 use SilverStripe\ORM\SS_List;
 use SilverStripe\Security\Group;
 use SilverStripe\Security\Member;
@@ -149,8 +155,8 @@ class Voucher extends DataObject
             'RemainingCredit'             => _t(self::class . '.REMAINING_CREDIT', 'Remaining credit'),
             'RestrictToMember'            => _t(self::class . '.RESTRICT_TO_MEMBER', 'Restrict to customers'),
             'RestrictToGroup'             => _t(self::class . '.RESTRICT_TO_GROUP', 'Restrict to groups'),
-            'RestrictToProductGroups'     => _t(self::class . '.RESTRICT_TO_PRODUCT', 'Restrict to products'),
-            'RestrictToProducts'          => _t(self::class . '.RESTRICT_TO_PRODUCTGROUP', 'Restrict to product groups'),
+            'RestrictToProductGroups'     => _t(self::class . '.RESTRICT_TO_PRODUCTGROUP', 'Restrict to product groups'),
+            'RestrictToProducts'          => _t(self::class . '.RESTRICT_TO_PRODUCT', 'Restrict to products'),
             'VoucherHistory'              => VoucherHistory::singleton()->singular_name(),
             'castedFormattedCreationDate' => _t(self::class . '.CREATED', 'Created'),
             'ProductNumber'               => _t(self::class . '.PRODUCTNUMBER', 'Product number'),
@@ -189,16 +195,16 @@ class Voucher extends DataObject
     {
         $fields = [];
         $fields['code'] = [
-            'title'     => $this->fieldLabel('code'),
-            'filter'    => 'PartialMatchFilter'
+            'title'  => $this->fieldLabel('code'),
+            'filter' => PartialMatchFilter::class,
         ];
         $fields['quantity'] = [
-            'title'     => $this->fieldLabel('quantity'),
-            'filter'    => 'PartialMatchFilter'
+            'title'  => $this->fieldLabel('quantity'),
+            'filter' => PartialMatchFilter::class,
         ];
         $fields['isActive'] = [
-            'title'     => $this->fieldLabel('isActive'),
-            'filter'    => 'ExactMatchFilter'
+            'title'  => $this->fieldLabel('isActive'),
+            'filter' => ExactMatchFilter::class,
         ];
         return $fields;
     }
@@ -911,6 +917,15 @@ class Voucher extends DataObject
      */
     public function  getCMSFields() : FieldList
     {
+        $this->beforeUpdateCMSFields(function(FieldList $fields) {
+            $fields->removeByName('Members');
+            $historyField = $fields->dataFieldByName('VoucherHistory');
+            if ($historyField instanceof GridField) {
+                $historyField->getConfig()->removeComponentsByType(GridFieldAddNewButton::class);
+                $historyField->getConfig()->removeComponentsByType(GridFieldAddExistingAutocompleter::class);
+                $historyField->getConfig()->removeComponentsByType(GridFieldFilterHeader::class);
+            }
+        });
         return DataObjectExtension::getCMSFields($this);
     }
 

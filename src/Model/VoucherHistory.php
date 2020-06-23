@@ -2,6 +2,7 @@
 
 namespace SilverCart\Voucher\Model;
 
+use SilverCart\Dev\Tools;
 use SilverCart\Model\Order\ShoppingCart;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Member;
@@ -49,6 +50,28 @@ class VoucherHistory extends DataObject
      * @var string
      */
     private static $default_sort = 'Created DESC';
+
+    /**
+     * Returns the translated plural name of the object. If no translation exists
+     * the class name will be returned.
+     *
+     * @return string
+     */
+    public function plural_name() : string
+    {
+        return Tools::plural_name_for($this);
+    }
+
+    /**
+     * Returns the translated singular name of the object. If no translation exists
+     * the class name will be returned.
+     *
+     * @return string
+     */
+    public function singular_name() : string
+    {
+        return Tools::singular_name_for($this);
+    }
     
     /**
      * Summary fields.
