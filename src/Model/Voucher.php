@@ -866,6 +866,7 @@ class Voucher extends DataObject
         // Don't initialise when called from within the cms
         if (!($controller instanceof \PageController)
          || !$controller->hasMethod('AddVoucherCodeForm')
+         || !Voucher::get()->filter('isActive', true)->exists()
         ) {
             return $actions;
         }
