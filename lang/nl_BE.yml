@@ -1,0 +1,68 @@
+nl_BE:
+    SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucher:
+        IS_BOUND_TO_CUSTOMER: 'Gebonden aan klanten'
+        PLURALNAME: Cadeaubonnen
+        SINGULARNAME: Cadeaubon
+        VALUE: Waarde
+    SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucherBlueprint:
+        PLURALNAME: 'Cadeaubon sjablonen'
+        SINGULARNAME: 'Cadeaubon sjabloon'
+        VALUE: Waarde
+    SilverCart\Voucher\Model\Voucher\AbsoluteRebateVoucher:
+        PLURALNAME: Waardebonnen
+        SINGULARNAME: Waardebon
+        VALUE: Waarde
+    SilverCart\Voucher\Model\Voucher\GiftVoucherProduct:
+        PLURALNAME: Voucherartikel
+        SINGULARNAME: Voucherartikel
+    SilverCart\Voucher\Model\Voucher\NaturalRebateVoucher:
+        PLURALNAME: Goederenvouchers
+        SINGULARNAME: Goederenbon
+    SilverCart\Voucher\Model\Voucher\RelativeRebateVoucher:
+        PLURALNAME: Kortingsbonnen
+        SINGULARNAME: Kortingsbon
+    SilverCart\Voucher\Model\Voucher:
+        CODE: Vouchercode
+        CREATED: 'Opgemaakt op'
+        ERRORMESSAGE-ALREADY_IN_SHOPPINGCART: 'Deze voucher zit al in uw winkelwagen.'
+        ERRORMESSAGE-CODE_NOT_VALID: 'De vouchercode is ongeldig.'
+        ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY: 'Deze voucher werd volledig ingewisseld.'
+        ERRORMESSAGE-CUSTOMER_MUST_BE_REGISTERED: 'U moet zich registreren om deze voucher in te wisselen, aangezien deze voucher bij inwisseling aan de klant wordt gebonden. <br /> U kunt deze voucher gebruiken voor meerdere aankopen als uw aankoopwaarde lager is dan de waarde van de voucher. <br /> <a href="%s"> Klik hier om naar het registratieformulier te gaan. </a>'
+        ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE: 'U mag deze voucher niet inwisselen.'
+        ERRORMESSAGE-NOT_REDEEMABLE: 'De voucher kan niet worden ingewisseld.'
+        ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID: 'Deze voucher kan niet worden ingewisseld voor de goederen in uw winkelwagen.'
+        ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID: 'De winkelwagenwaarde is niet geschikt.'
+        ERRORMESSAGE-VOUCHER_ALREADY_OWNED: 'Deze voucher werd reeds door  iemand anders ingewisseld.'
+        ISACTIVE: 'Is actief'
+        LABEL-REDEEM: Inwisselen
+        LABEL-SHOPPINGCART_REMOVE: Verwijderen
+        MAXIMUM_SHOPPINGCART_VALUE: 'Minimale winkelwagenwaarde'
+        MINIMUM_SHOPPINGCART_VALUE: 'Minimale winkelwagenwaarde'
+        ORIGINAL_VALUE: 'Originele waarde'
+        PLURALNAME: Vouchers
+        PRODUCTNUMBER: Artikelnummer
+        QUANTITY: Aantal
+        QUANTITY_REDEEMED: 'Aantal ingewisseld'
+        REDEEMED_VOUCHERS: 'Ingewisselde vouchers:'
+        REDEEM_VOUCHER: 'Voucher inwisselen:'
+        REMAINING_CREDIT: 'Resterend krediet'
+        RESTRICT_TO_GROUP: 'Binden aan klantenklasse(s)'
+        RESTRICT_TO_MEMBER: 'Binden aan klant(en)'
+        RESTRICT_TO_PRODUCT: 'Binden aan artikel'
+        RESTRICT_TO_PRODUCTGROUP: 'Binden aan productgroep(en)'
+        SINGULARNAME: Voucher
+        VALUE: Waarde
+        VALUE_IN_PERCENT: 'Korting in procent'
+    SilverCart\Voucher\Admin\Controllers\VoucherAdmin:
+        MENUTITLE: Vouchers
+        TITLE: Vouchers
+    SilverCart\Voucher\Model\VoucherHistory:
+        PLURALNAME: Voucher-geschiedenissen
+        SINGULARNAME: Voucher-geschiedenis
+    SilverCart\Voucher\Extensions\Model\Pages\OrderDetailPageExtension:
+        PLURALVOUCHERTITLE: 'De vouchercodes zijn:'
+        PLURALVOUCHERVALUETITLE: 'De waarde van elke voucher is'
+        SINGULARVOUCHERTITLE: 'De vouchercode is'
+        SINGULARVOUCHERVALUETITLE: 'De waarde van de voucher is'
+        WARNING_PAYBEFOREREDEEMING_PLURAL: 'Houd er rekening mee dat de bestelling eerst moet worden betaald voordat de vouchers kunnen worden ingewisseld.'
+        WARNING_PAYBEFOREREDEEMING_SINGULAR: 'Houd er rekening mee dat de bestelling eerst moet worden betaald voordat de voucher kan worden ingewisseld.'

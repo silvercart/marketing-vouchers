@@ -1,68 +1,68 @@
 de:
-  SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucher:
-    IS_BOUND_TO_CUSTOMER: "Ist an Kunden gebunden"
-    PLURALNAME: "Geschenkgutscheine"
-    SINGULARNAME: "Geschenkgutschein"
-    VALUE: "Wert"
-  SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucherBlueprint:
-    PLURALNAME: "Geschenkgutschein Vorlagen"
-    SINGULARNAME: "Geschenkgutschein Vorlage"
-    VALUE: "Wert"
-  SilverCart\Voucher\Model\Voucher\AbsoluteRebateVoucher:
-    PLURALNAME: "Wertgutscheine"
-    SINGULARNAME: "Wertgutschein"
-    VALUE: "Wert"
-  SilverCart\Voucher\Model\Voucher\GiftVoucherProduct:
-    PLURALNAME: "Gutschein Artikel"
-    SINGULARNAME: "Gutschein Artikel"
-  SilverCart\Voucher\Model\Voucher\NaturalRebateVoucher:
-    PLURALNAME: "Warengutscheine"
-    SINGULARNAME: "Warengutschein"
-  SilverCart\Voucher\Model\Voucher\RelativeRebateVoucher:
-    PLURALNAME: "Rabattgutscheine"
-    SINGULARNAME: "Rabattgutschein"
-  SilverCart\Voucher\Model\Voucher:
-    CODE: "Gutscheincode"
-    CREATED: "Erstellt am"
-    ERRORMESSAGE-ALREADY_IN_SHOPPINGCART: "Dieser Gutschein befindet sich schon in Ihrem Warenkorb."
-    ERRORMESSAGE-CODE_NOT_VALID: "Dieser Gutscheincode ist nicht gültig."
-    ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY: "Dieser Gutschein wurde vollständig eingelöst."
-    ERRORMESSAGE-CUSTOMER_MUST_BE_REGISTERED: "Sie müssen sich registrieren, um diesen Gutschein einzulösen, da dieser Gutschein bei Einlösung an den Kunde gebunden wird.<br />Dadurch können Sie diesen Gutschein für mehrere Einkäufe verwenden, falls Ihr Einkaufswert niedriger ist als der Gutscheinwert.<br /><a href=\"%s\">Klicken Sie hier, um zum Registrierungsformular zu gelangen.</a>"
-    ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE: "Sie dürfen diesen Gutschein nicht einlösen."
-    ERRORMESSAGE-NOT_REDEEMABLE: "Der Gutschein kann nicht eingelöst werden."
-    ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID: "Dieser Gutschein kann nicht für die Waren eingelöst werden, die sich in Ihrem Warenkorb befinden."
-    ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID: "Der Warenkorbwert ist nicht passend."
-    ERRORMESSAGE-VOUCHER_ALREADY_OWNED: "Dieser Gutschein wurde schon von einer anderen Person eingelöst."
-    ISACTIVE: "Ist Aktiv"
-    LABEL-REDEEM: "Einlösen"
-    LABEL-SHOPPINGCART_REMOVE: "Entfernen"
-    MAXIMUM_SHOPPINGCART_VALUE: "Maximaler Warenkorb-Wert"
-    MINIMUM_SHOPPINGCART_VALUE: "Minimaler Warenkorb-Wert"
-    ORIGINAL_VALUE: "Ursprünglicher Wert"
-    PLURALNAME: "Gutscheine"
-    PRODUCTNUMBER: "Artikelnummer"
-    QUANTITY: "Anzahl"
-    QUANTITY_REDEEMED: "Anzahl eingelöst"
-    REDEEMED_VOUCHERS: "Eingelöste Gutscheine: "
-    REDEEM_VOUCHER: "Gutschein einlösen: "
-    REMAINING_CREDIT: "Restliches Guthaben"
-    RESTRICT_TO_GROUP: "An Kundenklasse(n) binden"
-    RESTRICT_TO_MEMBER: "An Kunde(n) binden"
-    RESTRICT_TO_PRODUCT: "An Artikel binden"
-    RESTRICT_TO_PRODUCTGROUP: "An Warengruppe(n) binden"
-    SINGULARNAME: "Gutschein"
-    VALUE: "Wert"
-    VALUE_IN_PERCENT: "Rabatt in Prozent"
-  SilverCart\Voucher\Admin\Controllers\VoucherAdmin:
-    MENUTITLE: "Gutscheine"
-    TITLE: "Gutscheine"
-  SilverCart\Voucher\Model\VoucherHistory:
-    PLURALNAME: "Gutschein Historien"
-    SINGULARNAME: "Gutschein Historie"
-  SilverCart\Voucher\Extensions\Model\Pages\OrderDetailPageExtension:
-    PLURALVOUCHERTITLE: "Die Gutschein-Codes lauten:"
-    PLURALVOUCHERVALUETITLE: "Der Wert jedes Gutscheins beträgt"
-    SINGULARVOUCHERTITLE: "Der Gutschein-Code lautet"
-    SINGULARVOUCHERVALUETITLE: "Der Wert des Gutscheins beträgt"
-    WARNING_PAYBEFOREREDEEMING_PLURAL: "Beachten Sie bitte, dass die Bestellung erst bezahlt werden muss, bevor die Gutscheine eingelöst werden können."
-    WARNING_PAYBEFOREREDEEMING_SINGULAR: "Beachten Sie bitte, dass die Bestellung erst bezahlt werden muss, bevor der Gutscheine eingelöst werden kann."
+    SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucher:
+        IS_BOUND_TO_CUSTOMER: 'Ist an Kunden gebunden'
+        PLURALNAME: Geschenkgutscheine
+        SINGULARNAME: Geschenkgutschein
+        VALUE: Wert
+    SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucherBlueprint:
+        PLURALNAME: 'Geschenkgutschein Vorlagen'
+        SINGULARNAME: 'Geschenkgutschein Vorlage'
+        VALUE: Wert
+    SilverCart\Voucher\Model\Voucher\AbsoluteRebateVoucher:
+        PLURALNAME: Wertgutscheine
+        SINGULARNAME: Wertgutschein
+        VALUE: Wert
+    SilverCart\Voucher\Model\Voucher\GiftVoucherProduct:
+        PLURALNAME: 'Gutschein Artikel'
+        SINGULARNAME: 'Gutschein Artikel'
+    SilverCart\Voucher\Model\Voucher\NaturalRebateVoucher:
+        PLURALNAME: Warengutscheine
+        SINGULARNAME: Warengutschein
+    SilverCart\Voucher\Model\Voucher\RelativeRebateVoucher:
+        PLURALNAME: Rabattgutscheine
+        SINGULARNAME: Rabattgutschein
+    SilverCart\Voucher\Model\Voucher:
+        CODE: Gutscheincode
+        CREATED: 'Erstellt am'
+        ERRORMESSAGE-ALREADY_IN_SHOPPINGCART: 'Dieser Gutschein befindet sich schon in Ihrem Warenkorb.'
+        ERRORMESSAGE-CODE_NOT_VALID: 'Dieser Gutscheincode ist nicht gültig.'
+        ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY: 'Dieser Gutschein wurde vollständig eingelöst.'
+        ERRORMESSAGE-CUSTOMER_MUST_BE_REGISTERED: 'Sie müssen sich registrieren, um diesen Gutschein einzulösen, da dieser Gutschein bei Einlösung an den Kunde gebunden wird.<br />Dadurch können Sie diesen Gutschein für mehrere Einkäufe verwenden, falls Ihr Einkaufswert niedriger ist als der Gutscheinwert.<br /><a href="%s">Klicken Sie hier, um zum Registrierungsformular zu gelangen.</a>'
+        ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE: 'Sie dürfen diesen Gutschein nicht einlösen.'
+        ERRORMESSAGE-NOT_REDEEMABLE: 'Der Gutschein kann nicht eingelöst werden.'
+        ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID: 'Dieser Gutschein kann nicht für die Waren eingelöst werden, die sich in Ihrem Warenkorb befinden.'
+        ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID: 'Der Warenkorbwert ist nicht passend.'
+        ERRORMESSAGE-VOUCHER_ALREADY_OWNED: 'Dieser Gutschein wurde schon von einer anderen Person eingelöst.'
+        ISACTIVE: 'Ist Aktiv'
+        LABEL-REDEEM: Einlösen
+        LABEL-SHOPPINGCART_REMOVE: Entfernen
+        MAXIMUM_SHOPPINGCART_VALUE: 'Maximaler Warenkorb-Wert'
+        MINIMUM_SHOPPINGCART_VALUE: 'Minimaler Warenkorb-Wert'
+        ORIGINAL_VALUE: 'Ursprünglicher Wert'
+        PLURALNAME: Gutscheine
+        PRODUCTNUMBER: Artikelnummer
+        QUANTITY: Anzahl
+        QUANTITY_REDEEMED: 'Anzahl eingelöst'
+        REDEEMED_VOUCHERS: 'Eingelöste Gutscheine: '
+        REDEEM_VOUCHER: 'Gutschein einlösen: '
+        REMAINING_CREDIT: 'Restliches Guthaben'
+        RESTRICT_TO_GROUP: 'An Kundenklasse(n) binden'
+        RESTRICT_TO_MEMBER: 'An Kunde(n) binden'
+        RESTRICT_TO_PRODUCT: 'An Artikel binden'
+        RESTRICT_TO_PRODUCTGROUP: 'An Warengruppe(n) binden'
+        SINGULARNAME: Gutschein
+        VALUE: Wert
+        VALUE_IN_PERCENT: 'Rabatt in Prozent'
+    SilverCart\Voucher\Admin\Controllers\VoucherAdmin:
+        MENUTITLE: Gutscheine
+        TITLE: Gutscheine
+    SilverCart\Voucher\Model\VoucherHistory:
+        PLURALNAME: 'Gutschein Historien'
+        SINGULARNAME: 'Gutschein Historie'
+    SilverCart\Voucher\Extensions\Model\Pages\OrderDetailPageExtension:
+        PLURALVOUCHERTITLE: 'Die Gutschein-Codes lauten:'
+        PLURALVOUCHERVALUETITLE: 'Der Wert jedes Gutscheins beträgt'
+        SINGULARVOUCHERTITLE: 'Der Gutschein-Code lautet'
+        SINGULARVOUCHERVALUETITLE: 'Der Wert des Gutscheins beträgt'
+        WARNING_PAYBEFOREREDEEMING_PLURAL: 'Beachten Sie bitte, dass die Bestellung erst bezahlt werden muss, bevor die Gutscheine eingelöst werden können.'
+        WARNING_PAYBEFOREREDEEMING_SINGULAR: 'Beachten Sie bitte, dass die Bestellung erst bezahlt werden muss, bevor der Gutscheine eingelöst werden kann.'

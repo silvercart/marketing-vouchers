@@ -1,0 +1,68 @@
+fr_BE:
+    SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucher:
+        IS_BOUND_TO_CUSTOMER: 'Est lié aux clients'
+        PLURALNAME: Bons-cadeaux
+        SINGULARNAME: 'Bon cadeau'
+        VALUE: Valeur
+    SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucherBlueprint:
+        PLURALNAME: 'Modèles de bon cadeau'
+        SINGULARNAME: 'Modèle de bon cadeau'
+        VALUE: Valeur
+    SilverCart\Voucher\Model\Voucher\AbsoluteRebateVoucher:
+        PLURALNAME: 'Bons de valeur'
+        SINGULARNAME: 'Bon de valeur'
+        VALUE: Valeur
+    SilverCart\Voucher\Model\Voucher\GiftVoucherProduct:
+        PLURALNAME: 'Bon d''article'
+        SINGULARNAME: 'Bon d''article'
+    SilverCart\Voucher\Model\Voucher\NaturalRebateVoucher:
+        PLURALNAME: 'Bons d''achat de produits'
+        SINGULARNAME: 'Bon d''achat de produit'
+    SilverCart\Voucher\Model\Voucher\RelativeRebateVoucher:
+        PLURALNAME: 'Bons de réduction'
+        SINGULARNAME: 'Bon de réduction'
+    SilverCart\Voucher\Model\Voucher:
+        CODE: 'Code du bon'
+        CREATED: 'Créé le'
+        ERRORMESSAGE-ALREADY_IN_SHOPPINGCART: 'Ce bon est déjà dans votre panier.'
+        ERRORMESSAGE-CODE_NOT_VALID: 'Ce code de bon n’est pas valide.'
+        ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY: 'Ce bon a été entièrement échangé.'
+        ERRORMESSAGE-CUSTOMER_MUST_BE_REGISTERED: 'Vous devez vous enregistrer pour échanger ce bon, car ce bon est lié au client au moment de l''échange.<br />Cela vous permet d''utiliser ce bon pour plusieurs achats si la valeur de votre achat est inférieure à la valeur du bon.<br /><a href="%s">Cliquez ici pour accéder au formulaire d''enregistrement.</a>'
+        ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE: 'Vous ne pouvez pas échanger ce bon.'
+        ERRORMESSAGE-NOT_REDEEMABLE: 'Le bon ne peut pas être échangé.'
+        ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID: 'Ce bon ne peut pas être échangé contre les produits se trouvant dans votre panier.'
+        ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID: 'La valeur du panier ne convient pas.'
+        ERRORMESSAGE-VOUCHER_ALREADY_OWNED: 'Ce bon a déjà été échangé par une autre personne.'
+        ISACTIVE: 'Est actif'
+        LABEL-REDEEM: Échanger
+        LABEL-SHOPPINGCART_REMOVE: Supprimer
+        MAXIMUM_SHOPPINGCART_VALUE: 'Valeur maximale du panier'
+        MINIMUM_SHOPPINGCART_VALUE: 'Valeur minimale du panier'
+        ORIGINAL_VALUE: 'Valeur d''origine'
+        PLURALNAME: Bons
+        PRODUCTNUMBER: 'Numéro d''article'
+        QUANTITY: Nombre
+        QUANTITY_REDEEMED: 'Nombre échangé'
+        REDEEMED_VOUCHERS: 'Bons échangés:'
+        REDEEM_VOUCHER: 'Échanger le bon :'
+        REMAINING_CREDIT: 'Crédit restant'
+        RESTRICT_TO_GROUP: 'Lier à la classe/aux classes de clients'
+        RESTRICT_TO_MEMBER: 'Lier au(x) client(s)'
+        RESTRICT_TO_PRODUCT: 'Lier à l''article'
+        RESTRICT_TO_PRODUCTGROUP: 'Lier au groupe(s) de produits'
+        SINGULARNAME: Bon
+        VALUE: Valeur
+        VALUE_IN_PERCENT: 'Réduction en pourcentage'
+    SilverCart\Voucher\Admin\Controllers\VoucherAdmin:
+        MENUTITLE: Bons
+        TITLE: Bons
+    SilverCart\Voucher\Model\VoucherHistory:
+        PLURALNAME: 'Historiques des bons'
+        SINGULARNAME: 'Historique des bons'
+    SilverCart\Voucher\Extensions\Model\Pages\OrderDetailPageExtension:
+        PLURALVOUCHERTITLE: 'Les codes des bons sont :'
+        PLURALVOUCHERVALUETITLE: 'La valeur de chaque bon est de'
+        SINGULARVOUCHERTITLE: 'Le code du bon est'
+        SINGULARVOUCHERVALUETITLE: 'La valeur du bon est de'
+        WARNING_PAYBEFOREREDEEMING_PLURAL: 'Veuillez noter que la commande doit être payée avant que les bons puissent être échangés.'
+        WARNING_PAYBEFOREREDEEMING_SINGULAR: 'Veuillez noter que la commande doit être payée avant que le bon puisse être échangé.'
