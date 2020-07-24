@@ -124,7 +124,7 @@ class RelativeRebateVoucher extends Voucher
           && $tax
           && $tax->Rate > 0)
         ) {
-            $shoppingCartAmount = $shoppingCart->getTaxableAmountGrossWithoutFees([Voucher::class])->getAmount();
+            $shoppingCartAmount = $shoppingCart->getTaxableAmountWithoutFees([Voucher::class])->getAmount();
             $rebateAmount       = round(($shoppingCartAmount / 100 * $this->valueInPercent), 2);
             $rebateAmountNet    = ((int) $this->Tax()->Rate === 0) ? $rebateAmount : $rebateAmount / (100 + (int) $this->Tax()->Rate) * 100;
             $rebate             = DBMoney::create()
@@ -167,7 +167,7 @@ class RelativeRebateVoucher extends Voucher
     {
         $amount             = DBMoney::create();
         $member             = Customer::currentUser();
-        $shoppingCartAmount = $member->ShoppingCart()->getTaxableAmountGrossWithoutFees([Voucher::class])->getAmount();
+        $shoppingCartAmount = $member->ShoppingCart()->getTaxableAmountWithoutFees([Voucher::class])->getAmount();
         $rebateAmount       = ($shoppingCartAmount / 100 * $this->valueInPercent);
         $rebate             = DBMoney::create()
                 ->setAmount($rebateAmount)

@@ -148,7 +148,7 @@ class AbsoluteRebateVoucher extends Voucher
                     ->setCurrency(Config::DefaultCurrency());
             // The shopppingcart total may not be below 0
             $excludeShoppingCartPositions[] = $this->ID;
-            $shoppingcartTotal              = $shoppingCart->getTaxableAmountGrossWithoutFeesAndCharges([], $excludeShoppingCartPositions);
+            $shoppingcartTotal              = $shoppingCart->getTaxableAmountWithoutFeesAndCharges([], $excludeShoppingCartPositions);
             $originalAmount                 = $this->value->getAmount();
             if ($originalAmount >= $shoppingcartTotal->getAmount()) {
                 $originalAmountObj = DBMoney::create()

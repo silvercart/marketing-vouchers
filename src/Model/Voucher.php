@@ -405,7 +405,7 @@ class Voucher extends DataObject
     {
         $error    = false;
         $messages = [];
-        if (!$this->isShoppingCartAmountValid($shoppingCart->getTaxableAmountGrossWithoutFeesAndCharges([self::class]))) {
+        if (!$this->isShoppingCartAmountValid($shoppingCart->getTaxableAmountWithoutFeesAndCharges([self::class]))) {
             $error      = true;
             $messages[] = $this->fieldLabel('ErrorValueNotValid');
         } elseif (!$this->isValidForShoppingCartItems($shoppingCart->ShoppingCartPositions())) {
