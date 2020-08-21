@@ -2,35 +2,35 @@ it:
     SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucher:
         IS_BOUND_TO_CUSTOMER: 'È vincolato ai clienti'
         PLURALNAME: 'Buoni  sconto regalo'
-        SINGULARNAME: "Buono sconto regalo\n"
+        SINGULARNAME: "Coupon regalo\n"
         VALUE: valore
     SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucherBlueprint:
         PLURALNAME: 'Modelli di buoni regalo'
-        SINGULARNAME: 'Modello buono sconto regalo'
+        SINGULARNAME: 'Modello coupon regalo'
         VALUE: valore
     SilverCart\Voucher\Model\Voucher\AbsoluteRebateVoucher:
         PLURALNAME: 'Valore buoni sconto'
-        SINGULARNAME: "Valore buono sconto\n"
+        SINGULARNAME: "Valore coupon\n"
         VALUE: valore
     SilverCart\Voucher\Model\Voucher\GiftVoucherProduct:
-        PLURALNAME: 'Buono sconto articoli'
-        SINGULARNAME: 'Buono sconto articolo'
+        PLURALNAME: 'Coupon articoli'
+        SINGULARNAME: 'Coupon articolo'
     SilverCart\Voucher\Model\Voucher\NaturalRebateVoucher:
         PLURALNAME: 'Buoni sconto merci'
-        SINGULARNAME: 'Buono sconto merce'
+        SINGULARNAME: 'Coupon merce'
     SilverCart\Voucher\Model\Voucher\RelativeRebateVoucher:
         PLURALNAME: 'Buoni sconto'
-        SINGULARNAME: 'Buono sconto'
+        SINGULARNAME: Coupon
     SilverCart\Voucher\Model\Voucher:
-        CODE: 'Codice del buono sconto.'
+        CODE: 'Codice del coupon.'
         CREATED: 'Creato il'
-        ERRORMESSAGE-ALREADY_IN_SHOPPINGCART: 'Il buono sconto è già presente nel carrello.'
-        ERRORMESSAGE-CODE_NOT_VALID: 'Il codice di questo buono sconto non è valido.'
-        ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY: 'Hai esaurito il buono sconto a tua disposizione.'
-        ERRORMESSAGE-CUSTOMER_MUST_BE_REGISTERED: 'Per poter usufruire di questo buono sconto è necessaria la tua registrazione al portale <br /> La registrazione ti consentirà, nel caso in cui il valore degli articoli presenti nel carrello sia è inferiore al valore del  buono sconto, di utilizzarlo anche per acquisti multipli . <br /> <a href="%s"> Fai clic qui per accedere al modulo di registrazione.</a>'
-        ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE: 'Non ti è consentito di usufruire di questo buono sconto.'
-        ERRORMESSAGE-NOT_REDEEMABLE: 'Il buono sconto non può essere riscattato.'
-        ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID: 'Gli articoli presenti nel carrello non consentono di usufruire del buono sconto.'
+        ERRORMESSAGE-ALREADY_IN_SHOPPINGCART: 'Il coupon è già presente nel carrello.'
+        ERRORMESSAGE-CODE_NOT_VALID: 'Il codice di questo coupon non è valido.'
+        ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY: 'Hai esaurito il coupon a tua disposizione.'
+        ERRORMESSAGE-CUSTOMER_MUST_BE_REGISTERED: 'Per poter usufruire di questo coupon è necessaria la tua registrazione al portale <br /> La registrazione ti consentirà, nel caso in cui il valore degli articoli presenti nel carrello sia è inferiore al valore del  coupon, di utilizzarlo anche per acquisti multipli . <br /> <a href="%s"> Fai clic qui per accedere al modulo di registrazione.</a>'
+        ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE: 'Non ti è consentito di usufruire di questo coupon.'
+        ERRORMESSAGE-NOT_REDEEMABLE: 'Il coupon non può essere riscattato.'
+        ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID: 'Gli articoli presenti nel carrello non consentono di usufruire del coupon.'
         ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID: 'Il valore degli articoli presenti nel carrello non è sufficiente.'
         ERRORMESSAGE-VOUCHER_ALREADY_OWNED: 'Questo buono  sconto è già stato utilizzato da un''altra persona.'
         ISACTIVE: 'È attivo'
@@ -44,13 +44,13 @@ it:
         QUANTITY: Numero
         QUANTITY_REDEEMED: 'Numero di buoni di cui hai usufruito'
         REDEEMED_VOUCHERS: 'Buoni sconto già utilizzati: '
-        REDEEM_VOUCHER: 'Utilizza il buono sconto: '
+        REDEEM_VOUCHER: 'Utilizza il coupon: '
         REMAINING_CREDIT: 'Credito residuo'
         RESTRICT_TO_GROUP: 'Associa al gruppo clienti'
         RESTRICT_TO_MEMBER: 'Associa al cliente/i'
         RESTRICT_TO_PRODUCT: 'Associa all''articolo'
         RESTRICT_TO_PRODUCTGROUP: "Associa al gruppo prodotti\n"
-        SINGULARNAME: 'Buono sconto'
+        SINGULARNAME: Coupon
         VALUE: valore
         VALUE_IN_PERCENT: 'Percentuale di sconto'
     SilverCart\Voucher\Admin\Controllers\VoucherAdmin:
@@ -61,8 +61,8 @@ it:
         SINGULARNAME: 'Cronologia buoni sconto'
     SilverCart\Voucher\Extensions\Model\Pages\OrderDetailPageExtension:
         PLURALVOUCHERTITLE: 'Codice buoni sconto'
-        PLURALVOUCHERVALUETITLE: 'Il valore di ciascun buono sconto ammonta a'
-        SINGULARVOUCHERTITLE: 'Codice buono sconto'
-        SINGULARVOUCHERVALUETITLE: 'Valore buono sconto'
+        PLURALVOUCHERVALUETITLE: 'Il valore di ciascun coupon ammonta a'
+        SINGULARVOUCHERTITLE: 'Codice coupon'
+        SINGULARVOUCHERVALUETITLE: 'Valore coupon'
         WARNING_PAYBEFOREREDEEMING_PLURAL: 'Nota bene: prima di poter usufruire dei buoni sconto dovrà essere effettuato il pagamento dell''ordine.'
-        WARNING_PAYBEFOREREDEEMING_SINGULAR: 'Nota bene: prima di poter usufruire del buono sconto dovrà essere effettuato il pagamento dell''ordine.'
+        WARNING_PAYBEFOREREDEEMING_SINGULAR: 'Nota bene: prima di poter usufruire del coupon dovrà essere effettuato il pagamento dell''ordine.'
