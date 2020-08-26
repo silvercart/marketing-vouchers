@@ -10,7 +10,7 @@ it:
         VALUE: valore
     SilverCart\Voucher\Model\Voucher\AbsoluteRebateVoucher:
         PLURALNAME: 'Valore buoni sconto'
-        SINGULARNAME: "Valore coupon\n"
+        SINGULARNAME: "Valore coupon"
         VALUE: valore
     SilverCart\Voucher\Model\Voucher\GiftVoucherProduct:
         PLURALNAME: 'Coupon articoli'
