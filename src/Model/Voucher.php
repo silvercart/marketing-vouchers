@@ -57,6 +57,75 @@ use SilverStripe\View\ArrayData;
 class Voucher extends DataObject
 {
     use \SilverCart\ORM\ExtensibleDataObject;
+    
+    /**
+     * Returns a voucher with the given $code.
+     * 
+     * @param string $code Voucher code
+     * 
+     * @return Voucher|null
+     */
+    public static function getByCode(string $code) : ?Voucher
+    {
+        return Voucher::get()->filter('code', $code)->first();
+    }
+
+    /**
+     * Generates a single voucher code.
+     * 
+     * @return string
+     */
+    public static function generateCode() : string
+    {
+        $parts = [];
+        for ($i = 0; $i < self::config()->generator_code_part_count; $i++) {
+            $part = '';
+            for ($j = 0; $j < self::config()->generator_code_part_length; $j++) {
+                $part .= strtoupper(dechex(rand(0,15)));
+            }
+            $parts[] = $part;
+        }
+        $code = implode(self::config()->generator_code_part_delimiter, $parts);
+        if (self::getByCode($code) instanceof Voucher) {
+            $code = self::generateCode();
+        }
+        return $code;
+    }
+    
+    /**
+     * Generates voucher codes.
+     * 
+     * @param int $count Count of voucher codes to generate
+     * 
+     * @return string[]
+     */
+    public static function generateCodes(int $count = 1) : array
+    {
+        $codes = [];
+        for ($x = 0; $x < $count; $x++) {
+            $codes[] = self::generateCode();
+        }
+        return $codes;
+    }
+    
+    /**
+     * Amount of code parts when using the generator.
+     *
+     * @var int
+     */
+    private static $generator_code_part_count = 4;
+    /**
+     * Delimiter to use between the code parts when using the generator.
+     *
+     * @var string
+     */
+    private static $generator_code_part_delimiter = '-';
+    /**
+     * Length of a single code part when using the generator.
+     *
+     * @var int
+     */
+    private static $generator_code_part_length = 5;
     /**
      * Table name
      *
