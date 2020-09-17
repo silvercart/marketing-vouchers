@@ -7,6 +7,18 @@ use SilverCart\Voucher\Model\Voucher;
 use SilverStripe\Core\Extension;
 use SilverStripe\Forms\FormField;
 
+/**
+ * Extension for SilverCart CustomRequiredFields.
+ * 
+ * @package SilverCart
+ * @subpackage Voucher\Extensions\Forms
+ * @author Sebastian Diel <sdiel@pixeltricks.de>
+ * @since 01.01.2020
+ * @copyright 2020 pixeltricks GmbH
+ * @license see license file in modules root directory
+ * 
+ * @property \SilverCart\Forms\CustomRequiredFields $owner Owner
+ */
 class CustomRequiredFieldsExtension extends Extension
 {
     /**
@@ -38,7 +50,10 @@ class CustomRequiredFieldsExtension extends Extension
                 $isValidVoucher = true;
             }
         } else {
-            $errorMessage = Voucher::singleton()->fieldLabel('ErrorCodeNotValid');
+            $this->owner->extend('updateIsValidVoucherOnFail', $voucherCode, $isValidVoucher);
+            if (!$isValidVoucher) {
+                $errorMessage = Voucher::singleton()->fieldLabel('ErrorCodeNotValid');
+            }
         }
         return [
             'error'        => !($isValidVoucher === $expectedResult),

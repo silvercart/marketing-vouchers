@@ -100,7 +100,11 @@ class AddVoucherCodeForm extends CustomForm
                 $this->getController()->redirect($this->getController()->Link());
             }
         } else {
-            $this->setErrorMessage(Voucher::singleton()->fieldLabel('ErrorCodeNotValid'));
+            $isValidVoucherCode = false;
+            $this->owner->extend('updateDoSubmitOnFail', $voucherCode, $isValidVoucherCode);
+            if (!$isValidVoucherCode) {
+                $this->setErrorMessage(Voucher::singleton()->fieldLabel('ErrorCodeNotValid'));
+            }
         }
     }
 }
