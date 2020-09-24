@@ -860,10 +860,12 @@ class Voucher extends DataObject
             $this->extend('onBeforeShoppingCartConvert', $shoppingCart, $member, $order);
             foreach ($shoppingCartPositions as $shoppingCartPosition) {
                 if (!$shoppingCartPosition->Voucher()->exists()) {
+                    $shoppingCartPosition->delete();
                     continue;
                 }
                 $originalVoucher = self::get()->byID($shoppingCartPosition->VoucherID);
                 if (!($originalVoucher instanceof Voucher)) {
+                    $shoppingCartPosition->delete();
                     continue;
                 }
                 // Adjust quantity
@@ -881,7 +883,7 @@ class Voucher extends DataObject
                 // save changes to original voucher
                 $originalVoucher->write();
                 // And remove from the customers shopping cart
-                ShoppingCartPosition::remove($shoppingCart->ID, $shoppingCartPosition->VoucherID);
+                $shoppingCartPosition->delete();
             }
             $this->extend('onAfterShoppingCartConvert', $shoppingCart, $member, $order);
         }
