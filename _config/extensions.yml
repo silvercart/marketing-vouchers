@@ -1,6 +1,9 @@
 SilverCart\Forms\CustomRequiredFields:
     extensions:
         - SilverCart\Voucher\Extensions\Forms\CustomRequiredFieldsExtension
+SilverCart\Model\Order\Order:
+    extensions:
+        - SilverCart\Voucher\Extensions\Model\Order\OrderExtension
 SilverCart\Model\Order\OrderPosition:
     extensions:
         - SilverCart\Voucher\Extensions\Model\Order\OrderPositionExtension
