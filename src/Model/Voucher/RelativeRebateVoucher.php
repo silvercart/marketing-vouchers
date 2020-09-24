@@ -10,10 +10,10 @@ use SilverCart\ORM\FieldType\DBMoney;
 use SilverCart\Voucher\Model\ShoppingCartPosition;
 use SilverCart\Voucher\Model\Voucher;
 use SilverCart\Voucher\View\VoucherPrice;
-use SilverStripe\Control\Controller;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\ORM\ArrayList;
+use SilverStripe\Security\Member;
 
 /**
  * Extends the voucher class for relative rebates that are subtracted from
@@ -199,5 +199,27 @@ class RelativeRebateVoucher extends Voucher
         $fields->removeByName('quantityRedeemed');
         $fields->addFieldToTab('Root.Main', LiteralField::create('quantityRedeemed', "<br />{$this->fieldLabel('RedeemedVouchers')}" . ($this->quantityRedeemed ? $this->quantityRedeemed : '0')));
         return $fields;
+    }
+
+    /**
+     * This method gets called when converting the shoppingcart positions to
+     * order positions.
+     *
+     * @param ShoppingCart         $shoppingCart         the shoppingcart object
+     * @param ShoppingCartPosition $shoppingCartPosition position of the shoppingcart which contains the voucher
+     * @param Voucher              $originalVoucher      the original voucher
+     * @param Member               $member               member object
+     *
+     * @return void
+     */
+    public function convert(ShoppingCart $shoppingCart, ShoppingCartPosition $shoppingCartPosition, Voucher $originalVoucher, Member $member) : void
+    {
+        if (Customer::currentRegisteredCustomer()) {
+            // only do this for registered customers
+            $voucherOnMember = $member->Vouchers()->find('ID', $shoppingCartPosition->VoucherID);
+            if (!$voucherOnMember) {
+                $member->Vouchers()->add($originalVoucher);
+            }
+        }
     }
 }
