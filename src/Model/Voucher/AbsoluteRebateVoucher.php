@@ -141,15 +141,18 @@ class AbsoluteRebateVoucher extends Voucher
             if (in_array($this->ID, self::$alreadyHandledPositionIDs)) {
                 return self::$alreadyHandledPositions[$this->ID];
             }
+            $priceGross = DBMoney::create()
+                    ->setAmount($this->value->getAmount())
+                    ->setCurrency($this->value->getCurrency());
             $title          = "{$this->singular_name()} (Code: {$this->code})";
-            $priceNetAmount = round($this->value->getAmount() / (100 + $this->Tax()->Rate) * 100, 4);
+            $priceNetAmount = round($priceGross->getAmount() / (100 + $this->Tax()->Rate) * 100, 4);
             $priceNet = DBMoney::create()
                     ->setAmount($priceNetAmount)
                     ->setCurrency(Config::DefaultCurrency());
             // The shopppingcart total may not be below 0
             $excludeShoppingCartPositions[] = $this->ID;
             $shoppingcartTotal              = $shoppingCart->getTaxableAmountWithoutFeesAndCharges([], $excludeShoppingCartPositions);
-            $originalAmount                 = $this->value->getAmount();
+            $originalAmount                 = $priceGross->getAmount();
             if ($originalAmount >= $shoppingcartTotal->getAmount()) {
                 $originalAmountObj = DBMoney::create()
                         ->setAmount($originalAmount);
@@ -163,7 +166,7 @@ class AbsoluteRebateVoucher extends Voucher
                  && !is_null($member->Vouchers()->find('ID', $this->ID))
                 ) {
                     $voucherOnMember = $member->Vouchers()->find('ID', $this->ID);
-                    $this->value->setAmount((float) $voucherOnMember->remainingAmount);
+                    $priceGross->setAmount((float) $voucherOnMember->remainingAmount);
                     $restAmountObj = DBMoney::create()
                             ->setAmount($voucherOnMember->remainingAmount);
                     $title .= sprintf(
@@ -172,13 +175,13 @@ class AbsoluteRebateVoucher extends Voucher
                         $restAmountObj->Nice()
                     );
                 } else {
-                    $this->value->setAmount($shoppingcartTotal->getAmount());
+                    $priceGross->setAmount($shoppingcartTotal->getAmount());
                     $priceNet->setAmount($shoppingcartTotal->getAmount());
                 }
             }
             $taxAmount = (float) 0.0;
-            if ($this->value->getAmount() > 0) {
-                $amount = $this->value->getAmount();
+            if ($priceGross->getAmount() > 0) {
+                $amount = $priceGross->getAmount();
                 if (Config::PriceType() == 'gross') {
                     $taxAmount = (float) $amount - ($amount / (100 + $this->Tax()->Rate) * 100);
                 } else {
@@ -186,9 +189,12 @@ class AbsoluteRebateVoucher extends Voucher
                 }
             }
             $priceNet->setAmount($priceNet->getAmount() * -1);
-            $this->value->setAmount($this->value->getAmount() * -1);
-            $position = $this->createVoucherPricePosition($title, $priceNet, $taxAmount);
-            $positions->push($position);
+            $priceGross->setAmount($priceGross->getAmount() * -1);
+            $position = $this->createVoucherPricePosition($title, $priceGross, $priceNet, $taxAmount);
+            $this->extend('updateShoppingCartPosition', $position, $shoppingCart);
+            if ($position instanceof VoucherPrice) {
+                $positions->push($position);
+            }
             if (!in_array($this->ID, self::$alreadyHandledPositionIDs)) {
                 self::$alreadyHandledPositionIDs[] = $this->ID;
             }
@@ -200,16 +206,17 @@ class AbsoluteRebateVoucher extends Voucher
     /**
      * creates a VoucherPrice and returns it
      * 
-     * @param string  $title     Title of the object
-     * @param DBMoney $priceNet  net price object
-     * @param float   $taxAmount tax amount obj
+     * @param string  $title      Title of the object
+     * @param DBMoney $priceGross gross price object
+     * @param DBMoney $priceNet   net price object
+     * @param float   $taxAmount  tax amount obj
      * 
      * @return VoucherPrice
      * 
      * @author Patrick Schneider <pschneider@pixeltricks.de>
      * @since 05.12.2012
      */
-    protected function createVoucherPricePosition(string $title, DBMoney $priceNet, float $taxAmount) : VoucherPrice
+    protected function createVoucherPricePosition(string $title, DBMoney $priceGross, DBMoney $priceNet, float $taxAmount) : VoucherPrice
     {
         $priceNetTotal   = $priceNet;
         $voucherPriceObj = VoucherPrice::create();
@@ -217,11 +224,11 @@ class AbsoluteRebateVoucher extends Voucher
         $voucherPriceObj->Name                   = $title;
         $voucherPriceObj->ShortDescription       = $this->code;
         $voucherPriceObj->LongDescription        = $this->code;
-        $voucherPriceObj->Currency               = $this->value->getCurrency();
-        $voucherPriceObj->Price                  = $this->value->getAmount();
-        $voucherPriceObj->PriceFormatted         = $this->value->Nice();
-        $voucherPriceObj->PriceTotal             = $this->value->getAmount();
-        $voucherPriceObj->PriceTotalFormatted    = $this->value->Nice();
+        $voucherPriceObj->Currency               = $priceGross->getCurrency();
+        $voucherPriceObj->Price                  = $priceGross->getAmount();
+        $voucherPriceObj->PriceFormatted         = $priceGross->Nice();
+        $voucherPriceObj->PriceTotal             = $priceGross->getAmount();
+        $voucherPriceObj->PriceTotalFormatted    = $priceGross->Nice();
         $voucherPriceObj->PriceNet               = $priceNet->getAmount();
         $voucherPriceObj->PriceNetFormatted      = $priceNet->Nice();
         $voucherPriceObj->PriceNetTotal          = $priceNetTotal->getAmount();
@@ -292,6 +299,7 @@ class AbsoluteRebateVoucher extends Voucher
             // this user can't reuse this voucher anymore
             $remainingAmount = 0.0;
         }
+        $this->extend('updateRemainingAmount', $remainingAmount, $currentRemainingAmount, $amountToReduce);
         return $remainingAmount;
     }
 

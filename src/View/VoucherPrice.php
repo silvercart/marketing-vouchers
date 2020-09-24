@@ -111,6 +111,22 @@ class VoucherPrice extends ViewableData
     public $Tax = null;
 
     /**
+     * Sets the price gross amount and re-calculates the price net amount.
+     * 
+     * @param float $priceGrossAmount New price gross
+     * 
+     * @return void
+     */
+    public function setPriceGrossAmount(float $priceGrossAmount) : void
+    {
+        $priceNetAmount      = round($priceGrossAmount / (100 + $this->TaxRate) * 100, 4);
+        $this->Price         = $priceGrossAmount;
+        $this->PriceTotal    = $priceGrossAmount;
+        $this->PriceNet      = $priceNetAmount;
+        $this->PriceNetTotal = $priceNetAmount;
+    }
+    
+    /**
      * Returns the price sum for this voucher.
      *
      * @param bool   $forSingleProduct Indicates wether the price for the total

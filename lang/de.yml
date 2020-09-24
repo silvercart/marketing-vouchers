@@ -1,4 +1,7 @@
 de:
+    Voucher:
+        ValidFor: 'Gültig für'
+        YourPrice: 'Ihr Preis: <span class="font-weight-bold">{discounted}</span> anstelle von <span class="text-line-through">{original}</span>.'
     SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucher:
         IS_BOUND_TO_CUSTOMER: 'Ist an Kunden gebunden'
         PLURALNAME: Geschenkgutscheine

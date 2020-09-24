@@ -16,6 +16,7 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldAddNewButton;
 use SilverStripe\Forms\GridField\GridFieldFilterHeader;
+use SilverStripe\Forms\HiddenField;
 use SilverStripe\i18n\i18n;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
@@ -155,6 +156,14 @@ class Voucher extends DataObject
         'Tax' => Tax::class,
     ];
     /**
+     * Has-many Relationships.
+     *
+     * @var array
+     */
+    private static $has_many = [
+        'VoucherHistory' => VoucherHistory::class,
+    ];
+    /**
      * Many-many Relationships.
      *
      * @var array
@@ -164,7 +173,6 @@ class Voucher extends DataObject
         'RestrictToGroup'         => Group::class,
         'RestrictToProductGroups' => ProductGroupPage::class,
         'RestrictToProducts'      => Product::class,
-        'VoucherHistory'          => VoucherHistory::class,
     ];
     /**
      * Belongs-many-many Relationships.
@@ -236,6 +244,7 @@ class Voucher extends DataObject
             'ErrorAlreadyInCart'          => _t(self::class . '.ERRORMESSAGE-ALREADY_IN_SHOPPINGCART', 'This voucher is already in your shoppingcart.'),
             'ErrorValueNotValid'          => _t(self::class . '.ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID', 'The shoppingcart value is not valid.'),
             'ErrorItemsNotValid'          => _t(self::class . '.ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID', 'Your cart doesn\'t contain the appropriate products for this voucher.'),
+            'Value'                       => _t(self::class . '.VALUE', 'Value'),
         ]);
     }
 
@@ -678,14 +687,16 @@ class Voucher extends DataObject
             } else {
                 $isValidByUndefinedProductGroup = true;
             }
-            $this->isValidForShoppingCartItems[$cacheKey] = ($isValidByProduct
-                                                          && $isValidByProductGroup)
-                                                         || ($isValidByUndefinedProduct
-                                                          && $isValidByUndefinedProductGroup)
-                                                         || (!$isValidByProductGroup
-                                                          && $isValidByProduct)
-                                                         || (!$isValidByProduct
-                                                          && $isValidByProductGroup);
+            $isValid = ($isValidByProduct
+                     && $isValidByProductGroup)
+                    || ($isValidByUndefinedProduct
+                     && $isValidByUndefinedProductGroup)
+                    || (!$isValidByProductGroup
+                     && $isValidByProduct)
+                    || (!$isValidByProduct
+                     && $isValidByProductGroup);
+            $this->extend('updateIsValidForShoppingCartItems', $isValid, $shoppingCartPositions);
+            $this->isValidForShoppingCartItems[$cacheKey] = $isValid;
         }
         return $this->isValidForShoppingCartItems[$cacheKey];
     }
@@ -749,9 +760,11 @@ class Voucher extends DataObject
      */
     public function removeFromShoppingCart(Member $member, string $action = 'removed') : void
     {
+        $this->extend('onBeforeRemoveFromShoppingCart', $member);
         $voucherHistory = VoucherHistory::create();
         $voucherHistory->add($this, $member, $action);
         ShoppingCartPosition::remove($member->ShoppingCart()->ID, $this->ID);
+        $this->extend('onAfterRemoveFromShoppingCart', $member);
     }
 
     /**
@@ -807,7 +820,7 @@ class Voucher extends DataObject
                 continue;
             }
             $addedIDs[] = $record['VoucherObjectID'];
-            $voucher    = self::get()->byID($record['VoucherObjectID']);
+            $voucher    = Voucher::get()->byID($record['VoucherObjectID']);
             if ($voucher instanceof Voucher) {
                 $position = ShoppingCartPosition::getVoucherShoppingCartPosition($shoppingCart->ID, $voucher->ID);
                 if ($position instanceof ShoppingCartPosition
@@ -844,6 +857,7 @@ class Voucher extends DataObject
     {
         $shoppingCartPositions = ShoppingCartPosition::get()->filter('ShoppingCartID', $shoppingCart->ID);
         if ($shoppingCartPositions->exists()) {
+            $this->extend('onBeforeShoppingCartConvert', $shoppingCart, $member, $order);
             foreach ($shoppingCartPositions as $shoppingCartPosition) {
                 if (!$shoppingCartPosition->Voucher()->exists()) {
                     continue;
@@ -869,6 +883,7 @@ class Voucher extends DataObject
                 // And remove from the customers shopping cart
                 ShoppingCartPosition::remove($shoppingCart->ID, $shoppingCartPosition->VoucherID);
             }
+            $this->extend('onAfterShoppingCartConvert', $shoppingCart, $member, $order);
         }
     }
 
@@ -989,6 +1004,11 @@ class Voucher extends DataObject
     {
         $this->beforeUpdateCMSFields(function(FieldList $fields) {
             $fields->removeByName('Members');
+            if (empty($this->code)) {
+                $code = self::generateCode();
+                $fields->dataFieldByName('code')->setAttribute('placeholder', $code);
+                $fields->addFieldToTab('Root.Main', HiddenField::create('GeneratedCode', '', $code));
+            }
             $historyField = $fields->dataFieldByName('VoucherHistory');
             if ($historyField instanceof GridField) {
                 $historyField->getConfig()->removeComponentsByType(GridFieldAddNewButton::class);
@@ -997,6 +1017,24 @@ class Voucher extends DataObject
             }
         });
         return DataObjectExtension::getCMSFields($this);
+    }
+    
+    /**
+     * On before write.
+     * 
+     * @return void
+     */
+    protected function onBeforeWrite() : void
+    {
+        parent::onBeforeWrite();
+        if ($this->canEdit()) {
+            if (empty($this->code)
+             && array_key_exists('GeneratedCode', $_POST)
+             && !empty($_POST['GeneratedCode'])
+            ) {
+                $this->code = $_POST['GeneratedCode'];
+            }
+        }
     }
 
     /**

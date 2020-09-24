@@ -16,6 +16,11 @@ use SilverStripe\ORM\DataObject;
  * @since 14.05.2020
  * @copyright 2020 pixeltricks GmbH
  * @license see license file in modules root directory
+ * 
+ * @property bool $implicatePosition Is this an implicate position?
+ * 
+ * @method ShoppingCart ShoppingCart() Returns the related ShoppingCart.
+ * @method Voucher      Voucher()      Returns the related Voucher.
  */
 class ShoppingCartPosition extends DataObject
 {

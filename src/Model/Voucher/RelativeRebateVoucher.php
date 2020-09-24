@@ -153,7 +153,10 @@ class RelativeRebateVoucher extends Voucher
             $position->TaxAmount             = ($rebateAmount - ($rebateAmount / (100 + $this->Tax()->Rate) * 100)) * -1;
             $position->Tax                   = $this->Tax();
             $position->ProductNumber         = $this->ProductNumber;
-            $positions->push($position);
+            $this->extend('updateShoppingCartPosition', $position, $shoppingCart);
+            if ($position instanceof VoucherPrice) {
+                $positions->push($position);
+            }
         }
         return $positions;
     }

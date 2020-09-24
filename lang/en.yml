@@ -1,4 +1,7 @@
 en:
+    Voucher:
+        ValidFor: 'Valid for'
+        YourPrice: 'Your price: <span class="font-weight-bold">{discounted}</span> instead of <span class="text-line-through">{original}</span>.'
     SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucher:
         IS_BOUND_TO_CUSTOMER: 'Is bound to customer'
         PLURALNAME: 'Gift vouchers'
