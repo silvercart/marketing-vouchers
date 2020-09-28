@@ -453,7 +453,6 @@ class Voucher extends DataObject
                     $voucherHistory = VoucherHistory::create();
                     $voucherHistory->add($this, $member, 'redeemed');
                     $position->setImplicationStatus(true);
-                    $member->Vouchers()->add($this);
                 }
             }
         }
