@@ -379,7 +379,7 @@ class Voucher extends DataObject
             } elseif (!$this->isCustomerEligible($member)) {
                 $error      = true;
                 $messages[] = $this->fieldLabel('ErrorCustomerNotEligible');
-            } elseif (!$this->isRedeemable()) {
+            } elseif (!$this->isRedeemable($member)) {
                 $error      = true;
                 $messages[] = $this->fieldLabel('ErrorNotRedeemable');
             } elseif ($this->isCompletelyRedeemedAlready($member, $voucherID)) {
@@ -717,10 +717,12 @@ class Voucher extends DataObject
     /**
      * Checks if the voucher is active and if there are enough remaining
      * vouchers if the quantity is restricted.
+     * 
+     * @param Member $member Member context
      *
      * @return bool
      */
-    public function isRedeemable() : bool
+    public function isRedeemable(Member $member = null) : bool
     {
         $isRedeemable = false;
         if ($this->isActive) {

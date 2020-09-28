@@ -141,48 +141,56 @@ class AbsoluteRebateVoucher extends Voucher
             if (in_array($this->ID, self::$alreadyHandledPositionIDs)) {
                 return self::$alreadyHandledPositions[$this->ID];
             }
-            $priceGross = DBMoney::create()
-                    ->setAmount($this->value->getAmount())
-                    ->setCurrency($this->value->getCurrency());
-            $title          = "{$this->singular_name()} (Code: {$this->code})";
+            $title            = "{$this->singular_name()} (Code: {$this->code})";
+            $remainingVoucher = $shoppingCart->Member()->Vouchers()->byID($this->ID);
+            if ($remainingVoucher instanceof Voucher) {
+                $priceGross = DBMoney::create()
+                        ->setAmount($remainingVoucher->remainingAmount)
+                        ->setCurrency($this->value->getCurrency());
+                $originalAmount    = $this->value->getAmount();
+                $originalAmountNet = round($originalAmount / (100 + $this->Tax()->Rate) * 100, 4);
+                $originalValue  = DBMoney::create()
+                        ->setAmount($originalAmount)
+                        ->setCurrency($this->value->getCurrency());
+                $originalValueNet = DBMoney::create()
+                        ->setAmount($originalAmountNet)
+                        ->setCurrency($this->value->getCurrency());
+            } else {
+                $priceGross = DBMoney::create()
+                        ->setAmount($this->value->getAmount())
+                        ->setCurrency($this->value->getCurrency());
+            }
             $priceNetAmount = round($priceGross->getAmount() / (100 + $this->Tax()->Rate) * 100, 4);
             $priceNet = DBMoney::create()
                     ->setAmount($priceNetAmount)
                     ->setCurrency(Config::DefaultCurrency());
+            if ($remainingVoucher instanceof Voucher) {
+                if (Config::PriceType() === Config::PRICE_TYPE_GROSS) {
+                    $title = "{$title}<br/>{$this->fieldLabel('OriginalValue')}: {$originalValue->Nice()}"
+                           . "<br/>{$this->fieldLabel('RemainingCredit')}: {$priceGross->Nice()}";
+                } else {
+                    $title = "{$title}<br/>{$this->fieldLabel('OriginalValue')}: {$originalValueNet->Nice()}"
+                           . "<br/>{$this->fieldLabel('RemainingCredit')}: {$priceNet->Nice()}";
+                }
+            }
             // The shopppingcart total may not be below 0
             $excludeShoppingCartPositions[] = $this->ID;
             $shoppingcartTotal              = $shoppingCart->getTaxableAmountWithoutFeesAndCharges([], $excludeShoppingCartPositions);
-            $originalAmount                 = $priceGross->getAmount();
-            if ($originalAmount >= $shoppingcartTotal->getAmount()) {
-                $originalAmountObj = DBMoney::create()
-                        ->setAmount($originalAmount);
-                $title .= sprintf(
-                    "<br />%s: %s",
-                    $this->fieldLabel('OriginalValue'),
-                    $originalAmountObj->Nice()
-                );
-                $member = Customer::currentRegisteredCustomer();
-                if ($member
-                 && !is_null($member->Vouchers()->find('ID', $this->ID))
-                ) {
-                    $voucherOnMember = $member->Vouchers()->find('ID', $this->ID);
-                    $priceGross->setAmount((float) $voucherOnMember->remainingAmount);
-                    $restAmountObj = DBMoney::create()
-                            ->setAmount($voucherOnMember->remainingAmount);
-                    $title .= sprintf(
-                        "<br />%s: %s",
-                        $this->fieldLabel('RemainingCredit'),
-                        $restAmountObj->Nice()
-                    );
-                } else {
-                    $priceGross->setAmount($shoppingcartTotal->getAmount());
-                    $priceNet->setAmount($shoppingcartTotal->getAmount());
-                }
+            if (Config::PriceType() === Config::PRICE_TYPE_GROSS
+             && $priceGross->getAmount() > $shoppingcartTotal->getAmount()
+            ) {
+                $priceGross->setAmount($shoppingcartTotal->getAmount());
+                $priceNet->setAmount(round($shoppingcartTotal->getAmount() / (100 + $this->Tax()->Rate) * 100, 4));
+            } elseif (Config::PriceType() === Config::PRICE_TYPE_NET
+             && $priceNet->getAmount() > $shoppingcartTotal->getAmount()
+            ) {
+                $priceNet->setAmount($shoppingcartTotal->getAmount());
+                $priceGross->setAmount(round($shoppingcartTotal->getAmount() / 100 * (100 + $this->Tax()->Rate), 4));
             }
             $taxAmount = (float) 0.0;
             if ($priceGross->getAmount() > 0) {
                 $amount = $priceGross->getAmount();
-                if (Config::PriceType() == 'gross') {
+                if (Config::PriceType() === Config::PRICE_TYPE_GROSS) {
                     $taxAmount = (float) $amount - ($amount / (100 + $this->Tax()->Rate) * 100);
                 } else {
                     $taxAmount = (float) ($priceNet->getAmount() * ($this->Tax()->Rate) / 100);
@@ -294,7 +302,7 @@ class AbsoluteRebateVoucher extends Voucher
      */
     protected function doSplitValue(float $currentRemainingAmount, float $amountToReduce) : float
     {
-        $remainingAmount = $currentRemainingAmount - ($amountToReduce * -1);
+        $remainingAmount = $currentRemainingAmount - ($amountToReduce);
         if ($remainingAmount < 0.0) {
             // this user can't reuse this voucher anymore
             $remainingAmount = 0.0;
@@ -324,6 +332,12 @@ class AbsoluteRebateVoucher extends Voucher
             $currentRemainingAmount = null;
             $amountToReduce         = $shoppingCartPosition->Voucher()->value->getAmount();
             $voucherOnMember        = $member->Vouchers()->find('ID', $shoppingCartPosition->VoucherID);
+            $pricePositions         = $this->ShoppingCartPositions($shoppingCart, $member);
+            if ($pricePositions->exists()) {
+                $pricePosition  = $pricePositions->first();
+                /* @var $pricePosition VoucherPrice */
+                $amountToReduce = $pricePosition->getPrice(true, Config::PRICE_TYPE_GROSS)->getAmount() * -1;
+            }
             if (!$voucherOnMember) {
                 // this voucher is unused yet by this customer, connect to customer
                 $member->Vouchers()->add($originalVoucher);
@@ -351,6 +365,30 @@ class AbsoluteRebateVoucher extends Voucher
     protected function getVoucherOnMember(Member $member, int $voucherID) : ?Voucher
     {
         return $member->Vouchers()->byID($voucherID);
+    }
+    
+    /**
+     * can be used to return if a voucher is already fully redeemd,
+     * set error message in checkifAllowedInShoppingCart()
+     * 
+     * @param Member $member Member context
+     * 
+     * @return bool
+     */
+    public function isRedeemable(Member $member = null) : bool
+    {
+        $isRedeemable = parent::isRedeemable($member);
+        if (!$isRedeemable
+         && $member instanceof Member
+        ) {
+            $voucherOnMember = $member->Vouchers()->byID($this->ID);
+            if ($voucherOnMember instanceof Voucher
+             && $voucherOnMember->remainingAmount > 0
+            ) {
+                $isRedeemable = true;
+            }
+        }
+        return $isRedeemable;
     }
     
     /**
