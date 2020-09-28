@@ -126,7 +126,12 @@ class RelativeRebateVoucher extends Voucher
         ) {
             $shoppingCartAmount = $shoppingCart->getTaxableAmountWithoutFees([Voucher::class])->getAmount();
             $rebateAmount       = round(($shoppingCartAmount / 100 * $this->valueInPercent), 2);
-            $rebateAmountNet    = ((int) $this->Tax()->Rate === 0) ? $rebateAmount : $rebateAmount / (100 + (int) $this->Tax()->Rate) * 100;
+            if (Config::Pricetype() === Config::PRICE_TYPE_GROSS) {
+                $rebateAmountNet = ((int) $this->Tax()->Rate === 0) ? $rebateAmount : $rebateAmount / (100 + (int) $this->Tax()->Rate) * 100;
+            } else {
+                $rebateAmountNet = $rebateAmount;
+                $rebateAmount    = $rebateAmount * (((int) $this->Tax()->Rate / 100) + 1);
+            }
             $rebate             = DBMoney::create()
                     ->setAmount($rebateAmount)
                     ->setCurrency(Config::DefaultCurrency());
