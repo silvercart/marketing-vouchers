@@ -56,6 +56,7 @@ de:
         SINGULARNAME: Gutschein
         VALUE: Wert
         VALUE_IN_PERCENT: 'Rabatt in Prozent'
+        VocherInvalid: 'Der Gutschein-Code {code} ist nicht mehr gültig und wurde entfernt.'
     SilverCart\Voucher\Admin\Controllers\VoucherAdmin:
         MENUTITLE: Gutscheine
         TITLE: Gutscheine

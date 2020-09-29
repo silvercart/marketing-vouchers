@@ -56,6 +56,7 @@ en:
         SINGULARNAME: Voucher
         VALUE: Value
         VALUE_IN_PERCENT: 'Rebate value in percent'
+        VocherInvalid: 'The voucher {code} is no more valid and was removed from your shopping cart.'
     SilverCart\Voucher\Admin\Controllers\VoucherAdmin:
         MENUTITLE: Vouchers
         TITLE: Vouchers

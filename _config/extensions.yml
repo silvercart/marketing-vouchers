@@ -7,6 +7,9 @@ SilverCart\Model\Order\Order:
 SilverCart\Model\Order\OrderPosition:
     extensions:
         - SilverCart\Voucher\Extensions\Model\Order\OrderPositionExtension
+SilverCart\Model\Order\ShoppingCart:
+    extensions:
+        - SilverCart\Voucher\Extensions\Model\Order\ShoppingCartExtension
 SilverCart\Model\Pages\CartPageController:
     extensions:
         - SilverCart\Voucher\Extensions\Model\Pages\CartPageControllerExtension

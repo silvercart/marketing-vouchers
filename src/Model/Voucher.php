@@ -6,6 +6,7 @@ use SilverCart\Admin\Forms\GridField\GridFieldAddExistingAutocompleter;
 use SilverCart\Model\Customer\Customer;
 use SilverCart\Model\Order\Order;
 use SilverCart\Model\Order\ShoppingCart;
+use SilverCart\Model\Order\ShoppingCartPositionNotice;
 use SilverCart\Model\Pages\ProductGroupPage;
 use SilverCart\Model\Product\Product;
 use SilverCart\Model\Product\Tax;
@@ -19,6 +20,7 @@ use SilverStripe\Forms\GridField\GridFieldFilterHeader;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\i18n\i18n;
 use SilverStripe\ORM\ArrayList;
+use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DB;
 use SilverStripe\ORM\FieldType\DBMoney as SilverStripeDBMoney;
@@ -436,23 +438,33 @@ class Voucher extends DataObject
             ) {
                 return;
             }
-            $status   = $this->areShoppingCartConditionsMet($shoppingCart);
-            $position = ShoppingCartPosition::getVoucherShoppingCartPosition($shoppingCart->ID, $this->ID);
-            if ($status['error']) {
-                if ($position instanceof ShoppingCartPosition
-                 && $position->implicatePosition
-                ) {
-                    $position->setImplicationStatus(false);
-                    $voucherHistory = VoucherHistory::create();
-                    $voucherHistory->add($this, $member, 'removed');
+            if (!$this->isRedeemable()) {
+                ShoppingCartPositionNotice::addAllowedNotice('voucher-invalid', _t(self::class . '.VocherInvalid', 'The voucher {code} is no more valid and was removed from your shopping cart.', ['code' => $this->code]), ShoppingCartPositionNotice::NOTICE_TYPE_DANGER, ShoppingCartPositionNotice::NOTICE_FA_EXCLAMATION_CIRCLE);
+                ShoppingCartPositionNotice::setNotice(0, 'voucher-invalid');
+                $position = ShoppingCartPosition::getVoucherShoppingCartPosition($shoppingCart->ID, $this->ID);
+                if ($position instanceof ShoppingCartPosition) {
+                    $position->delete();
+                    VoucherHistory::create()->add($this, $member, 'removed');
                 }
             } else {
-                if ($position instanceof ShoppingCartPosition
-                 && (bool) $position->implicatePosition === false
-                ) {
-                    $voucherHistory = VoucherHistory::create();
-                    $voucherHistory->add($this, $member, 'redeemed');
-                    $position->setImplicationStatus(true);
+                $status   = $this->areShoppingCartConditionsMet($shoppingCart);
+                $position = ShoppingCartPosition::getVoucherShoppingCartPosition($shoppingCart->ID, $this->ID);
+                if ($status['error']) {
+                    if ($position instanceof ShoppingCartPosition
+                     && $position->implicatePosition
+                    ) {
+                        $position->setImplicationStatus(false);
+                        $voucherHistory = VoucherHistory::create();
+                        $voucherHistory->add($this, $member, 'removed');
+                    }
+                } else {
+                    if ($position instanceof ShoppingCartPosition
+                     && (bool) $position->implicatePosition === false
+                    ) {
+                        $voucherHistory = VoucherHistory::create();
+                        $voucherHistory->add($this, $member, 'redeemed');
+                        $position->setImplicationStatus(true);
+                    }
                 }
             }
         }
@@ -775,6 +787,8 @@ class Voucher extends DataObject
      * @param ShoppingCart $shoppingCart The shopping cart object
      *
      * @return Voucher
+     * 
+     * @deprecated
      */
     public function loadObjectForShoppingCart(ShoppingCart $shoppingCart) : Voucher
     {
@@ -786,6 +800,19 @@ class Voucher extends DataObject
             }
         }
         return $this;
+    }
+
+    /**
+     * Returns all vouchers related to the shopping cart.
+     *
+     * @param ShoppingCart $shoppingCart The shopping cart object
+     *
+     * @return DataList
+     */
+    public function loadObjectsForShoppingCart(ShoppingCart $shoppingCart) : DataList
+    {
+        $ids = array_merge([-1], $shoppingCart->VoucherPositions()->map('ID', 'VoucherID')->toArray());
+        return self::get()->filter('ID', $ids);
     }
 
     /**
