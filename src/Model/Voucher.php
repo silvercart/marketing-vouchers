@@ -494,12 +494,13 @@ class Voucher extends DataObject
     {
         $error    = false;
         $messages = [];
+        $message  = null;
         if (!$this->isShoppingCartAmountValid($shoppingCart->getTaxableAmountWithoutFeesAndCharges([self::class]))) {
             $error      = true;
             $messages[] = $this->fieldLabel('ErrorValueNotValid');
-        } elseif (!$this->isValidForShoppingCartItems($shoppingCart->ShoppingCartPositions())) {
+        } elseif (!$this->isValidForShoppingCartItems($shoppingCart->ShoppingCartPositions(), $message)) {
             $error      = true;
-            $messages[] = $this->fieldLabel('ErrorItemsNotValid');
+            $messages[] = $message === null ? $this->fieldLabel('ErrorItemsNotValid') : $message;
         }
         return [
             'error'    => $error,
@@ -659,6 +660,7 @@ class Voucher extends DataObject
      * items in the shopping cart.
      *
      * @param SS_List $shoppingCartPositions the shoppingcartposition object
+     * @param string  &$message              Alternative message to display in cart
      *
      * @return bool
      *
@@ -666,7 +668,7 @@ class Voucher extends DataObject
      *         Sebastian Diel <sdiel@pixeltricks.de>
      * @since 14.05.2020
      */
-    public function isValidForShoppingCartItems(SS_List $shoppingCartPositions) : bool
+    public function isValidForShoppingCartItems(SS_List $shoppingCartPositions, string &$message = null) : bool
     {
         $cacheKey = (string) implode('_', $shoppingCartPositions->map('ID', 'ID')->toArray());
         if (!array_key_exists($cacheKey, $this->isValidForShoppingCartItems)) {
@@ -706,7 +708,7 @@ class Voucher extends DataObject
                      && $isValidByProduct)
                     || (!$isValidByProduct
                      && $isValidByProductGroup);
-            $this->extend('updateIsValidForShoppingCartItems', $isValid, $shoppingCartPositions);
+            $this->extend('updateIsValidForShoppingCartItems', $isValid, $shoppingCartPositions, $message);
             $this->isValidForShoppingCartItems[$cacheKey] = $isValid;
         }
         return $this->isValidForShoppingCartItems[$cacheKey];
