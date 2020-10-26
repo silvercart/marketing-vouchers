@@ -898,6 +898,9 @@ class Voucher extends DataObject
                     $shoppingCartPosition->delete();
                     continue;
                 }
+                if ($shoppingCartPosition->Voucher()->areShoppingCartConditionsMet($shoppingCart)['error'] === true) {
+                    continue;
+                }
                 // Adjust quantity
                 if ($originalVoucher->quantity > 0) {
                     $originalVoucher->quantity -= 1;
