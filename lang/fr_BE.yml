@@ -53,6 +53,7 @@ fr_BE:
         SINGULARNAME: Bon
         VALUE: Valeur
         VALUE_IN_PERCENT: 'Réduction en pourcentage'
+        VocherInvalid: 'Le code de bon {code} n''est plus valide et a été supprimé.'
     SilverCart\Voucher\Admin\Controllers\VoucherAdmin:
         MENUTITLE: Bons
         TITLE: Bons
@@ -66,3 +67,6 @@ fr_BE:
         SINGULARVOUCHERVALUETITLE: 'La valeur du bon est de'
         WARNING_PAYBEFOREREDEEMING_PLURAL: 'Veuillez noter que la commande doit être payée avant que les bons puissent être échangés.'
         WARNING_PAYBEFOREREDEEMING_SINGULAR: 'Veuillez noter que la commande doit être payée avant que le bon puisse être échangé.'
+    Voucher:
+        ValidFor: 'Valide pour'
+        YourPrice: 'Votre prix: <span class="font-weight-bold"> {discounted} </span> au lieu de <span class="text-line-through"> {original} </span> .'

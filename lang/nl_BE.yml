@@ -32,7 +32,7 @@ nl_BE:
         ERRORMESSAGE-NOT_REDEEMABLE: 'De voucher kan niet worden ingewisseld.'
         ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID: 'Deze voucher kan niet worden ingewisseld voor de goederen in uw winkelwagen.'
         ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID: 'De winkelwagenwaarde is niet geschikt.'
-        ERRORMESSAGE-VOUCHER_ALREADY_OWNED: 'Deze voucher werd reeds door  iemand anders ingewisseld.'
+        ERRORMESSAGE-VOUCHER_ALREADY_OWNED: 'Deze voucher werd reeds door iemand anders ingewisseld.'
         ISACTIVE: 'Is actief'
         LABEL-REDEEM: Inwisselen
         LABEL-SHOPPINGCART_REMOVE: Verwijderen
@@ -53,6 +53,7 @@ nl_BE:
         SINGULARNAME: Voucher
         VALUE: Waarde
         VALUE_IN_PERCENT: 'Korting in procent'
+        VocherInvalid: 'De vouchercode {code} is niet meer geldig en werd verwijderd.'
     SilverCart\Voucher\Admin\Controllers\VoucherAdmin:
         MENUTITLE: Vouchers
         TITLE: Vouchers
@@ -66,3 +67,6 @@ nl_BE:
         SINGULARVOUCHERVALUETITLE: 'De waarde van de voucher is'
         WARNING_PAYBEFOREREDEEMING_PLURAL: 'Houd er rekening mee dat de bestelling eerst moet worden betaald voordat de vouchers kunnen worden ingewisseld.'
         WARNING_PAYBEFOREREDEEMING_SINGULAR: 'Houd er rekening mee dat de bestelling eerst moet worden betaald voordat de voucher kan worden ingewisseld.'
+    Voucher:
+        ValidFor: 'Geldig voor'
+        YourPrice: 'Uw prijs: <span class="font-weight-bold"> {discounted} </span> in plaats van <span class="text-line-through"> {original} </span> .'

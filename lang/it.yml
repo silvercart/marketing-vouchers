@@ -2,7 +2,7 @@ it:
     SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucher:
         IS_BOUND_TO_CUSTOMER: 'È vincolato ai clienti'
         PLURALNAME: 'Buoni  sconto regalo'
-        SINGULARNAME: "Coupon regalo\n"
+        SINGULARNAME: 'Coupon regalo'
         VALUE: valore
     SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucherBlueprint:
         PLURALNAME: 'Modelli di buoni regalo'
@@ -10,7 +10,7 @@ it:
         VALUE: valore
     SilverCart\Voucher\Model\Voucher\AbsoluteRebateVoucher:
         PLURALNAME: 'Valore buoni sconto'
-        SINGULARNAME: "Valore coupon"
+        SINGULARNAME: 'Valore coupon'
         VALUE: valore
     SilverCart\Voucher\Model\Voucher\GiftVoucherProduct:
         PLURALNAME: 'Coupon articoli'
@@ -53,6 +53,7 @@ it:
         SINGULARNAME: Coupon
         VALUE: valore
         VALUE_IN_PERCENT: 'Percentuale di sconto'
+        VocherInvalid: 'Il codice del coupon {code} non è più valido ed è stato rimosso.'
     SilverCart\Voucher\Admin\Controllers\VoucherAdmin:
         MENUTITLE: 'Buoni sconto'
         TITLE: 'Buoni sconto'
@@ -66,3 +67,6 @@ it:
         SINGULARVOUCHERVALUETITLE: 'Valore coupon'
         WARNING_PAYBEFOREREDEEMING_PLURAL: 'Nota bene: prima di poter usufruire dei buoni sconto dovrà essere effettuato il pagamento dell''ordine.'
         WARNING_PAYBEFOREREDEEMING_SINGULAR: 'Nota bene: prima di poter usufruire del coupon dovrà essere effettuato il pagamento dell''ordine.'
+    Voucher:
+        ValidFor: 'Valido per'
+        YourPrice: 'Il tuo prezzo: <span class="font-weight-bold"> {discounted} </span> invece di <span class="text-line-through"> {original} </span> .'
