@@ -8,6 +8,7 @@ use SilverCart\Voucher\Model\Voucher;
 use SilverStripe\Core\Extension;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
+use SilverStripe\Security\Member;
 
 /**
  * Extension for SilverCart CartPageController.
@@ -36,8 +37,6 @@ class CartPageControllerExtension extends Extension
     /**
      * Returns the AddVoucherCodeForm.
      * 
-     * @param HTTPRequest $request Request
-     * 
      * @return AddVoucherCodeForm
      */
     public function AddVoucherCodeForm() : AddVoucherCodeForm
@@ -45,12 +44,21 @@ class CartPageControllerExtension extends Extension
         return AddVoucherCodeForm::create($this->owner);
     }
     
+    /**
+     * Action to remoe a voucher from cart.
+     * 
+     * @param HTTPRequest $request HTTP request
+     * 
+     * @return HTTPResponse
+     */
     public function removeVoucher(HTTPRequest $request) : HTTPResponse
     {
         $voucher = Voucher::get()->byID((int) $request->param('ID'));
         if ($voucher instanceof Voucher) {
             $member = Customer::currentUser();
-            $voucher->removeFromShoppingCart($member, 'manuallyRemoved');
+            if ($member instanceof Member) {
+                $voucher->removeFromShoppingCart($member, 'manuallyRemoved');
+            }
         }
         return HTTPResponse::create($this->owner->render(), 200);
     }
