@@ -53,6 +53,14 @@ en:
         RESTRICT_TO_MEMBER: 'Restrict to customer(s)'
         RESTRICT_TO_PRODUCT: 'Restrict to product(s)'
         RESTRICT_TO_PRODUCTGROUP: 'Restrict to productgroups(s)'
+        SILVERCART_VOUCHER_CREATE: 'Create Vouchers'
+        SILVERCART_VOUCHER_CREATE_HELP: 'Allows an user to create new vouchers.'
+        SILVERCART_VOUCHER_DELETE: 'Delete Vouchers'
+        SILVERCART_VOUCHER_DELETE_HELP: 'Allows an user to delete vouchers.'
+        SILVERCART_VOUCHER_EDIT: 'Edit Vouchers'
+        SILVERCART_VOUCHER_EDIT_HELP: 'Allows an user to edit vouchers.'
+        SILVERCART_VOUCHER_VIEW: 'View Vouchers'
+        SILVERCART_VOUCHER_VIEW_HELP: 'Allows an user to view vouchers.'
         SINGULARNAME: Voucher
         VALUE: Value
         VALUE_IN_PERCENT: 'Rebate value in percent'

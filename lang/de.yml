@@ -53,6 +53,14 @@ de:
         RESTRICT_TO_MEMBER: 'An Kunde(n) binden'
         RESTRICT_TO_PRODUCT: 'An Artikel binden'
         RESTRICT_TO_PRODUCTGROUP: 'An Warengruppe(n) binden'
+        SILVERCART_VOUCHER_CREATE: 'Gutscheine erstellen'
+        SILVERCART_VOUCHER_CREATE_HELP: 'Erlaubt einem Benutzer neue Gutscheine zu erstellen.'
+        SILVERCART_VOUCHER_DELETE: 'Gutscheine löschen'
+        SILVERCART_VOUCHER_DELETE_HELP: 'Erlaubt einem Benutzer Gutscheine zu löschen.'
+        SILVERCART_VOUCHER_EDIT: 'Gutscheine bearbeiten'
+        SILVERCART_VOUCHER_EDIT_HELP: 'Erlaubt einem Benutzer Gutscheine zu bearbeiten.'
+        SILVERCART_VOUCHER_VIEW: 'Gutscheine anschauen'
+        SILVERCART_VOUCHER_VIEW_HELP: 'Erlaubt einem Benutzer Gutscheine anzuschauen.'
         SINGULARNAME: Gutschein
         VALUE: Wert
         VALUE_IN_PERCENT: 'Rabatt in Prozent'

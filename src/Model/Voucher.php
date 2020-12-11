@@ -29,6 +29,8 @@ use SilverStripe\ORM\Filters\PartialMatchFilter;
 use SilverStripe\ORM\SS_List;
 use SilverStripe\Security\Group;
 use SilverStripe\Security\Member;
+use SilverStripe\Security\Permission;
+use SilverStripe\Security\PermissionProvider;
 use SilverStripe\View\ArrayData;
 
 /**
@@ -57,9 +59,14 @@ use SilverStripe\View\ArrayData;
  * @method \SilverStripe\ORM\ManyManyList VoucherHistory()          Returns a list of related voucher history objects.
  * @method \SilverStripe\ORM\ManyManyList Members()                 Returns a list of related members.
  */
-class Voucher extends DataObject
+class Voucher extends DataObject implements PermissionProvider
 {
     use \SilverCart\ORM\ExtensibleDataObject;
+    
+    const PERMISSION_CREATE = 'SILVERCART_VOUCHER_CREATE';
+    const PERMISSION_DELETE = 'SILVERCART_VOUCHER_DELETE';
+    const PERMISSION_EDIT   = 'SILVERCART_VOUCHER_EDIT';
+    const PERMISSION_VIEW   = 'SILVERCART_VOUCHER_VIEW';
     
     /**
      * Returns a voucher with the given $code.
@@ -212,6 +219,95 @@ class Voucher extends DataObject
     protected $isValidForShoppingCartItems = [];
 
     /**
+     * Set permissions.
+     *
+     * @return array
+     */
+    public function providePermissions() : array
+    {
+        $permissions = [
+            self::PERMISSION_VIEW   => [
+                'name'     => $this->fieldLabel(self::PERMISSION_VIEW),
+                'help'     => $this->fieldLabel(self::PERMISSION_VIEW . '_HELP'),
+                'category' => $this->i18n_singular_name(),
+                'sort'     => 10,
+            ],
+            self::PERMISSION_CREATE   => [
+                'name'     => $this->fieldLabel(self::PERMISSION_CREATE),
+                'help'     => $this->fieldLabel(self::PERMISSION_CREATE . '_HELP'),
+                'category' => $this->i18n_singular_name(),
+                'sort'     => 20,
+            ],
+            self::PERMISSION_EDIT   => [
+                'name'     => $this->fieldLabel(self::PERMISSION_EDIT),
+                'help'     => $this->fieldLabel(self::PERMISSION_EDIT . '_HELP'),
+                'category' => $this->i18n_singular_name(),
+                'sort'     => 20,
+            ],
+            self::PERMISSION_DELETE => [
+                'name'     => $this->fieldLabel(self::PERMISSION_DELETE),
+                'help'     => $this->fieldLabel(self::PERMISSION_DELETE . '_HELP'),
+                'category' => $this->i18n_singular_name(),
+                'sort'     => 30,
+            ],
+        ];
+        $this->extend('updateProvidePermissions', $permissions);
+        return $permissions;
+    }
+
+    /**
+     * Indicates wether the current user can view this object.
+     * 
+     * @param Member $member Member to check permission for
+     *
+     * @return bool
+     */
+    public function canView($member = null) : bool
+    {
+        return parent::canView($member)
+            || Permission::checkMember($member, self::PERMISSION_VIEW);
+    }
+    
+    /**
+     * Order should not be created via backend
+     * 
+     * @param Member $member Member to check permission for
+     *
+     * @return bool
+     */
+    public function canCreate($member = null, $context = []) : bool
+    {
+        return parent::canCreate($member, $context)
+            || Permission::checkMember($member, self::PERMISSION_CREATE);
+    }
+
+    /**
+     * Indicates wether the current user can edit this object.
+     * 
+     * @param Member $member Member to check permission for
+     *
+     * @return bool
+     */
+    public function canEdit($member = null) : bool
+    {
+        return parent::canEdit($member)
+            || Permission::checkMember($member, self::PERMISSION_EDIT);
+    }
+
+    /**
+     * Indicates wether the current user can delete this object.
+     * 
+     * @param Member $member Member to check permission for
+     *
+     * @return bool
+     */
+    public function canDelete($member = null) : bool
+    {
+        return parent::canDelete($member)
+            || Permission::checkMember($member, self::PERMISSION_DELETE);
+    }
+
+    /**
      * Field labels for display in tables.
      *
      * @param boolean $includerelations A boolean value to indicate if the labels returned include relation fields
@@ -247,6 +343,14 @@ class Voucher extends DataObject
             'ErrorValueNotValid'          => _t(self::class . '.ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID', 'The shoppingcart value is not valid.'),
             'ErrorItemsNotValid'          => _t(self::class . '.ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID', 'Your cart doesn\'t contain the appropriate products for this voucher.'),
             'Value'                       => _t(self::class . '.VALUE', 'Value'),
+            self::PERMISSION_CREATE           => _t(self::class . '.' . self::PERMISSION_CREATE, 'Create Vouchers'),
+            self::PERMISSION_CREATE . '_HELP' => _t(self::class . '.' . self::PERMISSION_CREATE . '_HELP', 'Allows an user to create new vouchers.'),
+            self::PERMISSION_VIEW             => _t(self::class . '.' . self::PERMISSION_VIEW, 'View Vouchers'),
+            self::PERMISSION_VIEW . '_HELP'   => _t(self::class . '.' . self::PERMISSION_VIEW . '_HELP', 'Allows an user to view vouchers.'),
+            self::PERMISSION_EDIT             => _t(self::class . '.' . self::PERMISSION_EDIT, 'Edit Vouchers'),
+            self::PERMISSION_EDIT . '_HELP'   => _t(self::class . '.' . self::PERMISSION_EDIT . '_HELP', 'Allows an user to edit vouchers.'),
+            self::PERMISSION_DELETE           => _t(self::class . '.' . self::PERMISSION_DELETE, 'Delete Vouchers'),
+            self::PERMISSION_DELETE . '_HELP' => _t(self::class . '.' . self::PERMISSION_DELETE . '_HELP', 'Allows an user to delete vouchers.'),
         ]);
     }
 
