@@ -9,6 +9,7 @@ use SilverCart\Model\Order\ShoppingCart;
 use SilverCart\ORM\FieldType\DBMoney;
 use SilverCart\Voucher\Model\ShoppingCartPosition;
 use SilverCart\Voucher\Model\Voucher;
+use SilverCart\Voucher\Security\VoucherValidator;
 use SilverCart\Voucher\View\VoucherPrice;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
@@ -139,6 +140,7 @@ class RelativeRebateVoucher extends Voucher
                     ->setAmount($rebateAmountNet)
                     ->setCurrency(Config::DefaultCurrency());
             $position = VoucherPrice::create();
+            $position->setVoucher($this);
             $position->ID                    = $this->ID;
             $position->Name                  = "{$this->singular_name()} (Code: {$this->code})";
             $position->ShortDescription      = $this->code;
@@ -204,6 +206,19 @@ class RelativeRebateVoucher extends Voucher
         $fields->removeByName('quantityRedeemed');
         $fields->addFieldToTab('Root.Main', LiteralField::create('quantityRedeemed', "<br />{$this->fieldLabel('RedeemedVouchers')}" . ($this->quantityRedeemed ? $this->quantityRedeemed : '0')));
         return $fields;
+    }
+    
+    /**
+     * Returns the custom VoucherValidator to use for CMS field validation.
+     * 
+     * @return VoucherValidator
+     */
+    public function getCMSValidator() : VoucherValidator
+    {
+        $this->beforeUpdateCMSValidator(function(VoucherValidator $validator) {
+            $validator->addRequiredField('valueInPercent');
+        });
+        return parent::getCMSValidator();
     }
 
     /**

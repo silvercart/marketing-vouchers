@@ -12,6 +12,7 @@ use SilverCart\Model\Product\Product;
 use SilverCart\Model\Product\Tax;
 use SilverCart\ORM\DataObjectExtension;
 use SilverCart\ORM\FieldType\DBMoney;
+use SilverCart\Voucher\Security\VoucherValidator;
 use SilverStripe\Control\Controller;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\GridField\GridField;
@@ -1156,6 +1157,30 @@ class Voucher extends DataObject implements PermissionProvider
             }
         });
         return DataObjectExtension::getCMSFields($this);
+    }
+    
+    /**
+     * Returns the custom VoucherValidator to use for CMS field validation.
+     * 
+     * @return VoucherValidator
+     */
+    public function getCMSValidator() : VoucherValidator
+    {
+        $validator = VoucherValidator::create();
+        $validator->setForVoucher($this);
+        $this->extend('updateCMSValidator', $validator);
+        return $validator;
+    }
+
+    /**
+     * Allows user code to hook into DataObject::getCMSValidator prior to 
+     * updateCMSValidator being called on extensions.
+     *
+     * @param callable $callback The callback to execute
+     */
+    protected function beforeUpdateCMSValidator(callable $callback) : void
+    {
+        $this->beforeExtending('updateCMSValidator', $callback);
     }
     
     /**

@@ -62,6 +62,8 @@ en:
         SILVERCART_VOUCHER_VIEW: 'View Vouchers'
         SILVERCART_VOUCHER_VIEW_HELP: 'Allows an user to view vouchers.'
         SINGULARNAME: Voucher
+        ValidationPartnerExists: 'A partner with the same {identifier} already exists.'
+        ValidationVoucherExists: 'A voucher already exists with the same {identifier}'
         VALUE: Value
         VALUE_IN_PERCENT: 'Rebate value in percent'
         VocherInvalid: 'The voucher {code} is no more valid and was removed from your shopping cart.'

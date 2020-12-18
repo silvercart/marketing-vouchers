@@ -62,6 +62,8 @@ de:
         SILVERCART_VOUCHER_VIEW: 'Gutscheine anschauen'
         SILVERCART_VOUCHER_VIEW_HELP: 'Erlaubt einem Benutzer Gutscheine anzuschauen.'
         SINGULARNAME: Gutschein
+        ValidationPartnerExists: 'Ein Partner mit dem gleichen {identifier} existiert bereits.'
+        ValidationVoucherExists: 'Ein Gutschein mit dem gleichen {identifier} existiert bereits.'
         VALUE: Wert
         VALUE_IN_PERCENT: 'Rabatt in Prozent'
         VocherInvalid: 'Der Gutschein-Code {code} ist nicht mehr gültig und wurde entfernt.'

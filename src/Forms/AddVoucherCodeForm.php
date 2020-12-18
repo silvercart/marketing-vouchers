@@ -98,10 +98,11 @@ class AddVoucherCodeForm extends CustomForm
             } else {
                 $voucher->redeem($member, 'manuallyRedeemed');
                 $this->getController()->redirect($this->getController()->Link());
+                $this->extend('onAfterSubmitSuccess', $voucher);
             }
         } else {
             $isValidVoucherCode = false;
-            $this->owner->extend('updateDoSubmitOnFail', $voucherCode, $isValidVoucherCode);
+            $this->extend('updateDoSubmitOnFail', $voucherCode, $isValidVoucherCode);
             if (!$isValidVoucherCode) {
                 $this->setErrorMessage(Voucher::singleton()->fieldLabel('ErrorCodeNotValid'));
             }

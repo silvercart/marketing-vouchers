@@ -4,6 +4,7 @@ namespace SilverCart\Voucher\View;
 
 use SilverCart\Admin\Model\Config;
 use SilverCart\ORM\FieldType\DBMoney;
+use SilverCart\Voucher\Model\Voucher;
 use SilverStripe\View\ViewableData;
 
 /**
@@ -109,6 +110,12 @@ class VoucherPrice extends ViewableData
      * @var \SilverCart\Model\Product\Tax
      */
     public $Tax = null;
+    /**
+     * Voucher
+     * 
+     * @var \SilverCart\Voucher\Model\Voucher
+     */
+    public $Voucher = null;
 
     /**
      * Sets the price gross amount and re-calculates the price net amount.
@@ -200,5 +207,28 @@ class VoucherPrice extends ViewableData
     public function getTypeSafeQuantity() : int
     {
        return (int) $this->Quantity;
+    }
+    
+    /**
+     * Sets the voucher.
+     * 
+     * @param Voucher $voucher Voucher
+     * 
+     * @return \SilverCart\Voucher\View\VoucherPrice
+     */
+    public function setVoucher(Voucher $voucher) : VoucherPrice
+    {
+        $this->Voucher = $voucher;
+        return $this;
+    }
+    
+    /**
+     * Returns the voucher.
+     * 
+     * @return Voucher|null
+     */
+    public function getVoucher() : ?Voucher
+    {
+        return $this->Voucher;
     }
 }
