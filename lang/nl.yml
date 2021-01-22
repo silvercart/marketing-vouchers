@@ -1,0 +1,72 @@
+nl:
+    SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucher:
+        IS_BOUND_TO_CUSTOMER: 'Is gebonden aan klanten'
+        PLURALNAME: Cadeaubonnen
+        SINGULARNAME: Cadeaubon
+        VALUE: Waarde
+    SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucherBlueprint:
+        PLURALNAME: Cadeaubon
+        SINGULARNAME: Cadeaubon
+        VALUE: Waarde
+    SilverCart\Voucher\Model\Voucher\AbsoluteRebateVoucher:
+        PLURALNAME: Vouchers
+        SINGULARNAME: Waardebon
+        VALUE: Waarde
+    SilverCart\Voucher\Model\Voucher\GiftVoucherProduct:
+        PLURALNAME: 'Coupon artikel'
+        SINGULARNAME: 'Coupon artikel'
+    SilverCart\Voucher\Model\Voucher\NaturalRebateVoucher:
+        PLURALNAME: Vouchers
+        SINGULARNAME: Waardebon
+    SilverCart\Voucher\Model\Voucher\RelativeRebateVoucher:
+        PLURALNAME: Kortingsbonnen
+        SINGULARNAME: Kortingsbon
+    SilverCart\Voucher\Model\Voucher:
+        CODE: Couponcode
+        CREATED: 'Opgesteld op'
+        ERRORMESSAGE-ALREADY_IN_SHOPPINGCART: 'Deze bon zit al in uw winkelwagen.'
+        ERRORMESSAGE-CODE_NOT_VALID: 'Deze couponcode is niet geldig.'
+        ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY: 'Deze voucher is volledig ingewisseld.'
+        ERRORMESSAGE-CUSTOMER_MUST_BE_REGISTERED: 'U moet zich registreren om deze voucher in te wisselen, omdat deze voucher bij inwisseling aan de klant gebonden is. <br /> Hierdoor kunt u deze bon voor meerdere aankopen gebruiken als uw aankoopwaarde lager is dan de waarde van de bon. <br /><a href="%s">Klik hier om naar het registratieformulier te gaan.</a>'
+        ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE: 'U kunt deze tegoedbon niet inwisselen.'
+        ERRORMESSAGE-NOT_REDEEMABLE: 'De voucher kan niet worden ingewisseld.'
+        ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID: 'Deze voucher kan niet worden ingewisseld voor de artikelen in uw winkelwagen.'
+        ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID: 'De waarde van het winkelwagentje is niet geschikt.'
+        ERRORMESSAGE-VOUCHER_ALREADY_OWNED: 'Deze bon is al door een ander persoon ingewisseld.'
+        ISACTIVE: 'Is actief'
+        LABEL-REDEEM: Inwisselen
+        LABEL-SHOPPINGCART_REMOVE: Verwijderen
+        MAXIMUM_SHOPPINGCART_VALUE: 'Maximale waarde van de winkelwagen'
+        MINIMUM_SHOPPINGCART_VALUE: 'Minimumwaarde van de winkelwagen'
+        ORIGINAL_VALUE: 'Originele waarde'
+        PLURALNAME: Vouchers
+        PRODUCTNUMBER: Artikelnummer
+        QUANTITY: Hoeveelheid
+        QUANTITY_REDEEMED: 'Aantal ingewisseld'
+        REDEEMED_VOUCHERS: 'Ingewisselde bonnen: '
+        REDEEM_VOUCHER: 'Wissel de coupon in: '
+        REMAINING_CREDIT: 'Resterend krediet'
+        RESTRICT_TO_GROUP: Klantgebonden
+        RESTRICT_TO_MEMBER: Klantgebonden.
+        RESTRICT_TO_PRODUCT: 'Artikel gebonden.'
+        RESTRICT_TO_PRODUCTGROUP: 'Productgroep gebonden'
+        SINGULARNAME: Voucher
+        VALUE: Waarde
+        VALUE_IN_PERCENT: 'Korting in procenten'
+        VocherInvalid: 'De vouchercode {code} is niet meer geldig en is verwijderd.'
+    SilverCart\Voucher\Admin\Controllers\VoucherAdmin:
+        MENUTITLE: Vouchers
+        TITLE: Vouchers
+    SilverCart\Voucher\Model\VoucherHistory:
+        PLURALNAME: Voucherhistorie
+        SINGULARNAME: 'Voucher geschiedenis'
+    SilverCart\Voucher\Extensions\Model\Pages\OrderDetailPageExtension:
+        PLURALVOUCHERTITLE: 'De vouchercodes zijn:'
+        PLURALVOUCHERVALUETITLE: 'De waarde van elke voucher is'
+        SINGULARVOUCHERTITLE: 'De vouchercode is'
+        SINGULARVOUCHERVALUETITLE: 'De waarde van elke voucher is'
+        WARNING_PAYBEFOREREDEEMING_PLURAL: 'Houd er rekening mee dat de bestelling eerst moet worden betaald voordat de vouchers kunnen worden ingewisseld.'
+        WARNING_PAYBEFOREREDEEMING_SINGULAR: 'Houd er rekening mee dat de bestelling eerst moet worden betaald voordat de voucher kan worden ingewisseld.'
+    Voucher:
+        ValidFor: 'Geldig voor'
+        YourPrice: 'Uw prijs: <span class="font-weight-bold">{korting}</span> in plaats van <span class="text-line-through">{oorspronkelijk}</span>.'
