@@ -13,8 +13,8 @@ nl:
         SINGULARNAME: Waardebon
         VALUE: Waarde
     SilverCart\Voucher\Model\Voucher\GiftVoucherProduct:
-        PLURALNAME: 'Coupon artikel'
-        SINGULARNAME: 'Coupon artikel'
+        PLURALNAME: 'Waardebon producten'
+        SINGULARNAME: 'Waardebon product'
     SilverCart\Voucher\Model\Voucher\NaturalRebateVoucher:
         PLURALNAME: Vouchers
         SINGULARNAME: Waardebon
@@ -31,7 +31,7 @@ nl:
         ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE: 'U kunt deze tegoedbon niet inwisselen.'
         ERRORMESSAGE-NOT_REDEEMABLE: 'De voucher kan niet worden ingewisseld.'
         ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID: 'Deze voucher kan niet worden ingewisseld voor de artikelen in uw winkelwagen.'
-        ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID: 'De waarde van het winkelwagentje is niet geschikt.'
+        ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID: 'De waarde van het winkelwagentje is niet geldig.'
         ERRORMESSAGE-VOUCHER_ALREADY_OWNED: 'Deze bon is al door een ander persoon ingewisseld.'
         ISACTIVE: 'Is actief'
         LABEL-REDEEM: Inwisselen
@@ -58,15 +58,15 @@ nl:
         MENUTITLE: Vouchers
         TITLE: Vouchers
     SilverCart\Voucher\Model\VoucherHistory:
-        PLURALNAME: Voucherhistorie
+        PLURALNAME: 'Voucher geschiedenis'
         SINGULARNAME: 'Voucher geschiedenis'
     SilverCart\Voucher\Extensions\Model\Pages\OrderDetailPageExtension:
         PLURALVOUCHERTITLE: 'De vouchercodes zijn:'
         PLURALVOUCHERVALUETITLE: 'De waarde van elke voucher is'
         SINGULARVOUCHERTITLE: 'De vouchercode is'
-        SINGULARVOUCHERVALUETITLE: 'De waarde van elke voucher is'
+        SINGULARVOUCHERVALUETITLE: 'De waarde van voucher is'
         WARNING_PAYBEFOREREDEEMING_PLURAL: 'Houd er rekening mee dat de bestelling eerst moet worden betaald voordat de vouchers kunnen worden ingewisseld.'
-        WARNING_PAYBEFOREREDEEMING_SINGULAR: 'Houd er rekening mee dat de bestelling eerst moet worden betaald voordat de voucher kan worden ingewisseld.'
+        WARNING_PAYBEFOREREDEEMING_SINGULAR: 'Houdt er rekening mee dat de bestelling eerst moet worden betaald voordat de voucher kan worden ingewisseld.'
     Voucher:
         ValidFor: 'Geldig voor'
-        YourPrice: 'Uw prijs: <span class="font-weight-bold">{korting}</span> in plaats van <span class="text-line-through">{oorspronkelijk}</span>.'
+        YourPrice: 'Uw prijs: <span class="font-weight-bold">{discounted}</span> in plaats van <span class="text-line-through">{original}</span>.'
