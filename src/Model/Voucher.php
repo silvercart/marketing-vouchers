@@ -1136,6 +1136,16 @@ class Voucher extends DataObject implements PermissionProvider
     }
 
     /**
+     * Returns the amount to consider in the shopping cart total calculation.
+     *
+     * @return DBMoney
+     */
+    public function getShoppingCartTotal() : DBMoney
+    {
+        return DBMoney::create();
+    }
+
+    /**
      * Define the backend administration masks.
      *
      * @return FieldList
