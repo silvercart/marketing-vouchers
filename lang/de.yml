@@ -7,6 +7,9 @@ de:
         PLURALNAME: Geschenkgutscheine
         SINGULARNAME: Geschenkgutschein
         VALUE: Wert
+    SilverCart\Voucher\Model\ShoppingCartPosition:
+        PLURALNAME: Gutschein-Positionen
+        SINGULARNAME: Gutschein-Position
     SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucherBlueprint:
         PLURALNAME: 'Geschenkgutschein Vorlagen'
         SINGULARNAME: 'Geschenkgutschein Vorlage'

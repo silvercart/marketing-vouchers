@@ -7,6 +7,9 @@ en:
         PLURALNAME: 'Gift vouchers'
         SINGULARNAME: 'Gift voucher'
         VALUE: Amount
+    SilverCart\Voucher\Model\ShoppingCartPosition:
+        PLURALNAME: 'Voucher Positions'
+        SINGULARNAME: 'Voucher Position'
     SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucherBlueprint:
         PLURALNAME: 'Gift voucher blueprints'
         SINGULARNAME: 'Gift voucher blueprint'
