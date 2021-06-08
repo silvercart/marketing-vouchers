@@ -6,8 +6,9 @@
     {$Field}
 <% end_loop %>
     {$BeforeFormContent}
+    <label for="{$Fields.dataFieldByName('VoucherCode').HTMLID}">{$Fields.dataFieldByName('VoucherCode').Title}</label>
     <div class="input-group">
-        <div class="input-group-prepend">
+        <div class="input-group-prepend d-none d-xxl-flex">
             <span class="input-group-text"><span class="fa fa-qrcode"></span></span>
         </div>
         {$Fields.dataFieldByName('VoucherCode').addErrorClass('is-invalid').Field}
