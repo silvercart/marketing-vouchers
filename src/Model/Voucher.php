@@ -84,21 +84,35 @@ class Voucher extends DataObject implements PermissionProvider
     /**
      * Generates a single voucher code.
      * 
+     * @param string $prefix        Code prefix
+     * @param int    $partCount     Code part count
+     * @param int    $partLength    Code part length
+     * @param string $partDelimiter Code part delimiter
+     * 
      * @return string
      */
-    public static function generateCode() : string
+    public static function generateCode(string $prefix = '', int $partCount = 0, int $partLength = 0, string $partDelimiter = null) : string
     {
+        if ($partCount === 0) {
+            $partCount = self::config()->generator_code_part_count;
+        }
+        if ($partLength === 0) {
+            $partLength = self::config()->generator_code_part_length;
+        }
+        if ($partDelimiter === null) {
+            $partDelimiter = self::config()->generator_code_part_delimiter;
+        }
         $parts = [];
-        for ($i = 0; $i < self::config()->generator_code_part_count; $i++) {
+        for ($i = 0; $i < $partCount; $i++) {
             $part = '';
-            for ($j = 0; $j < self::config()->generator_code_part_length; $j++) {
+            for ($j = 0; $j < $partLength; $j++) {
                 $part .= strtoupper(dechex(rand(0,15)));
             }
             $parts[] = $part;
         }
-        $code = implode(self::config()->generator_code_part_delimiter, $parts);
+        $code = $prefix . implode($partDelimiter, $parts);
         if (self::getByCode($code) instanceof Voucher) {
-            $code = self::generateCode();
+            $code = self::generateCode($prefix, $partCount, $partLength, $partDelimiter);
         }
         return $code;
     }
@@ -391,6 +405,7 @@ class Voucher extends DataObject implements PermissionProvider
             'title'  => $this->fieldLabel('isActive'),
             'filter' => ExactMatchFilter::class,
         ];
+        $this->extend('updateSearchableFields', $fields);
         return $fields;
     }
     
