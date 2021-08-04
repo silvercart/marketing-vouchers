@@ -1,0 +1,72 @@
+da_DK:
+    SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucher:
+        IS_BOUND_TO_CUSTOMER: 'Er bundet til kunder'
+        PLURALNAME: Gavekort
+        SINGULARNAME: Gavekort
+        VALUE: Beløb
+    SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucherBlueprint:
+        PLURALNAME: 'Skabeloner til gavekort'
+        SINGULARNAME: 'Skabelon til gavekort'
+        VALUE: Beløb
+    SilverCart\Voucher\Model\Voucher\AbsoluteRebateVoucher:
+        PLURALNAME: 'Absolutte rabatkuponer'
+        SINGULARNAME: Voucher
+        VALUE: Beløb
+    SilverCart\Voucher\Model\Voucher\GiftVoucherProduct:
+        PLURALNAME: Kuponartikel
+        SINGULARNAME: Kuponartikel
+    SilverCart\Voucher\Model\Voucher\NaturalRebateVoucher:
+        PLURALNAME: 'Vouchere for varer'
+        SINGULARNAME: 'Vouchere for varer'
+    SilverCart\Voucher\Model\Voucher\RelativeRebateVoucher:
+        PLURALNAME: Rabatkuponer
+        SINGULARNAME: Rabatkupon
+    SilverCart\Voucher\Model\Voucher:
+        CODE: Værdibeviskode
+        CREATED: 'Oprettet den'
+        ERRORMESSAGE-ALREADY_IN_SHOPPINGCART: 'Dette værdibevis er allerede i din indkøbskurv.'
+        ERRORMESSAGE-CODE_NOT_VALID: 'Denne kuponkode er ikke gyldig.'
+        ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY: 'Denne kupon er blevet indløst fuldt ud.'
+        ERRORMESSAGE-CUSTOMER_MUST_BE_REGISTERED: 'For at indløse dette værdibevis skal du være registreret, da dette værdibevis bliver bundet til kunden ved indløsning.<br />Du kan således bruge værdibeviset til flere køb, hvis værdien af din indkøbskurv er lavere end værdibeviset.<br /><a href="%s">Klik her for at registrere dig.</a>'
+        ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE: 'Du kan ikke indløse denne kupon.'
+        ERRORMESSAGE-NOT_REDEEMABLE: 'Kuponen kan ikke indløses.'
+        ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID: 'Dette værdibevis kan ikke indløses for de varer, der er i din indkøbskurv.'
+        ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID: 'Værdien i indkøbskurven er ikke passende.'
+        ERRORMESSAGE-VOUCHER_ALREADY_OWNED: 'Dette værdibevis er allerede blevet indløst af en anden person.'
+        ISACTIVE: 'Er aktiv'
+        LABEL-REDEEM: Indløs
+        LABEL-SHOPPINGCART_REMOVE: Fjern
+        MAXIMUM_SHOPPINGCART_VALUE: 'Maksimal værdi af indkøbskurven'
+        MINIMUM_SHOPPINGCART_VALUE: 'Mindste værdi i indkøbskurven'
+        ORIGINAL_VALUE: 'Oprindelig værdi'
+        PLURALNAME: Værdibeviser
+        PRODUCTNUMBER: Varenummer
+        QUANTITY: Antal
+        QUANTITY_REDEEMED: 'Mængde indløst'
+        REDEEMED_VOUCHERS: 'Indløste værdibeviser'
+        REDEEM_VOUCHER: 'Indløs værdibevis: '
+        REMAINING_CREDIT: 'Resterende saldo'
+        RESTRICT_TO_GROUP: 'Bind til kundeklasse(r)'
+        RESTRICT_TO_MEMBER: 'Bind til kunden/kunderne'
+        RESTRICT_TO_PRODUCT: 'Bind til produkt(er)'
+        RESTRICT_TO_PRODUCTGROUP: 'Bind til materialegruppe(r)'
+        SINGULARNAME: Værdibevis
+        VALUE: Værdi
+        VALUE_IN_PERCENT: 'Rabat i procent'
+        VocherInvalid: 'Værdibeviset {code} er ikke længere gyldig og er blevet fjernet fra indkøbskurven.'
+    SilverCart\Voucher\Admin\Controllers\VoucherAdmin:
+        MENUTITLE: Værdibeviser
+        TITLE: Værdibeviser
+    SilverCart\Voucher\Model\VoucherHistory:
+        PLURALNAME: 'Historier om kuponer'
+        SINGULARNAME: Kuponhistorik
+    SilverCart\Voucher\Extensions\Model\Pages\OrderDetailPageExtension:
+        PLURALVOUCHERTITLE: 'Kuponkoderne er:'
+        PLURALVOUCHERVALUETITLE: 'Værdien af hver kupon er'
+        SINGULARVOUCHERTITLE: 'Kuponkoden er'
+        SINGULARVOUCHERVALUETITLE: 'Værdien af kuponen er'
+        WARNING_PAYBEFOREREDEEMING_PLURAL: 'Bemærk venligst, at ordren skal være betalt, før kuponerne kan indløses.'
+        WARNING_PAYBEFOREREDEEMING_SINGULAR: 'Bemærk venligst, at ordren skal være betalt, før kuponen kan indløses.'
+    Voucher:
+        ValidFor: 'Gyldig for'
+        YourPrice: 'Din pris: <span class="font-weight-bold">{nedsat}</span> i stedet for <span class="text-line-through">{original}.</span>'
