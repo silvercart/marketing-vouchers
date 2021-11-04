@@ -9,6 +9,9 @@ nl:
     SINGULARVOUCHERVALUETITLE: 'De waarde van voucher is'
     WARNING_PAYBEFOREREDEEMING_PLURAL: 'Houd er rekening mee dat de bestelling eerst moet worden betaald voordat de vouchers kunnen worden ingewisseld.'
     WARNING_PAYBEFOREREDEEMING_SINGULAR: 'Houdt er rekening mee dat de bestelling eerst moet worden betaald voordat de voucher kan worden ingewisseld.'
+  SilverCart\Voucher\Model\ShoppingCartPosition:
+    PLURALNAME: Voucherposities
+    SINGULARNAME: Voucherpositie
   SilverCart\Voucher\Model\Voucher:
     CODE: Couponcode
     CREATED: 'Opgesteld op'
@@ -38,9 +41,19 @@ nl:
     RESTRICT_TO_MEMBER: Klantgebonden.
     RESTRICT_TO_PRODUCT: 'Artikel gebonden.'
     RESTRICT_TO_PRODUCTGROUP: 'Productgroep gebonden'
+    SILVERCART_VOUCHER_CREATE: 'Vouchers aanmaken'
+    SILVERCART_VOUCHER_CREATE_HELP: 'Hiermee kan een gebruiker nieuwe vouchers aanmaken.'
+    SILVERCART_VOUCHER_DELETE: 'Vouchers verwijderen'
+    SILVERCART_VOUCHER_DELETE_HELP: 'Hiermee kan een gebruiker vouchers verwijderen.'
+    SILVERCART_VOUCHER_EDIT: 'Vouchers bewerken'
+    SILVERCART_VOUCHER_EDIT_HELP: 'Hiermee kan een gebruiker vouchers bewerken.'
+    SILVERCART_VOUCHER_VIEW: 'Vouchers bekijken'
+    SILVERCART_VOUCHER_VIEW_HELP: 'Hiermee kan een gebruiker vouchers bekijken.'
     SINGULARNAME: Voucher
     VALUE: Waarde
     VALUE_IN_PERCENT: 'Korting in procenten'
+    ValidationPartnerExists: 'Een partner met dezelfde {identifier} bestaat al.'
+    ValidationVoucherExists: 'Er bestaat al een voucher met dezelfde {identifier}'
     VocherInvalid: 'De vouchercode {code} is niet meer geldig en is verwijderd.'
   SilverCart\Voucher\Model\VoucherHistory:
     PLURALNAME: 'Voucher geschiedenis'

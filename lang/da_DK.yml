@@ -9,6 +9,9 @@ da_DK:
     SINGULARVOUCHERVALUETITLE: 'Værdien af kuponen er'
     WARNING_PAYBEFOREREDEEMING_PLURAL: 'Bemærk venligst, at ordren skal være betalt, før kuponerne kan indløses.'
     WARNING_PAYBEFOREREDEEMING_SINGULAR: 'Bemærk venligst, at ordren skal være betalt, før kuponen kan indløses.'
+  SilverCart\Voucher\Model\ShoppingCartPosition:
+    PLURALNAME: 'Stillinger med kupon'
+    SINGULARNAME: 'Position for kupon'
   SilverCart\Voucher\Model\Voucher:
     CODE: Værdibeviskode
     CREATED: 'Oprettet den'
@@ -38,9 +41,19 @@ da_DK:
     RESTRICT_TO_MEMBER: 'Bind til kunden/kunderne'
     RESTRICT_TO_PRODUCT: 'Bind til produkt(er)'
     RESTRICT_TO_PRODUCTGROUP: 'Bind til materialegruppe(r)'
+    SILVERCART_VOUCHER_CREATE: 'Opret kuponer'
+    SILVERCART_VOUCHER_CREATE_HELP: 'Giver en bruger mulighed for at oprette nye vouchere.'
+    SILVERCART_VOUCHER_DELETE: 'Slet kuponer'
+    SILVERCART_VOUCHER_DELETE_HELP: 'Giver en bruger mulighed for at slette bilag.'
+    SILVERCART_VOUCHER_EDIT: 'Rediger vouchere'
+    SILVERCART_VOUCHER_EDIT_HELP: 'Giver en bruger mulighed for at redigere vouchere.'
+    SILVERCART_VOUCHER_VIEW: 'Se værdikuponer'
+    SILVERCART_VOUCHER_VIEW_HELP: 'Giver en bruger mulighed for at se værdikuponer.'
     SINGULARNAME: Værdibevis
     VALUE: Værdi
     VALUE_IN_PERCENT: 'Rabat i procent'
+    ValidationPartnerExists: 'Der findes allerede en partner med samme {identifikator}.'
+    ValidationVoucherExists: 'Der findes allerede en kupon med samme {identifikator}'
     VocherInvalid: 'Værdibeviset {code} er ikke længere gyldig og er blevet fjernet fra indkøbskurven.'
   SilverCart\Voucher\Model\VoucherHistory:
     PLURALNAME: 'Historier om kuponer'
