@@ -1,0 +1,85 @@
+ro:
+  SilverCart\Voucher\Admin\Controllers\VoucherAdmin:
+    MENUTITLE: Vouchere
+    TITLE: Vouchere
+  SilverCart\Voucher\Extensions\Model\Pages\OrderDetailPageExtension:
+    PLURALVOUCHERTITLE: 'Codurile de voucher sunt:'
+    PLURALVOUCHERVALUETITLE: 'Valoarea fiecărui voucher este de'
+    SINGULARVOUCHERTITLE: 'Codul voucherului este'
+    SINGULARVOUCHERVALUETITLE: 'Valoarea voucherului este de'
+    WARNING_PAYBEFOREREDEEMING_PLURAL: 'Vă rugăm să rețineți că, înainte de a putea folosi voucherele, comanda trebuie să fie plătită.'
+    WARNING_PAYBEFOREREDEEMING_SINGULAR: 'Vă rugăm să rețineți că comanda trebuie să fie plătită înainte ca voucherul să poată fi utilizat.'
+  SilverCart\Voucher\Model\ShoppingCartPosition:
+    PLURALNAME: 'Poziții cu bonuri valorice'
+    SINGULARNAME: 'Poziția bonului valoric'
+  SilverCart\Voucher\Model\Voucher:
+    CODE: 'Cod cupon'
+    CREATED: 'Creat pe'
+    ERRORMESSAGE-ALREADY_IN_SHOPPINGCART: 'Acest voucher se află deja în coșul de cumpărături.'
+    ERRORMESSAGE-CODE_NOT_VALID: 'Acest cod voucher nu este valabil.'
+    ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY: 'Acest voucher a fost utilizat în întregime.'
+    ERRORMESSAGE-CUSTOMER_MUST_BE_REGISTERED: 'Trebuie să vă înregistrați pentru a răscumpăra acest voucher, deoarece acesta va fi legat de client atunci când va fi răscumpărat. <br /> Acest lucru vă permite să utilizați acest voucher pentru mai multe cumpărături dacă valoarea achiziției este mai mică decât valoarea voucherului. <br /><a href="%s">Faceți clic aici pentru a accesa formularul de înregistrare</a>.'
+    ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE: 'Nu puteți răscumpăra acest voucher.'
+    ERRORMESSAGE-NOT_REDEEMABLE: 'Voucherul nu poate fi răscumpărat.'
+    ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID: 'Acest voucher nu poate fi utilizat pentru produsele care se află în coșul de cumpărături.'
+    ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID: 'Valoarea coșului nu este adecvată.'
+    ERRORMESSAGE-VOUCHER_ALREADY_OWNED: 'Acest voucher a fost deja utilizat de o altă persoană.'
+    ISACTIVE: 'Este activ'
+    LABEL-REDEEM: Răscumpărați
+    LABEL-SHOPPINGCART_REMOVE: Eliminați
+    MAXIMUM_SHOPPINGCART_VALUE: 'Valoarea maximă a coșului de cumpărături'
+    MINIMUM_SHOPPINGCART_VALUE: 'Valoarea minimă a coșului de cumpărături'
+    ORIGINAL_VALUE: 'Valoarea inițială'
+    PLURALNAME: Vouchere
+    PRODUCTNUMBER: 'Numărul articolului'
+    QUANTITY: Număr
+    QUANTITY_REDEEMED: 'Număr de răscumpărări'
+    REDEEMED_VOUCHERS: 'Vouchere răscumpărate: '
+    REDEEM_VOUCHER: 'Răscumpărați voucherul: '
+    REMAINING_CREDIT: 'Sold rămas'
+    RESTRICT_TO_GROUP: 'Legătura cu clasa (clasele) clientului'
+    RESTRICT_TO_MEMBER: 'Legătura cu clientul (clienții)'
+    RESTRICT_TO_PRODUCT: 'Legătura cu articolul'
+    RESTRICT_TO_PRODUCTGROUP: 'Legătura cu grupul (grupurile) de produse'
+    SILVERCART_VOUCHER_CREATE: 'Creați cupoane'
+    SILVERCART_VOUCHER_CREATE_HELP: 'Permite unui utilizator să creeze bonuri noi.'
+    SILVERCART_VOUCHER_DELETE: 'Ștergerea cupoanelor'
+    SILVERCART_VOUCHER_DELETE_HELP: 'Permite unui utilizator să șteargă cupoane.'
+    SILVERCART_VOUCHER_EDIT: 'Editarea cupoanelor'
+    SILVERCART_VOUCHER_EDIT_HELP: 'Permite unui utilizator să editeze cupoane.'
+    SILVERCART_VOUCHER_VIEW: 'Vezi vouchere'
+    SILVERCART_VOUCHER_VIEW_HELP: 'Permite unui utilizator să vizualizeze bonurile.'
+    SINGULARNAME: Voucher
+    VALUE: Valoare
+    VALUE_IN_PERCENT: 'Reducere în procente'
+    ValidationPartnerExists: 'Există deja un partener cu același {identificator}.'
+    ValidationVoucherExists: 'Există deja un bon cu același {identificator}.'
+    VocherInvalid: 'Codul voucher {code} nu mai este valabil și a fost eliminat.'
+  SilverCart\Voucher\Model\VoucherHistory:
+    PLURALNAME: 'Istoricul bonurilor'
+    SINGULARNAME: 'Istoricul voucherelor'
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucher:
+    IS_BOUND_TO_CUSTOMER: 'Este legat de clienți'
+    PLURALNAME: 'Vouchere cadou'
+    SINGULARNAME: 'Voucher cadou'
+    VALUE: Valoare
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucherBlueprint:
+    PLURALNAME: 'Șabloane de certificat de cadou'
+    SINGULARNAME: 'Certificat de cadou șablon'
+    VALUE: Valoare
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateVoucher:
+    PLURALNAME: Vouchere
+    SINGULARNAME: Voucher
+    VALUE: Valoare
+  SilverCart\Voucher\Model\Voucher\GiftVoucherProduct:
+    PLURALNAME: 'Articol de cupon'
+    SINGULARNAME: 'Articol de cupon'
+  SilverCart\Voucher\Model\Voucher\NaturalRebateVoucher:
+    PLURALNAME: 'Bonuri de marfă'
+    SINGULARNAME: 'Bon de marfă'
+  SilverCart\Voucher\Model\Voucher\RelativeRebateVoucher:
+    PLURALNAME: 'Cupoane de reducere'
+    SINGULARNAME: 'Voucher de reducere'
+  Voucher:
+    ValidFor: 'Valabil pentru'
+    YourPrice: 'Prețul dvs.: <span class="font-weight-bold">{reducere}</span> în loc de <span class="text-line-through">{original}</span>.'

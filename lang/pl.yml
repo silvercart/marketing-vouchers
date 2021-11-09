@@ -1,0 +1,85 @@
+pl:
+  SilverCart\Voucher\Admin\Controllers\VoucherAdmin:
+    MENUTITLE: Vouchery
+    TITLE: Vouchery
+  SilverCart\Voucher\Extensions\Model\Pages\OrderDetailPageExtension:
+    PLURALVOUCHERTITLE: 'Kody voucherów to:'
+    PLURALVOUCHERVALUETITLE: 'Wartość każdego bonu wynosi'
+    SINGULARVOUCHERTITLE: 'Kod kuponu to'
+    SINGULARVOUCHERVALUETITLE: 'Wartość vouchera wynosi'
+    WARNING_PAYBEFOREREDEEMING_PLURAL: 'Należy pamiętać, że zamówienie musi zostać opłacone, aby bony mogły zostać zrealizowane.'
+    WARNING_PAYBEFOREREDEEMING_SINGULAR: 'Należy pamiętać, że zamówienie musi zostać opłacone przed realizacją bonu.'
+  SilverCart\Voucher\Model\ShoppingCartPosition:
+    PLURALNAME: 'Pozycje dotyczące bonów'
+    SINGULARNAME: 'Pozycja vouchera'
+  SilverCart\Voucher\Model\Voucher:
+    CODE: 'Kod kuponu'
+    CREATED: 'Utworzony w dniu'
+    ERRORMESSAGE-ALREADY_IN_SHOPPINGCART: 'Ten kupon znajduje się już w Twoim koszyku.'
+    ERRORMESSAGE-CODE_NOT_VALID: 'Ten kod kuponu nie jest ważny.'
+    ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY: 'Ten kupon został zrealizowany w całości.'
+    ERRORMESSAGE-CUSTOMER_MUST_BE_REGISTERED: 'Musisz się zarejestrować, aby zrealizować ten kupon, ponieważ będzie on przypisany do klienta w momencie realizacji. <br /> Dzięki temu możesz wykorzystać ten bon na wielokrotne zakupy, jeśli wartość zakupów jest mniejsza niż wartość bonu. <br /><a href="%s">Kliknij tutaj, aby przejść do formularza rejestracyjnego</a>.'
+    ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE: 'Nie możesz zrealizować tego kuponu.'
+    ERRORMESSAGE-NOT_REDEEMABLE: 'Voucher nie może zostać zrealizowany.'
+    ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID: 'Ten kupon nie może być zrealizowany na towary znajdujące się w koszyku.'
+    ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID: 'Wartość koszyka nie jest odpowiednia.'
+    ERRORMESSAGE-VOUCHER_ALREADY_OWNED: 'Ten kupon został już zrealizowany przez inną osobę.'
+    ISACTIVE: 'Jest aktywny'
+    LABEL-REDEEM: 'Skorzystaj z'
+    LABEL-SHOPPINGCART_REMOVE: Usuń
+    MAXIMUM_SHOPPINGCART_VALUE: 'Maksymalna wartość koszyka'
+    MINIMUM_SHOPPINGCART_VALUE: 'Minimalna wartość koszyka'
+    ORIGINAL_VALUE: 'Wartość początkowa'
+    PLURALNAME: Vouchery
+    PRODUCTNUMBER: 'Numer artykułu'
+    QUANTITY: Numer
+    QUANTITY_REDEEMED: 'Liczba umorzonych'
+    REDEEMED_VOUCHERS: 'Zrealizowane kupony: '
+    REDEEM_VOUCHER: 'Zrealizuj voucher: '
+    REMAINING_CREDIT: 'Pozostałe saldo'
+    RESTRICT_TO_GROUP: 'Powiązanie z klasą(ami) klienta'
+    RESTRICT_TO_MEMBER: 'Powiązanie z klientem(ami)'
+    RESTRICT_TO_PRODUCT: 'Powiąż z artykułem'
+    RESTRICT_TO_PRODUCTGROUP: 'Wiązanie z grupą(ami) produktów'
+    SILVERCART_VOUCHER_CREATE: 'Tworzenie voucherów'
+    SILVERCART_VOUCHER_CREATE_HELP: 'Umożliwia użytkownikowi tworzenie nowych voucherów.'
+    SILVERCART_VOUCHER_DELETE: 'Usuń kupony'
+    SILVERCART_VOUCHER_DELETE_HELP: 'Umożliwia użytkownikowi usuwanie bonów.'
+    SILVERCART_VOUCHER_EDIT: 'Edycja kuponów'
+    SILVERCART_VOUCHER_EDIT_HELP: 'Umożliwia użytkownikowi edycję voucherów.'
+    SILVERCART_VOUCHER_VIEW: 'Wyświetl kupony'
+    SILVERCART_VOUCHER_VIEW_HELP: 'Umożliwia użytkownikowi przeglądanie voucherów.'
+    SINGULARNAME: Voucher
+    VALUE: Wartość
+    VALUE_IN_PERCENT: 'Rabat w procentach'
+    ValidationPartnerExists: 'Partner o takim samym {identyfikatorze} już istnieje.'
+    ValidationVoucherExists: 'Voucher o tym samym {identyfikatorze} już istnieje.'
+    VocherInvalid: 'Kod kuponu {code} nie jest już ważny i został usunięty.'
+  SilverCart\Voucher\Model\VoucherHistory:
+    PLURALNAME: 'Historie voucherów'
+    SINGULARNAME: 'Historia voucherów'
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucher:
+    IS_BOUND_TO_CUSTOMER: 'Jest powiązany z klientami'
+    PLURALNAME: 'Bony podarunkowe'
+    SINGULARNAME: 'Bon podarunkowy'
+    VALUE: Wartość
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucherBlueprint:
+    PLURALNAME: 'Szablony bonów podarunkowych'
+    SINGULARNAME: 'Szablon certyfikatu podarunkowego'
+    VALUE: Wartość
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateVoucher:
+    PLURALNAME: Vouchery
+    SINGULARNAME: Voucher
+    VALUE: Wartość
+  SilverCart\Voucher\Model\Voucher\GiftVoucherProduct:
+    PLURALNAME: 'Pozycja bonów towarowych'
+    SINGULARNAME: 'Pozycja bonów towarowych'
+  SilverCart\Voucher\Model\Voucher\NaturalRebateVoucher:
+    PLURALNAME: 'Bony towarowe'
+    SINGULARNAME: 'Voucher na towary'
+  SilverCart\Voucher\Model\Voucher\RelativeRebateVoucher:
+    PLURALNAME: 'Kupony rabatowe'
+    SINGULARNAME: 'Kupon rabatowy'
+  Voucher:
+    ValidFor: 'Obowiązuje dla'
+    YourPrice: 'Twoja cena: <span class="font-weight-bold">{zdyskontowana}</span> zamiast <span class="text-line-through">{oryginalna}</span>.'

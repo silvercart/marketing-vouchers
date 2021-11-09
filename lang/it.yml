@@ -9,6 +9,9 @@ it:
     SINGULARVOUCHERVALUETITLE: 'Valore coupon'
     WARNING_PAYBEFOREREDEEMING_PLURAL: 'Nota bene: prima di poter usufruire dei buoni sconto dovrà essere effettuato il pagamento dell''ordine.'
     WARNING_PAYBEFOREREDEEMING_SINGULAR: 'Nota bene: prima di poter usufruire del coupon dovrà essere effettuato il pagamento dell''ordine.'
+  SilverCart\Voucher\Model\ShoppingCartPosition:
+    PLURALNAME: 'Posizioni di buoni'
+    SINGULARNAME: 'Posizione del buono'
   SilverCart\Voucher\Model\Voucher:
     CODE: 'Codice del coupon.'
     CREATED: 'Creato il'
@@ -38,9 +41,19 @@ it:
     RESTRICT_TO_MEMBER: 'Associa al cliente/i'
     RESTRICT_TO_PRODUCT: 'Associa all''articolo'
     RESTRICT_TO_PRODUCTGROUP: "Associa al gruppo prodotti\n"
+    SILVERCART_VOUCHER_CREATE: 'Creare buoni'
+    SILVERCART_VOUCHER_CREATE_HELP: 'Permette all''utente di creare nuovi buoni.'
+    SILVERCART_VOUCHER_DELETE: 'Cancellare i buoni'
+    SILVERCART_VOUCHER_DELETE_HELP: 'Permette all''utente di cancellare i buoni.'
+    SILVERCART_VOUCHER_EDIT: 'Modifica dei buoni'
+    SILVERCART_VOUCHER_EDIT_HELP: 'Permette all''utente di modificare i buoni.'
+    SILVERCART_VOUCHER_VIEW: 'Visualizza i buoni'
+    SILVERCART_VOUCHER_VIEW_HELP: 'Permette all''utente di visualizzare i buoni.'
     SINGULARNAME: Coupon
     VALUE: valore
     VALUE_IN_PERCENT: 'Percentuale di sconto'
+    ValidationPartnerExists: 'Esiste già un partner con lo stesso {identifier} .'
+    ValidationVoucherExists: 'Esiste già un coupon con lo stesso {identifier}.'
     VocherInvalid: 'Il codice del coupon {code} non è più valido ed è stato rimosso.'
   SilverCart\Voucher\Model\VoucherHistory:
     PLURALNAME: 'Cronologia buoni sconto'

@@ -1,0 +1,85 @@
+fr:
+  SilverCart\Voucher\Admin\Controllers\VoucherAdmin:
+    MENUTITLE: 'Bons d''achat'
+    TITLE: 'Bons d''achat'
+  SilverCart\Voucher\Extensions\Model\Pages\OrderDetailPageExtension:
+    PLURALVOUCHERTITLE: 'Les codes des bons sont :'
+    PLURALVOUCHERVALUETITLE: 'La valeur de chaque bon est de'
+    SINGULARVOUCHERTITLE: 'Le code du bon est'
+    SINGULARVOUCHERVALUETITLE: 'La valeur du bon d''achat est de'
+    WARNING_PAYBEFOREREDEEMING_PLURAL: 'Veuillez noter que la commande doit être payée avant que les bons d''achat puissent être échangés.'
+    WARNING_PAYBEFOREREDEEMING_SINGULAR: 'Veuillez noter que la commande doit être payée avant que le bon d''achat puisse être utilisé.'
+  SilverCart\Voucher\Model\ShoppingCartPosition:
+    PLURALNAME: 'Positions des bons d''achat'
+    SINGULARNAME: 'Position du bon'
+  SilverCart\Voucher\Model\Voucher:
+    CODE: 'Code coupon'
+    CREATED: 'Créé le'
+    ERRORMESSAGE-ALREADY_IN_SHOPPINGCART: 'Ce bon est déjà dans votre panier.'
+    ERRORMESSAGE-CODE_NOT_VALID: 'Ce code promotionnel n''est pas valable.'
+    ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY: 'Ce bon a été utilisé dans son intégralité.'
+    ERRORMESSAGE-CUSTOMER_MUST_BE_REGISTERED: 'Vous devez vous enregistrer pour pouvoir utiliser ce bon, car il sera lié au client lorsqu''il sera utilisé. <br /> Cela vous permet d''utiliser ce bon pour des achats multiples si la valeur de votre achat est inférieure à celle du bon. <br /><a href="%s">Cliquez ici pour accéder au formulaire d''inscription.</a>'
+    ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE: 'Vous ne pouvez pas utiliser ce bon.'
+    ERRORMESSAGE-NOT_REDEEMABLE: 'Le bon ne peut pas être échangé.'
+    ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID: 'Ce bon ne peut pas être échangé contre les produits qui se trouvent dans votre panier.'
+    ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID: 'La valeur du panier n''est pas appropriée.'
+    ERRORMESSAGE-VOUCHER_ALREADY_OWNED: 'Ce bon a déjà été échangé par une autre personne.'
+    ISACTIVE: 'Est actif'
+    LABEL-REDEEM: Rédiger
+    LABEL-SHOPPINGCART_REMOVE: Retirer
+    MAXIMUM_SHOPPINGCART_VALUE: 'Valeur maximale du panier d''achat'
+    MINIMUM_SHOPPINGCART_VALUE: 'Valeur minimale du panier d''achat'
+    ORIGINAL_VALUE: 'Valeur originale'
+    PLURALNAME: 'Bons d''achat'
+    PRODUCTNUMBER: 'Numéro d''article'
+    QUANTITY: Numéro
+    QUANTITY_REDEEMED: 'Nombre de rachats'
+    REDEEMED_VOUCHERS: 'Bons d''achat échangés : '
+    REDEEM_VOUCHER: 'Utilisez le bon d''achat : '
+    REMAINING_CREDIT: 'Solde restant'
+    RESTRICT_TO_GROUP: 'Lier à la (aux) classe(s) du client'
+    RESTRICT_TO_MEMBER: 'Lier au(x) client(s)'
+    RESTRICT_TO_PRODUCT: 'Lier à l''article'
+    RESTRICT_TO_PRODUCTGROUP: 'Lier à une ou plusieurs catégories de produits'
+    SILVERCART_VOUCHER_CREATE: 'Créer des bons d''achat'
+    SILVERCART_VOUCHER_CREATE_HELP: 'Permet à un utilisateur de créer de nouvelles pièces justificatives.'
+    SILVERCART_VOUCHER_DELETE: 'Supprimer les bons'
+    SILVERCART_VOUCHER_DELETE_HELP: 'Permet à un utilisateur de supprimer des pièces justificatives.'
+    SILVERCART_VOUCHER_EDIT: 'Modifier les bons'
+    SILVERCART_VOUCHER_EDIT_HELP: 'Permet à un utilisateur de modifier les bons.'
+    SILVERCART_VOUCHER_VIEW: 'Voir les bons d''achat'
+    SILVERCART_VOUCHER_VIEW_HELP: 'Permet à un utilisateur de visualiser les pièces justificatives.'
+    SINGULARNAME: 'Bon d''achat'
+    VALUE: Valeur
+    VALUE_IN_PERCENT: 'Remise en pourcentage'
+    ValidationPartnerExists: 'Un partenaire avec le même {identifiant} existe déjà.'
+    ValidationVoucherExists: 'Un bon avec le même {identifiant} existe déjà.'
+    VocherInvalid: 'Le code promotionnel {code} n''est plus valable et a été supprimé.'
+  SilverCart\Voucher\Model\VoucherHistory:
+    PLURALNAME: 'Histoires de bons'
+    SINGULARNAME: 'Historique des bons d''achat'
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucher:
+    IS_BOUND_TO_CUSTOMER: 'est lié aux clients'
+    PLURALNAME: Chèques-cadeaux
+    SINGULARNAME: Chèque-cadeau
+    VALUE: Valeur
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucherBlueprint:
+    PLURALNAME: 'Modèles de certificats-cadeaux'
+    SINGULARNAME: 'Modèle de chèque-cadeau'
+    VALUE: Valeur
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateVoucher:
+    PLURALNAME: 'Bons d''achat'
+    SINGULARNAME: 'Bon d''achat'
+    VALUE: Valeur
+  SilverCart\Voucher\Model\Voucher\GiftVoucherProduct:
+    PLURALNAME: 'Elément de bon d''achat'
+    SINGULARNAME: 'Elément de bon d''achat'
+  SilverCart\Voucher\Model\Voucher\NaturalRebateVoucher:
+    PLURALNAME: 'Bons d''achat de marchandises'
+    SINGULARNAME: 'Bon de marchandises'
+  SilverCart\Voucher\Model\Voucher\RelativeRebateVoucher:
+    PLURALNAME: 'Bons de réduction'
+    SINGULARNAME: 'Bon de réduction'
+  Voucher:
+    ValidFor: 'Valable pour'
+    YourPrice: 'Votre prix : <span class="font-weight-bold">{réduit}</span> au lieu de <span class="text-line-through">{original}</span>.'

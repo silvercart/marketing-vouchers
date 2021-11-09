@@ -1,0 +1,85 @@
+ru:
+  SilverCart\Voucher\Admin\Controllers\VoucherAdmin:
+    MENUTITLE: Ваучеры
+    TITLE: Ваучеры
+  SilverCart\Voucher\Extensions\Model\Pages\OrderDetailPageExtension:
+    PLURALVOUCHERTITLE: 'Коды ваучеров следующие:'
+    PLURALVOUCHERVALUETITLE: 'Стоимость каждого ваучера составляет'
+    SINGULARVOUCHERTITLE: 'Код ваучера'
+    SINGULARVOUCHERVALUETITLE: 'Стоимость ваучера составляет'
+    WARNING_PAYBEFOREREDEEMING_PLURAL: 'Обратите внимание, что заказ должен быть оплачен до того, как ваучеры будут использованы.'
+    WARNING_PAYBEFOREREDEEMING_SINGULAR: 'Обратите внимание, что заказ должен быть оплачен до того, как ваучер может быть использован.'
+  SilverCart\Voucher\Model\ShoppingCartPosition:
+    PLURALNAME: 'Ваучерные позиции'
+    SINGULARNAME: 'Положение ваучера'
+  SilverCart\Voucher\Model\Voucher:
+    CODE: 'Код купона'
+    CREATED: 'Создано на'
+    ERRORMESSAGE-ALREADY_IN_SHOPPINGCART: 'Этот ваучер уже находится в вашей корзине.'
+    ERRORMESSAGE-CODE_NOT_VALID: 'Данный код ваучера недействителен.'
+    ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY: 'Этот ваучер был полностью погашен.'
+    ERRORMESSAGE-CUSTOMER_MUST_BE_REGISTERED: 'Чтобы воспользоваться этим ваучером, необходимо зарегистрироваться, так как при его использовании ваучер будет привязан к клиенту. <br /> Это позволяет использовать данный ваучер для нескольких покупок, если стоимость покупки меньше стоимости ваучера. <br /><a href="%s">Нажмите здесь, чтобы перейти к регистрационной форме</a>.'
+    ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE: 'Вы не можете погасить этот ваучер.'
+    ERRORMESSAGE-NOT_REDEEMABLE: 'Ваучер не может быть погашен.'
+    ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID: 'Этот ваучер не может быть обменен на товары, находящиеся в вашей корзине.'
+    ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID: 'Значение корзины не подходит.'
+    ERRORMESSAGE-VOUCHER_ALREADY_OWNED: 'Этот ваучер уже был выкуплен другим лицом.'
+    ISACTIVE: Активен
+    LABEL-REDEEM: Выкупить
+    LABEL-SHOPPINGCART_REMOVE: Удалить
+    MAXIMUM_SHOPPINGCART_VALUE: 'Максимальная стоимость корзины'
+    MINIMUM_SHOPPINGCART_VALUE: 'Минимальная стоимость корзины покупок'
+    ORIGINAL_VALUE: 'Первоначальная стоимость'
+    PLURALNAME: Ваучеры
+    PRODUCTNUMBER: 'Номер статьи'
+    QUANTITY: Номер
+    QUANTITY_REDEEMED: 'Количество выкупленных'
+    REDEEMED_VOUCHERS: 'Погашенные ваучеры: '
+    REDEEM_VOUCHER: 'Выкупить ваучер: '
+    REMAINING_CREDIT: Остаток
+    RESTRICT_TO_GROUP: 'Привязка к классу(ам) клиента'
+    RESTRICT_TO_MEMBER: 'Привязка к клиенту(ам)'
+    RESTRICT_TO_PRODUCT: 'Привязка к статье'
+    RESTRICT_TO_PRODUCTGROUP: 'Привязка к группе(ам) продуктов'
+    SILVERCART_VOUCHER_CREATE: 'Создание ваучеров'
+    SILVERCART_VOUCHER_CREATE_HELP: 'Позволяет пользователю создавать новые ваучеры.'
+    SILVERCART_VOUCHER_DELETE: 'Удалить ваучеры'
+    SILVERCART_VOUCHER_DELETE_HELP: 'Позволяет пользователю удалять ваучеры.'
+    SILVERCART_VOUCHER_EDIT: 'Редактировать ваучеры'
+    SILVERCART_VOUCHER_EDIT_HELP: 'Позволяет пользователю редактировать ваучеры.'
+    SILVERCART_VOUCHER_VIEW: 'Посмотреть ваучеры'
+    SILVERCART_VOUCHER_VIEW_HELP: 'Позволяет пользователю просматривать ваучеры.'
+    SINGULARNAME: Ваучер
+    VALUE: Значение
+    VALUE_IN_PERCENT: 'Скидка в процентах'
+    ValidationPartnerExists: 'Партнер с таким же {идентификатором} уже существует.'
+    ValidationVoucherExists: 'Ваучер с таким же {идентификатором} уже существует.'
+    VocherInvalid: 'Код ваучера {code} больше не действует и был удален.'
+  SilverCart\Voucher\Model\VoucherHistory:
+    PLURALNAME: 'Истории ваучеров'
+    SINGULARNAME: 'История ваучеров'
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucher:
+    IS_BOUND_TO_CUSTOMER: 'привязана к клиентам'
+    PLURALNAME: 'Подарочные сертификаты'
+    SINGULARNAME: 'Подарочный сертификат'
+    VALUE: Значение
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucherBlueprint:
+    PLURALNAME: 'Шаблоны подарочных сертификатов'
+    SINGULARNAME: 'Шаблон подарочного сертификата'
+    VALUE: Значение
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateVoucher:
+    PLURALNAME: Ваучеры
+    SINGULARNAME: Ваучер
+    VALUE: Значение
+  SilverCart\Voucher\Model\Voucher\GiftVoucherProduct:
+    PLURALNAME: 'Пункт ваучера'
+    SINGULARNAME: 'Пункт ваучера'
+  SilverCart\Voucher\Model\Voucher\NaturalRebateVoucher:
+    PLURALNAME: 'Товарные ваучеры'
+    SINGULARNAME: 'Товарный ваучер'
+  SilverCart\Voucher\Model\Voucher\RelativeRebateVoucher:
+    PLURALNAME: 'Ваучеры на скидку'
+    SINGULARNAME: 'Ваучер на скидку'
+  Voucher:
+    ValidFor: 'Действителен для'
+    YourPrice: 'Ваша цена: <span class="font-weight-bold">{дисконтная}</span> вместо <span class="text-line-through">{оригинальной}</span>.'

@@ -1,0 +1,85 @@
+cs:
+  SilverCart\Voucher\Admin\Controllers\VoucherAdmin:
+    MENUTITLE: Poukázky
+    TITLE: Poukázky
+  SilverCart\Voucher\Extensions\Model\Pages\OrderDetailPageExtension:
+    PLURALVOUCHERTITLE: 'Kódy voucherů jsou:'
+    PLURALVOUCHERVALUETITLE: 'Hodnota každého poukazu je'
+    SINGULARVOUCHERTITLE: 'Kód voucheru je'
+    SINGULARVOUCHERVALUETITLE: 'Hodnota voucheru je'
+    WARNING_PAYBEFOREREDEEMING_PLURAL: 'Upozorňujeme, že před uplatněním poukázek je nutné objednávku zaplatit.'
+    WARNING_PAYBEFOREREDEEMING_SINGULAR: 'Upozorňujeme, že před uplatněním voucheru je třeba objednávku zaplatit.'
+  SilverCart\Voucher\Model\ShoppingCartPosition:
+    PLURALNAME: 'Pozice voucherů'
+    SINGULARNAME: 'Pozice poukazu'
+  SilverCart\Voucher\Model\Voucher:
+    CODE: 'Kód kupónu'
+    CREATED: 'Vytvořeno dne'
+    ERRORMESSAGE-ALREADY_IN_SHOPPINGCART: 'Tento poukaz je již v nákupním košíku.'
+    ERRORMESSAGE-CODE_NOT_VALID: 'Tento kód voucheru není platný.'
+    ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY: 'Tento poukaz byl plně využit.'
+    ERRORMESSAGE-CUSTOMER_MUST_BE_REGISTERED: 'Pro uplatnění této poukázky je nutné se zaregistrovat, protože tato poukázka bude při uplatnění vázána na zákazníka. <br /> To vám umožní použít tento poukaz na více nákupů, pokud je hodnota vašeho nákupu nižší než hodnota poukazu. <br /><a href="%s">Kliknutím sem přejdete na registrační formulář</a>.'
+    ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE: 'Tento poukaz nelze uplatnit.'
+    ERRORMESSAGE-NOT_REDEEMABLE: 'Poukaz nelze uplatnit.'
+    ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID: 'Tento poukaz nelze uplatnit na zboží, které máte v nákupním košíku.'
+    ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID: 'Hodnota koše není vhodná.'
+    ERRORMESSAGE-VOUCHER_ALREADY_OWNED: 'Tento poukaz již byl uplatněn jinou osobou.'
+    ISACTIVE: 'Je aktivní'
+    LABEL-REDEEM: Vykoupit
+    LABEL-SHOPPINGCART_REMOVE: 'Odstranění stránky'
+    MAXIMUM_SHOPPINGCART_VALUE: 'Maximální hodnota nákupního košíku'
+    MINIMUM_SHOPPINGCART_VALUE: 'Minimální hodnota nákupního košíku'
+    ORIGINAL_VALUE: 'Původní hodnota'
+    PLURALNAME: Poukázky
+    PRODUCTNUMBER: 'Číslo článku'
+    QUANTITY: Číslo
+    QUANTITY_REDEEMED: 'Počet vykoupených'
+    REDEEMED_VOUCHERS: 'Uplatněné poukázky: '
+    REDEEM_VOUCHER: 'Uplatnění voucheru: '
+    REMAINING_CREDIT: 'Zbývající zůstatek'
+    RESTRICT_TO_GROUP: 'Vazba na třídu (třídy) zákazníka'
+    RESTRICT_TO_MEMBER: 'Vazba na zákazníka(y)'
+    RESTRICT_TO_PRODUCT: 'Vazba na článek'
+    RESTRICT_TO_PRODUCTGROUP: 'Vazba na skupinu(y) produktů'
+    SILVERCART_VOUCHER_CREATE: 'Vytvoření poukazů'
+    SILVERCART_VOUCHER_CREATE_HELP: 'Umožňuje uživateli vytvářet nové poukazy.'
+    SILVERCART_VOUCHER_DELETE: 'Odstranění poukazů'
+    SILVERCART_VOUCHER_DELETE_HELP: 'Umožňuje uživateli mazat poukazy.'
+    SILVERCART_VOUCHER_EDIT: 'Úprava poukazů'
+    SILVERCART_VOUCHER_EDIT_HELP: 'Umožňuje uživateli upravovat poukazy.'
+    SILVERCART_VOUCHER_VIEW: 'Zobrazit poukazy'
+    SILVERCART_VOUCHER_VIEW_HELP: 'Umožňuje uživateli zobrazit poukazy.'
+    SINGULARNAME: Voucher
+    VALUE: Hodnota
+    VALUE_IN_PERCENT: 'Sleva v procentech'
+    ValidationPartnerExists: 'Partner se stejným {identifikátorem} již existuje.'
+    ValidationVoucherExists: 'Poukaz se stejným {identifikátorem} již existuje.'
+    VocherInvalid: 'Kód voucheru {code} již není platný a byl odstraněn.'
+  SilverCart\Voucher\Model\VoucherHistory:
+    PLURALNAME: 'Historie voucherů'
+    SINGULARNAME: 'Historie voucherů'
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucher:
+    IS_BOUND_TO_CUSTOMER: 'Je vázán na zákazníky'
+    PLURALNAME: 'Dárkové poukazy'
+    SINGULARNAME: 'Dárkový poukaz'
+    VALUE: Hodnota
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucherBlueprint:
+    PLURALNAME: 'Šablony dárkových certifikátů'
+    SINGULARNAME: 'Šablona dárkového certifikátu'
+    VALUE: Hodnota
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateVoucher:
+    PLURALNAME: Poukázky
+    SINGULARNAME: Voucher
+    VALUE: Hodnota
+  SilverCart\Voucher\Model\Voucher\GiftVoucherProduct:
+    PLURALNAME: 'Položka poukazu'
+    SINGULARNAME: 'Položka poukazu'
+  SilverCart\Voucher\Model\Voucher\NaturalRebateVoucher:
+    PLURALNAME: 'Poukázky na zboží'
+    SINGULARNAME: 'Poukaz na zboží'
+  SilverCart\Voucher\Model\Voucher\RelativeRebateVoucher:
+    PLURALNAME: 'Slevové kupóny'
+    SINGULARNAME: 'Slevový poukaz'
+  Voucher:
+    ValidFor: 'Platí pro'
+    YourPrice: 'Vaše cena: <span class="font-weight-bold">{snížená}</span> místo <span class="text-line-through">{původní}</span>.'

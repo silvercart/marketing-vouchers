@@ -1,0 +1,84 @@
+fi:
+  SilverCart\Voucher\Admin\Controllers\VoucherAdmin:
+    MENUTITLE: Tositteet
+    TITLE: Tositteet
+  SilverCart\Voucher\Extensions\Model\Pages\OrderDetailPageExtension:
+    PLURALVOUCHERTITLE: 'Kuponkikoodit ovat:'
+    PLURALVOUCHERVALUETITLE: 'Kunkin arvosetelin arvo on'
+    SINGULARVOUCHERTITLE: 'Kuponkikoodi on'
+    SINGULARVOUCHERVALUETITLE: 'Kupongin arvo on'
+    WARNING_PAYBEFOREREDEEMING_PLURAL: 'Huomioithan, että tilaus on maksettava ennen kuin kupongit voidaan lunastaa.'
+    WARNING_PAYBEFOREREDEEMING_SINGULAR: 'Huomaa, että tilaus on maksettava ennen kuin kupongin voi lunastaa.'
+  SilverCart\Voucher\Model\ShoppingCartPosition:
+    PLURALNAME: Voucher-asemat
+    SINGULARNAME: 'Tositteen asema'
+  SilverCart\Voucher\Model\Voucher:
+    CODE: Kuponkikoodi
+    CREATED: Luotu
+    ERRORMESSAGE-ALREADY_IN_SHOPPINGCART: 'Tämä kuponki on jo ostoskorissasi.'
+    ERRORMESSAGE-CODE_NOT_VALID: 'Tämä kuponkikoodi ei ole voimassa.'
+    ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY: 'Tämä kuponki on lunastettu kokonaan.'
+    ERRORMESSAGE-CUSTOMER_MUST_BE_REGISTERED: 'Sinun on rekisteröidyttävä lunastaaksesi tämän arvosetelin, sillä arvoseteli sidotaan asiakkaaseen, kun se lunastetaan. <br /> Tämän avulla voit käyttää tätä arvoseteliä useisiin ostoksiin, jos ostoksen arvo on pienempi kuin arvosetelin arvo. <br /><a href="%s">Klikkaa tästä siirtyäksesi rekisteröintilomakkeeseen</a>.'
+    ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE: 'Et voi lunastaa tätä kuponkia.'
+    ERRORMESSAGE-NOT_REDEEMABLE: 'Kuponkia ei voi lunastaa.'
+    ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID: 'Tätä kuponkia ei voi lunastaa ostoskorissa oleviin tuotteisiin.'
+    ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID: 'Korin arvo ei ole sopiva.'
+    ERRORMESSAGE-VOUCHER_ALREADY_OWNED: 'Tämän kupongin on jo lunastanut toinen henkilö.'
+    ISACTIVE: 'On aktiivinen'
+    LABEL-REDEEM: Lunasta
+    LABEL-SHOPPINGCART_REMOVE: Poista
+    MAXIMUM_SHOPPINGCART_VALUE: 'Ostoskorin enimmäisarvo'
+    MINIMUM_SHOPPINGCART_VALUE: 'Ostoskorin vähimmäisarvo'
+    ORIGINAL_VALUE: 'Alkuperäinen arvo'
+    PLURALNAME: Tositteet
+    PRODUCTNUMBER: 'Artikkelin numero'
+    QUANTITY: Numero
+    QUANTITY_REDEEMED: 'Lunastettujen määrä'
+    REDEEMED_VOUCHERS: 'Lunastetut tositteet: '
+    REMAINING_CREDIT: 'Jäljellä oleva saldo'
+    RESTRICT_TO_GROUP: 'Sitoutuminen asiakasluokkaan (-luokkiin)'
+    RESTRICT_TO_MEMBER: 'Sitoudu asiakkaaseen (asiakkaisiin)'
+    RESTRICT_TO_PRODUCT: 'Sitoudu artikkeliin'
+    RESTRICT_TO_PRODUCTGROUP: 'Sitoutuminen tuoteryhmään (-ryhmiin)'
+    SILVERCART_VOUCHER_CREATE: 'Luo tositteita'
+    SILVERCART_VOUCHER_CREATE_HELP: 'Sallii käyttäjän luoda uusia tositteita.'
+    SILVERCART_VOUCHER_DELETE: 'Poista tositteet'
+    SILVERCART_VOUCHER_DELETE_HELP: 'Sallii käyttäjän poistaa tositteita.'
+    SILVERCART_VOUCHER_EDIT: 'Muokkaa tositteita'
+    SILVERCART_VOUCHER_EDIT_HELP: 'Sallii käyttäjän muokata tositteita.'
+    SILVERCART_VOUCHER_VIEW: 'Näytä tositteet'
+    SILVERCART_VOUCHER_VIEW_HELP: 'Sallii käyttäjän tarkastella tositteita.'
+    SINGULARNAME: Voucher
+    VALUE: Arvo
+    VALUE_IN_PERCENT: 'Alennus prosentteina'
+    ValidationPartnerExists: 'Kumppani, jolla on sama {tunnus}, on jo olemassa.'
+    ValidationVoucherExists: 'Saman {tunnisteen} omaava tosite on jo olemassa.'
+    VocherInvalid: 'Kuponkikoodi {koodi} ei ole enää voimassa ja se on poistettu.'
+  SilverCart\Voucher\Model\VoucherHistory:
+    PLURALNAME: 'Tositteiden historiat'
+    SINGULARNAME: 'Tositteiden historia'
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucher:
+    IS_BOUND_TO_CUSTOMER: 'on sidottu asiakkaisiin'
+    PLURALNAME: Lahjakortit
+    SINGULARNAME: Lahjakortti
+    VALUE: Arvo
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucherBlueprint:
+    PLURALNAME: 'Lahjakortti mallit'
+    SINGULARNAME: 'Lahjakortti malli'
+    VALUE: Arvo
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateVoucher:
+    PLURALNAME: Tositteet
+    SINGULARNAME: Voucher
+    VALUE: Arvo
+  SilverCart\Voucher\Model\Voucher\GiftVoucherProduct:
+    PLURALNAME: 'Kupongin erä'
+    SINGULARNAME: 'Kupongin erä'
+  SilverCart\Voucher\Model\Voucher\NaturalRebateVoucher:
+    PLURALNAME: Tavarasetelit
+    SINGULARNAME: Tavaraseteli
+  SilverCart\Voucher\Model\Voucher\RelativeRebateVoucher:
+    PLURALNAME: Alennuskupongit
+    SINGULARNAME: Alennuskuponki
+  Voucher:
+    ValidFor: Voimassa
+    YourPrice: 'Hintasi: <span class="font-weight-bold">{alennettu}</span> <span class="text-line-through">{alkuperäisen}</span> sijaan.'

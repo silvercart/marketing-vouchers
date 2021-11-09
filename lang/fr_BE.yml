@@ -9,6 +9,9 @@ fr_BE:
     SINGULARVOUCHERVALUETITLE: 'La valeur du bon est de'
     WARNING_PAYBEFOREREDEEMING_PLURAL: 'Veuillez noter que la commande doit être payée avant que les bons puissent être échangés.'
     WARNING_PAYBEFOREREDEEMING_SINGULAR: 'Veuillez noter que la commande doit être payée avant que le bon puisse être échangé.'
+  SilverCart\Voucher\Model\ShoppingCartPosition:
+    PLURALNAME: 'Positions des bons d''achat'
+    SINGULARNAME: 'Position du bon'
   SilverCart\Voucher\Model\Voucher:
     CODE: 'Code du bon'
     CREATED: 'Créé le'
@@ -38,9 +41,19 @@ fr_BE:
     RESTRICT_TO_MEMBER: 'Lier au(x) client(s)'
     RESTRICT_TO_PRODUCT: 'Lier à l''article'
     RESTRICT_TO_PRODUCTGROUP: 'Lier au groupe(s) de produits'
+    SILVERCART_VOUCHER_CREATE: 'Créer des bons d''achat'
+    SILVERCART_VOUCHER_CREATE_HELP: 'Permet à un utilisateur de créer de nouvelles pièces justificatives.'
+    SILVERCART_VOUCHER_DELETE: 'Supprimer les bons'
+    SILVERCART_VOUCHER_DELETE_HELP: 'Permet à un utilisateur de supprimer des pièces justificatives.'
+    SILVERCART_VOUCHER_EDIT: 'Modifier les bons'
+    SILVERCART_VOUCHER_EDIT_HELP: 'Permet à un utilisateur de modifier les bons.'
+    SILVERCART_VOUCHER_VIEW: 'Voir les bons d''achat'
+    SILVERCART_VOUCHER_VIEW_HELP: 'Permet à un utilisateur de visualiser les pièces justificatives.'
     SINGULARNAME: Bon
     VALUE: Valeur
     VALUE_IN_PERCENT: 'Réduction en pourcentage'
+    ValidationPartnerExists: 'Un partenaire avec le même {identifiant} existe déjà.'
+    ValidationVoucherExists: 'Un bon avec le même {identifiant} existe déjà.'
     VocherInvalid: 'Le code de bon {code} n''est plus valide et a été supprimé.'
   SilverCart\Voucher\Model\VoucherHistory:
     PLURALNAME: 'Historiques des bons'

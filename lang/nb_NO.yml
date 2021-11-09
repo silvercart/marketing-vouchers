@@ -1,0 +1,85 @@
+nb_NO:
+  SilverCart\Voucher\Admin\Controllers\VoucherAdmin:
+    MENUTITLE: Kuponger
+    TITLE: Kuponger
+  SilverCart\Voucher\Extensions\Model\Pages\OrderDetailPageExtension:
+    PLURALVOUCHERTITLE: 'Kupongkodene er:'
+    PLURALVOUCHERVALUETITLE: 'Verdien av hver kupong er'
+    SINGULARVOUCHERTITLE: 'Kupongkoden er'
+    SINGULARVOUCHERVALUETITLE: 'Verdien av kupongen er'
+    WARNING_PAYBEFOREREDEEMING_PLURAL: 'Vær oppmerksom på at bestillingen først må betales før kupongene kan løses inn.'
+    WARNING_PAYBEFOREREDEEMING_SINGULAR: 'Vær oppmerksom på at bestillingen først må betales før kupongen kan løses inn.'
+  SilverCart\Voucher\Model\ShoppingCartPosition:
+    PLURALNAME: 'Voucher posisjoner'
+    SINGULARNAME: 'Voucher posisjon'
+  SilverCart\Voucher\Model\Voucher:
+    CODE: Kupongkode
+    CREATED: 'Opprettet den'
+    ERRORMESSAGE-ALREADY_IN_SHOPPINGCART: 'Denne kupongen ligger allerede i handlekurven din.'
+    ERRORMESSAGE-CODE_NOT_VALID: 'Denne kupongkoden er ikke gyldig.'
+    ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY: 'Denne kupongen er innløst i sin helhet.'
+    ERRORMESSAGE-CUSTOMER_MUST_BE_REGISTERED: 'Du må registrere deg for å løse inn denne kupongen, da denne kupongen er bundet til kunden når den løses inn. <br /> Dette lar deg bruke denne kupongen for flere kjøp hvis kjøpsverdien er lavere enn kupongens verdi. <br /> <a href="%s"> Klikk her for å gå til registreringsskjemaet. </a>'
+    ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE: 'Du har ikke lov til å løse inn denne kupongen.'
+    ERRORMESSAGE-NOT_REDEEMABLE: 'Kupongen kan ikke løses inn.'
+    ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID: 'Denne kupongen kan ikke løses inn for varene i handlekurven din.'
+    ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID: 'Handlekurvverdien er ikke egnet.'
+    ERRORMESSAGE-VOUCHER_ALREADY_OWNED: 'Denne kupongen er allerede innløst av en annen person.'
+    ISACTIVE: 'Er aktiv'
+    LABEL-REDEEM: 'Løs inn'
+    LABEL-SHOPPINGCART_REMOVE: Fjernet
+    MAXIMUM_SHOPPINGCART_VALUE: 'Maksimal handlekurvverdi'
+    MINIMUM_SHOPPINGCART_VALUE: 'Minimum handlekurvverdi'
+    ORIGINAL_VALUE: 'Opprinnelig verdi'
+    PLURALNAME: Kuponger
+    PRODUCTNUMBER: artikkelnummer
+    QUANTITY: Nummer
+    QUANTITY_REDEEMED: 'Antall innløst'
+    REDEEMED_VOUCHERS: 'Innløste kuponger:'
+    REDEEM_VOUCHER: 'Løs inn kupong:'
+    REMAINING_CREDIT: 'Gjenstående kreditt'
+    RESTRICT_TO_GROUP: 'Bind til kundeklasse(r)'
+    RESTRICT_TO_MEMBER: 'Lojalitet til kunde(r)'
+    RESTRICT_TO_PRODUCT: 'Bind til artikkelen'
+    RESTRICT_TO_PRODUCTGROUP: 'Bind til produktgruppe(r)'
+    SILVERCART_VOUCHER_CREATE: 'Lag kuponger'
+    SILVERCART_VOUCHER_CREATE_HELP: 'Lar en bruker opprette nye bilag.'
+    SILVERCART_VOUCHER_DELETE: 'Slett bilag'
+    SILVERCART_VOUCHER_DELETE_HELP: 'Lar en bruker slette bilag.'
+    SILVERCART_VOUCHER_EDIT: 'Rediger bilag'
+    SILVERCART_VOUCHER_EDIT_HELP: 'Lar en bruker redigere bilag.'
+    SILVERCART_VOUCHER_VIEW: 'Se på kuponger'
+    SILVERCART_VOUCHER_VIEW_HELP: 'Lar en bruker se kuponger.'
+    SINGULARNAME: kupong
+    VALUE: verdi
+    VALUE_IN_PERCENT: 'Rabatt i prosent'
+    ValidationPartnerExists: 'En partner med samme {identifier} eksisterer allerede.'
+    ValidationVoucherExists: 'En kupong med samme {identifier} finnes allerede.'
+    VocherInvalid: 'Kupongkoden {code} er ikke lenger gyldig og har blitt fjernet.'
+  SilverCart\Voucher\Model\VoucherHistory:
+    PLURALNAME: Kuponghistorier
+    SINGULARNAME: Kuponghistorikk
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucher:
+    IS_BOUND_TO_CUSTOMER: 'Er bundet til kunder'
+    PLURALNAME: Gavekort
+    SINGULARNAME: gavekort
+    VALUE: verdi
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucherBlueprint:
+    PLURALNAME: 'Gavekort maler'
+    SINGULARNAME: 'Gavekort mal'
+    VALUE: verdi
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateVoucher:
+    PLURALNAME: Bilag
+    SINGULARNAME: Voucher
+    VALUE: verdi
+  SilverCart\Voucher\Model\Voucher\GiftVoucherProduct:
+    PLURALNAME: Kupongartikkel
+    SINGULARNAME: Kupongartikkel
+  SilverCart\Voucher\Model\Voucher\NaturalRebateVoucher:
+    PLURALNAME: Bilag
+    SINGULARNAME: Voucher
+  SilverCart\Voucher\Model\Voucher\RelativeRebateVoucher:
+    PLURALNAME: Rabattkuponger
+    SINGULARNAME: Rabatt-kupong
+  Voucher:
+    ValidFor: 'Gyldig for'
+    YourPrice: 'Din pris: <span class="font-weight-bold"> {discounted} </span> stedet for <span class="text-line-through"> {original} </span> .'

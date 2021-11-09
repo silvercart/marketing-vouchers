@@ -1,0 +1,85 @@
+es:
+  SilverCart\Voucher\Admin\Controllers\VoucherAdmin:
+    MENUTITLE: Vales
+    TITLE: Vales
+  SilverCart\Voucher\Extensions\Model\Pages\OrderDetailPageExtension:
+    PLURALVOUCHERTITLE: 'Los códigos de los vales son:'
+    PLURALVOUCHERVALUETITLE: 'El valor de cada vale es'
+    SINGULARVOUCHERTITLE: 'El código del vale es'
+    SINGULARVOUCHERVALUETITLE: 'El valor del bono es'
+    WARNING_PAYBEFOREREDEEMING_PLURAL: 'Tenga en cuenta que el pedido debe estar pagado antes de poder canjear los vales.'
+    WARNING_PAYBEFOREREDEEMING_SINGULAR: 'Tenga en cuenta que el pedido debe estar pagado antes de poder canjear el vale.'
+  SilverCart\Voucher\Model\ShoppingCartPosition:
+    PLURALNAME: 'Posiciones de los vales'
+    SINGULARNAME: 'Posición de los vales'
+  SilverCart\Voucher\Model\Voucher:
+    CODE: 'Código del cupón'
+    CREATED: 'Creado el'
+    ERRORMESSAGE-ALREADY_IN_SHOPPINGCART: 'Este vale ya está en su cesta de la compra.'
+    ERRORMESSAGE-CODE_NOT_VALID: 'Este código de bono no es válido.'
+    ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY: 'Este vale ha sido canjeado en su totalidad.'
+    ERRORMESSAGE-CUSTOMER_MUST_BE_REGISTERED: 'Debe registrarse para canjear este vale, ya que este vale estará vinculado al cliente cuando se canjee. <br /> Esto le permite utilizar este vale para varias compras si el valor de su compra es inferior al valor del vale. <br /><a href="%s">Haga clic aquí para ir al formulario de inscripción.</a>'
+    ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE: 'No puede canjear este vale.'
+    ERRORMESSAGE-NOT_REDEEMABLE: 'El vale no puede ser canjeado.'
+    ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID: 'Este vale no se puede canjear por los productos que están en su cesta de la compra.'
+    ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID: 'El valor de la cesta no es apropiado.'
+    ERRORMESSAGE-VOUCHER_ALREADY_OWNED: 'Este vale ya ha sido canjeado por otra persona.'
+    ISACTIVE: 'Está activo'
+    LABEL-REDEEM: Canjee
+    LABEL-SHOPPINGCART_REMOVE: Eliminar
+    MAXIMUM_SHOPPINGCART_VALUE: 'Valor máximo de la cesta de la compra'
+    MINIMUM_SHOPPINGCART_VALUE: 'Valor mínimo de la cesta de la compra'
+    ORIGINAL_VALUE: 'Valor original'
+    PLURALNAME: Vales
+    PRODUCTNUMBER: 'Número de artículo'
+    QUANTITY: Número
+    QUANTITY_REDEEMED: 'Número canjeado'
+    REDEEMED_VOUCHERS: 'Vales canjeados: '
+    REDEEM_VOUCHER: 'Canjea el cupón: '
+    REMAINING_CREDIT: 'Saldo restante'
+    RESTRICT_TO_GROUP: 'Vincular a clase(s) de cliente'
+    RESTRICT_TO_MEMBER: 'Vincular al cliente(s)'
+    RESTRICT_TO_PRODUCT: 'Vinculación con el artículo'
+    RESTRICT_TO_PRODUCTGROUP: 'Vincular a grupo(s) de productos'
+    SILVERCART_VOUCHER_CREATE: 'Crear vales'
+    SILVERCART_VOUCHER_CREATE_HELP: 'Permite al usuario crear nuevos vales.'
+    SILVERCART_VOUCHER_DELETE: 'Borrar vales'
+    SILVERCART_VOUCHER_DELETE_HELP: 'Permite a un usuario eliminar vales.'
+    SILVERCART_VOUCHER_EDIT: 'Editar vales'
+    SILVERCART_VOUCHER_EDIT_HELP: 'Permite al usuario editar los vales.'
+    SILVERCART_VOUCHER_VIEW: 'Ver vales'
+    SILVERCART_VOUCHER_VIEW_HELP: 'Permite al usuario ver los vales.'
+    SINGULARNAME: Voucher
+    VALUE: Valor
+    VALUE_IN_PERCENT: 'Descuento en porcentaje'
+    ValidationPartnerExists: 'Ya existe un socio con el mismo {identificador}.'
+    ValidationVoucherExists: 'Ya existe un bono con el mismo {identificador}.'
+    VocherInvalid: 'El código del cupón {código} ya no es válido y ha sido eliminado.'
+  SilverCart\Voucher\Model\VoucherHistory:
+    PLURALNAME: 'Historial de vales'
+    SINGULARNAME: 'Historial de vales'
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucher:
+    IS_BOUND_TO_CUSTOMER: 'Está vinculado a los clientes'
+    PLURALNAME: 'Vales de regalo'
+    SINGULARNAME: 'Cheque regalo'
+    VALUE: Valor
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucherBlueprint:
+    PLURALNAME: 'Plantillas de vales de regalo'
+    SINGULARNAME: 'Plantilla de certificado de regalo'
+    VALUE: Valor
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateVoucher:
+    PLURALNAME: Vales
+    SINGULARNAME: Voucher
+    VALUE: Valor
+  SilverCart\Voucher\Model\Voucher\GiftVoucherProduct:
+    PLURALNAME: 'Artículo del cupón'
+    SINGULARNAME: 'Artículo del cupón'
+  SilverCart\Voucher\Model\Voucher\NaturalRebateVoucher:
+    PLURALNAME: 'Vales de compra'
+    SINGULARNAME: 'Vale de compra'
+  SilverCart\Voucher\Model\Voucher\RelativeRebateVoucher:
+    PLURALNAME: 'Vales de descuento'
+    SINGULARNAME: 'Vale de descuento'
+  Voucher:
+    ValidFor: 'Válido para'
+    YourPrice: 'Su precio: <span class="font-weight-bold">{descontado}</span> en lugar de <span class="text-line-through">{original}</span>.'

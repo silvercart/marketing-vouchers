@@ -1,0 +1,85 @@
+tr_TR:
+  SilverCart\Voucher\Admin\Controllers\VoucherAdmin:
+    MENUTITLE: Kuponlar
+    TITLE: Kuponlar
+  SilverCart\Voucher\Extensions\Model\Pages\OrderDetailPageExtension:
+    PLURALVOUCHERTITLE: 'Kupon kodları şunlardır:'
+    PLURALVOUCHERVALUETITLE: 'Her kuponun değeri'
+    SINGULARVOUCHERTITLE: 'Kupon kodu'
+    SINGULARVOUCHERVALUETITLE: 'Kuponun değeri'
+    WARNING_PAYBEFOREREDEEMING_PLURAL: 'Kuponların kullanılabilmesi için önce siparişin ödenmesi gerektiğini lütfen unutmayın.'
+    WARNING_PAYBEFOREREDEEMING_SINGULAR: 'Kuponun kullanılabilmesi için önce siparişin ödenmesi gerektiğini lütfen unutmayın.'
+  SilverCart\Voucher\Model\ShoppingCartPosition:
+    PLURALNAME: 'Kupon pozisyonları'
+    SINGULARNAME: 'Kupon pozisyonu'
+  SilverCart\Voucher\Model\Voucher:
+    CODE: 'Kupon Kodu'
+    CREATED: 'tarihinde oluşturuldu'
+    ERRORMESSAGE-ALREADY_IN_SHOPPINGCART: 'Bu kupon zaten alışveriş sepetinizde.'
+    ERRORMESSAGE-CODE_NOT_VALID: 'Bu kupon kodu geçerli değil.'
+    ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY: 'Bu kupon tamamen kullanıldı.'
+    ERRORMESSAGE-CUSTOMER_MUST_BE_REGISTERED: 'Bu kupon kullanıldığında müşteriye bağlı olduğundan, bu kuponu kullanmak için kayıt olmanız gerekir. <br /> Bu, satın alma değeriniz kupon değerinden düşükse, bu kuponu birden fazla satın alma için kullanmanıza olanak tanır. <br /> <a href="%s"> Kayıt formuna gitmek için buraya tıklayın. </a>'
+    ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE: 'Bu kuponu kullanmanıza izin verilmiyor.'
+    ERRORMESSAGE-NOT_REDEEMABLE: 'Kupon kullanılamaz.'
+    ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID: 'Bu kupon, alışveriş sepetinizdeki ürünler için kullanılamaz.'
+    ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID: 'Alışveriş sepeti değeri uygun değil.'
+    ERRORMESSAGE-VOUCHER_ALREADY_OWNED: 'Bu kupon zaten başka bir kişi tarafından kullanılmış.'
+    ISACTIVE: Aktif
+    LABEL-REDEEM: 'Tazmin etmek'
+    LABEL-SHOPPINGCART_REMOVE: Kaldırıldı
+    MAXIMUM_SHOPPINGCART_VALUE: 'Maksimum alışveriş sepeti değeri'
+    MINIMUM_SHOPPINGCART_VALUE: 'Minimum alışveriş sepeti değeri'
+    ORIGINAL_VALUE: 'Orijinal değeri'
+    PLURALNAME: Kuponlar
+    PRODUCTNUMBER: 'ürün numarası'
+    QUANTITY: sayı
+    QUANTITY_REDEEMED: 'Kullanılan numara'
+    REDEEMED_VOUCHERS: 'Kullanılmış kuponlar:'
+    REDEEM_VOUCHER: 'Kuponu kullan:'
+    REMAINING_CREDIT: 'kalan kredi'
+    RESTRICT_TO_GROUP: 'Müşteri sınıf(lar)ına bağlan'
+    RESTRICT_TO_MEMBER: 'Müşteri(ler)e bağlılık'
+    RESTRICT_TO_PRODUCT: 'Makaleye Bağla'
+    RESTRICT_TO_PRODUCTGROUP: 'Ürün gruplarına bağlan'
+    SILVERCART_VOUCHER_CREATE: 'Kuponlar oluşturun'
+    SILVERCART_VOUCHER_CREATE_HELP: 'Bir kullanıcının yeni kuponlar oluşturmasına izin verir.'
+    SILVERCART_VOUCHER_DELETE: 'Kuponları sil'
+    SILVERCART_VOUCHER_DELETE_HELP: 'Bir kullanıcının kuponları silmesine izin verir.'
+    SILVERCART_VOUCHER_EDIT: 'Kuponları düzenle'
+    SILVERCART_VOUCHER_EDIT_HELP: 'Bir kullanıcının kuponları düzenlemesine izin verir.'
+    SILVERCART_VOUCHER_VIEW: 'kuponlara bak'
+    SILVERCART_VOUCHER_VIEW_HELP: 'Bir kullanıcının kuponları görüntülemesine izin verir.'
+    SINGULARNAME: kupon
+    VALUE: değer
+    VALUE_IN_PERCENT: 'Yüzde olarak indirim'
+    ValidationPartnerExists: '{identifier} ile bir iş ortağı zaten var.'
+    ValidationVoucherExists: '{identifier} ile bir fiş zaten var.'
+    VocherInvalid: '{code} kupon kodu artık geçerli değil ve kaldırıldı.'
+  SilverCart\Voucher\Model\VoucherHistory:
+    PLURALNAME: 'Kupon geçmişleri'
+    SINGULARNAME: 'Kupon geçmişi'
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucher:
+    IS_BOUND_TO_CUSTOMER: 'Müşterilere bağlıdır'
+    PLURALNAME: 'Hediye çekleri'
+    SINGULARNAME: 'hediye kartı'
+    VALUE: değer
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucherBlueprint:
+    PLURALNAME: 'Hediye sertifikası şablonları'
+    SINGULARNAME: 'Hediye sertifikası şablonu'
+    VALUE: değer
+  SilverCart\Voucher\Model\Voucher\AbsoluteRebateVoucher:
+    PLURALNAME: Kuponlar
+    SINGULARNAME: kupon
+    VALUE: değer
+  SilverCart\Voucher\Model\Voucher\GiftVoucherProduct:
+    PLURALNAME: 'Kupon makalesi'
+    SINGULARNAME: 'Kupon makalesi'
+  SilverCart\Voucher\Model\Voucher\NaturalRebateVoucher:
+    PLURALNAME: Kuponlar
+    SINGULARNAME: kupon
+  SilverCart\Voucher\Model\Voucher\RelativeRebateVoucher:
+    PLURALNAME: 'İndirim kuponları'
+    SINGULARNAME: 'indirim kuponu'
+  Voucher:
+    ValidFor: 'Şunun için geçerli'
+    YourPrice: 'Sizin fiyatınız: <span class="font-weight-bold"> {discounted} </span> yerine <span class="text-line-through"> {original} </span> .'
