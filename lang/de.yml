@@ -1,4 +1,7 @@
 de:
+  SilverCart\Voucher:
+    LimitedToRestrictedProductsPlural: 'Dieser Gutschein ist für folgende Artikel gültig:'
+    LimitedToRestrictedProductsSingular: 'Dieser Gutschein ist für den Artikel <i><u>{title}</u></i> gültig.'
   SilverCart\Voucher\Admin\Controllers\VoucherAdmin:
     MENUTITLE: Gutscheine
     TITLE: Gutscheine
@@ -27,6 +30,7 @@ de:
     ISACTIVE: 'Ist Aktiv'
     LABEL-REDEEM: Einlösen
     LABEL-SHOPPINGCART_REMOVE: Entfernen
+    LimitToRestrictedProducts: 'Gültigkeit dieses Gutscheins auf die daran gebundenen Artikel limitieren'
     MAXIMUM_SHOPPINGCART_VALUE: 'Maximaler Warenkorb-Wert'
     MINIMUM_SHOPPINGCART_VALUE: 'Minimaler Warenkorb-Wert'
     ORIGINAL_VALUE: 'Ursprünglicher Wert'

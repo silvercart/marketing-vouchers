@@ -285,6 +285,7 @@ class AbsoluteRebateVoucher extends Voucher
     public function getCMSFields() : FieldList
     {
         $fields = parent::getCMSFields();
+        $fields->removeByName('LimitToRestrictedProducts');
         $fields->removeByName('quantityRedeemed');
         $fields->addFieldToTab('Root.Main', LiteralField::create('quantityRedeemed', "<br />{$this->fieldLabel('RedeemedVouchers')}" . ($this->quantityRedeemed ? $this->quantityRedeemed : '0')));
         return $fields;

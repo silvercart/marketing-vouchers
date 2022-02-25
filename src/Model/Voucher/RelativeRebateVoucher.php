@@ -14,6 +14,7 @@ use SilverCart\Voucher\View\VoucherPrice;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\ORM\ArrayList;
+use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\Security\Member;
 
 /**
@@ -125,26 +126,23 @@ class RelativeRebateVoucher extends Voucher
           && $tax
           && $tax->Rate > 0)
         ) {
-            $shoppingCartAmount = $shoppingCart->getTaxableAmountWithoutFees([Voucher::class])->getAmount();
-            $rebateAmount       = round(($shoppingCartAmount / 100 * $this->valueInPercent), 2);
+            $rebate       = $this->getRebate();
+            $rebateAmount = $rebate->getAmount();
             if (Config::Pricetype() === Config::PRICE_TYPE_GROSS) {
                 $rebateAmountNet = ((int) $this->Tax()->Rate === 0) ? $rebateAmount : $rebateAmount / (100 + (int) $this->Tax()->Rate) * 100;
             } else {
                 $rebateAmountNet = $rebateAmount;
-                $rebateAmount    = $rebateAmount * (((int) $this->Tax()->Rate / 100) + 1);
+                $rebate->setAmount($rebateAmount * (((int) $this->Tax()->Rate / 100) + 1));
             }
-            $rebate             = DBMoney::create()
-                    ->setAmount($rebateAmount)
-                    ->setCurrency(Config::DefaultCurrency());
-            $rebateNet          = DBMoney::create()
+            $rebateNet = DBMoney::create()
                     ->setAmount($rebateAmountNet)
                     ->setCurrency(Config::DefaultCurrency());
             $position = VoucherPrice::create();
             $position->setVoucher($this);
             $position->ID                    = $this->ID;
             $position->Name                  = "{$this->singular_name()} (Code: {$this->code})";
-            $position->ShortDescription      = $this->code;
-            $position->LongDescription       = $this->code;
+            $position->ShortDescription      = $this->renderWith(Voucher::class . '_ShortDescription');
+            $position->LongDescription       = '';
             $position->Currency              = Config::DefaultCurrency();
             $position->Price                 = $rebateAmount * -1;
             $position->PriceFormatted        = '-' . $rebate->Nice();
@@ -175,14 +173,11 @@ class RelativeRebateVoucher extends Voucher
      */
     public function getShoppingCartTotal() : DBMoney
     {
-        $amount             = DBMoney::create();
-        $member             = Customer::currentUser();
-        $shoppingCartAmount = $member->ShoppingCart()->getTaxableAmountWithoutFees([Voucher::class])->getAmount();
-        $rebateAmount       = ($shoppingCartAmount / 100 * $this->valueInPercent);
-        $rebate             = DBMoney::create()
-                ->setAmount($rebateAmount)
-                ->setCurrency(Config::DefaultCurrency());
-        $position           = ShoppingCartPosition::getVoucherShoppingCartPosition($member->ShoppingCart()->ID, $this->ID);
+        $amount       = DBMoney::create();
+        $member       = Customer::currentUser();
+        $rebate       = $this->getRebate();
+        $rebateAmount = $rebate->getAmount();
+        $position     = ShoppingCartPosition::getVoucherShoppingCartPosition($member->ShoppingCart()->ID, $this->ID);
         if ($position instanceof ShoppingCartPosition
          && $position->implicatePosition
         ) {
@@ -193,6 +188,27 @@ class RelativeRebateVoucher extends Voucher
             $amount->setCurrency($rebate->getCurrency());
         }
         return $amount;
+    }
+    
+    /**
+     * Returns the rebate amount as a DBMoney object.
+     * 
+     * @return DBMoney
+     */
+    public function getRebate() : DBMoney
+    {
+        if ($this->isLimitedToRestrictedProducts()) {
+            $rebateBase = 0;
+            foreach ($this->getAffectedShoppingCartPositions() as $position) {
+                /* @var $position \SilverCart\Model\Order\ShoppingCartPosition */
+                $rebateBase += $position->getPrice()->getAmount();
+            }
+        } else {
+            $rebateBase = Customer::currentUser()->ShoppingCart()->getTaxableAmountWithoutFees([Voucher::class])->getAmount();
+        }
+        return DBMoney::create()
+                ->setAmount($rebateBase / 100 * $this->valueInPercent)
+                ->setCurrency(Config::DefaultCurrency());
     }
 
     /**

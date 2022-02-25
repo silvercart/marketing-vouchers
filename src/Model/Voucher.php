@@ -45,13 +45,14 @@ use SilverStripe\View\ArrayData;
  * @copyright 2020 pixeltricks GmbH
  * @license see license file in modules root directory
  * 
- * @param string  $code                     Code
- * @param bool    $isActive                 is active
- * @param DBMoney $minimumShoppingCartValue minimum shopping cart value
- * @param DBMoney $maximumShoppingCartValue maximum shopping cart value
- * @param int     $quantity                 quantity
- * @param int     $quantityRedeemed         quantity redeemed
- * @param string  $ProductNumber            Product number
+ * @param string  $code                      Code
+ * @param bool    $isActive                  is active
+ * @param DBMoney $minimumShoppingCartValue  minimum shopping cart value
+ * @param DBMoney $maximumShoppingCartValue  maximum shopping cart value
+ * @param int     $quantity                  quantity
+ * @param int     $quantityRedeemed          quantity redeemed
+ * @param string  $ProductNumber             Product number
+ * @param bool    $LimitToRestrictedProducts Limit To Restricted Products
  * 
  * @method \SilverStripe\ORM\ManyManyList RestrictToMember()        Returns a list of related members to restrict this voucher to.
  * @method \SilverStripe\ORM\ManyManyList RestrictToGroup()         Returns a list of related groups to restrict this voucher to.
@@ -163,13 +164,14 @@ class Voucher extends DataObject implements PermissionProvider
      * @var array
      */
     private static $db = [
-        'code'                     => 'Varchar(50)',
-        'isActive'                 => 'Boolean',
-        'minimumShoppingCartValue' => DBMoney::class,
-        'maximumShoppingCartValue' => DBMoney::class,
-        'quantity'                 => 'Int',
-        'quantityRedeemed'         => 'Int',
-        'ProductNumber'            => 'Varchar(50)',
+        'code'                      => 'Varchar(50)',
+        'isActive'                  => 'Boolean',
+        'minimumShoppingCartValue'  => DBMoney::class,
+        'maximumShoppingCartValue'  => DBMoney::class,
+        'quantity'                  => 'Int',
+        'quantityRedeemed'          => 'Int',
+        'ProductNumber'             => 'Varchar(50)',
+        'LimitToRestrictedProducts' => 'Boolean',
     ];
     /**
      * 1:1 relations
@@ -220,6 +222,13 @@ class Voucher extends DataObject implements PermissionProvider
      * @var bool
      */
     private static $enable_voucher_module = true;
+    
+    /**
+     * Contains the affected shopping cart positions.
+     * 
+     * @var ArrayList|null
+     */
+    protected $affectedShoppingCartPositions = null;
     /**
      * A list of already checked shopping cart amounts
      *
@@ -773,6 +782,45 @@ class Voucher extends DataObject implements PermissionProvider
                                                         && $isMinimumValid);
         }
         return $this->isShoppingCartAmountValid[$cacheKey];
+    }
+
+    /**
+     * Returns whether this voucher's value is limited to the restricted products.
+     * 
+     * @return bool
+     */
+    public function isLimitedToRestrictedProducts() : bool
+    {
+        return $this->LimitToRestrictedProducts
+            && ($this->RestrictToProducts()->exists()
+             || $this->RestrictToProductGroups()->exists());
+    }
+    
+    /**
+     * Returns the affected shopping cart positions.
+     * 
+     * @return ArrayList
+     */
+    public function getAffectedShoppingCartPositions()
+    {
+        if ($this->affectedShoppingCartPositions === null) {
+            $this->affectedShoppingCartPositions = ArrayList::create();
+            $member                              = Customer::currentUser();
+            if ($member instanceof Member) {
+                $shoppingCartPositions = $member->ShoppingCart()->ShoppingCartPositions();
+                if ($this->isLimitedToRestrictedProducts()) {
+                    foreach ($this->RestrictToProducts() as $restrictedProduct) {
+                        $this->affectedShoppingCartPositions->merge($shoppingCartPositions->filter('ProductID', $restrictedProduct->ID));
+                    }
+                    foreach ($this->RestrictToProductGroups() as $restrictedProductGroup) {
+                        $this->affectedShoppingCartPositions->merge($shoppingCartPositions->filter('Product.ProductGroupID', $restrictedProductGroup->ID));
+                    }
+                } else {
+                    $this->affectedShoppingCartPositions = $shoppingCartPositions;
+                }
+            }
+        }
+        return $this->affectedShoppingCartPositions;
     }
 
     /**
