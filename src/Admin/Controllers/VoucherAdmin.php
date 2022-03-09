@@ -25,6 +25,12 @@ class VoucherAdmin extends ModelAdmin
      */
     private static $menuCode = 'products';
     /**
+     * The section of the menu under which this admin should be grouped.
+     * 
+     * @var string
+     */
+    private static $menuSortIndex = 110;
+    /**
      * The URL segment
      *
      * @var string

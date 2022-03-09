@@ -23,6 +23,8 @@ de:
     ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY: 'Dieser Gutschein wurde vollständig eingelöst.'
     ERRORMESSAGE-CUSTOMER_MUST_BE_REGISTERED: 'Sie müssen sich registrieren, um diesen Gutschein einzulösen, da dieser Gutschein bei Einlösung an den Kunde gebunden wird.<br />Dadurch können Sie diesen Gutschein für mehrere Einkäufe verwenden, falls Ihr Einkaufswert niedriger ist als der Gutscheinwert.<br /><a href="%s">Klicken Sie hier, um zum Registrierungsformular zu gelangen.</a>'
     ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE: 'Sie dürfen diesen Gutschein nicht einlösen.'
+    ERRORMESSAGE-ErrorNotValidAnymore: 'Dieser Gutschein ist nicht mehr gültig (abgelaufen am {date}).'
+    ERRORMESSAGE-ErrorNotValidYet: 'Dieser Gutschein ist noch nicht gültig. Bitte versuchen Sie es am {date} oder später erneut.'
     ERRORMESSAGE-NOT_REDEEMABLE: 'Der Gutschein kann nicht eingelöst werden.'
     ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID: 'Dieser Gutschein kann nicht für die Waren eingelöst werden, die sich in Ihrem Warenkorb befinden.'
     ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID: 'Der Warenkorbwert ist nicht passend.'
@@ -56,8 +58,12 @@ de:
     SINGULARNAME: Gutschein
     VALUE: Wert
     VALUE_IN_PERCENT: 'Rabatt in Prozent'
+    ValidFrom: 'Gültig ab'
+    ValidFromDesc: 'Für sofortige Gültigkeit leer lassen'
     ValidationPartnerExists: 'Ein Partner mit dem gleichen {identifier} existiert bereits.'
     ValidationVoucherExists: 'Ein Gutschein mit dem gleichen {identifier} existiert bereits.'
+    ValidUntil: 'Gültig bis'
+    ValidUntilDesc: 'Für unbegrenzte Gültigkeit leer lassen'
     VocherInvalid: 'Der Gutschein-Code {code} ist nicht mehr gültig und wurde entfernt.'
   SilverCart\Voucher\Model\VoucherHistory:
     PLURALNAME: 'Gutschein Historien'

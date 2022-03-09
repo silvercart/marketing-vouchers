@@ -23,6 +23,8 @@ en:
     ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY: 'This voucher is completely redeemed.'
     ERRORMESSAGE-CUSTOMER_MUST_BE_REGISTERED: 'To redeem this voucher you must be registered, since this voucher gets bound to the customer on redemption.<br />Thus you can use the voucher for multiple purchases in case the value of your shoppingcart is lower than the voucher value.<br /><a href="%s">Click here to register.</a>'
     ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE: 'You''re not entitled to redeem this voucher.'
+    ERRORMESSAGE-ErrorNotValidAnymore: 'This voucher is not valid anymore (expired on {date}).'
+    ERRORMESSAGE-ErrorNotValidYet: 'This voucher is not valid yet. Please try again on {date} or later.'
     ERRORMESSAGE-NOT_REDEEMABLE: 'This voucher can''t be redeemed.'
     ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID: 'Your cart doesn''t contain the appropriate products for this voucher.'
     ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID: 'The shoppingcart value is not valid.'
@@ -56,8 +58,12 @@ en:
     SINGULARNAME: Voucher
     VALUE: Value
     VALUE_IN_PERCENT: 'Rebate value in percent'
+    ValidFrom: 'Valid from'
+    ValidFromDesc: 'Leave empty for immediate validity.'
     ValidationPartnerExists: 'A partner with the same {identifier} already exists.'
     ValidationVoucherExists: 'A voucher already exists with the same {identifier}'
+    ValidUntil: 'Valid until'
+    ValidUntilDesc: 'Leave empty for unlimited validity.'
     VocherInvalid: 'The voucher {code} is no more valid and was removed from your shopping cart.'
   SilverCart\Voucher\Model\VoucherHistory:
     PLURALNAME: 'Voucher histories'

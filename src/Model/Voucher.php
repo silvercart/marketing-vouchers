@@ -53,6 +53,8 @@ use SilverStripe\View\ArrayData;
  * @param int     $quantityRedeemed          quantity redeemed
  * @param string  $ProductNumber             Product number
  * @param bool    $LimitToRestrictedProducts Limit To Restricted Products
+ * @param string  $ValidFrom                 Valid from
+ * @param string  $ValidUntil                Valid until
  * 
  * @method \SilverStripe\ORM\ManyManyList RestrictToMember()        Returns a list of related members to restrict this voucher to.
  * @method \SilverStripe\ORM\ManyManyList RestrictToGroup()         Returns a list of related groups to restrict this voucher to.
@@ -172,6 +174,8 @@ class Voucher extends DataObject implements PermissionProvider
         'quantityRedeemed'          => 'Int',
         'ProductNumber'             => 'Varchar(50)',
         'LimitToRestrictedProducts' => 'Boolean',
+        'ValidFrom'                 => 'Datetime',
+        'ValidUntil'                => 'Datetime',
     ];
     /**
      * 1:1 relations
@@ -630,11 +634,57 @@ class Voucher extends DataObject implements PermissionProvider
         } elseif (!$this->isValidForShoppingCartItems($shoppingCart->ShoppingCartPositions(), $message)) {
             $error      = true;
             $messages[] = $message === null ? $this->fieldLabel('ErrorItemsNotValid') : $message;
+        } elseif (!$this->isValidFrom()) {
+            $error      = true;
+            $messages[] = _t(self::class . '.ERRORMESSAGE-ErrorNotValidYet', 'This voucher is not valid yet. Please try again on {date} or later.', [
+                'date' => $this->dbObject('ValidFrom')->Nice(),
+            ]);
+        } elseif (!$this->isValidUntil()) {
+            $error      = true;
+            $messages[] = _t(self::class . '.ERRORMESSAGE-ErrorNotValidAnymore', 'This voucher is not valid anymore (expired on {date}).', [
+                'date' => $this->dbObject('ValidUntil')->Nice(),
+            ]);
         }
         return [
             'error'    => $error,
             'messages' => $messages
         ];
+    }
+    
+    /**
+     * Returns whether this voucher's valid from date is before the given $timestamp.
+     * If no $timestamp is given, the current time (@see time()) will be used.
+     * 
+     * @param int $timestamp Timestampt to check validity for
+     * 
+     * @return bool
+     */
+    public function isValidFrom(int $timestamp = null) : bool
+    {
+        if ($timestamp === null) {
+            $timestamp = time();
+        }
+        $is = $this->ValidFrom === null
+           || strtotime($this->ValidFrom) < $timestamp;
+        return $is;
+    }
+    
+    /**
+     * Returns whether this voucher's valid until date is after the given $timestamp.
+     * If no $timestamp is given, the current time (@see time()) will be used.
+     * 
+     * @param int $timestamp Timestampt to check validity for
+     * 
+     * @return bool
+     */
+    public function isValidUntil(int $timestamp = null) : bool
+    {
+        if ($timestamp === null) {
+            $timestamp = time();
+        }
+        $is = $this->ValidUntil === null
+           || strtotime($this->ValidUntil) > $timestamp;
+        return $is;
     }
 
     /**
@@ -1217,6 +1267,8 @@ class Voucher extends DataObject implements PermissionProvider
     {
         $this->beforeUpdateCMSFields(function(FieldList $fields) {
             $fields->removeByName('Members');
+            $fields->dataFieldByName('ValidFrom')->setDescription($this->fieldLabel('ValidFromDesc'));
+            $fields->dataFieldByName('ValidUntil')->setDescription($this->fieldLabel('ValidUntilDesc'));
             if (empty($this->code)) {
                 $code = self::generateCode();
                 $fields->dataFieldByName('code')->setAttribute('placeholder', $code);
