@@ -86,6 +86,11 @@ class VoucherPrice extends ViewableData
      */
     public $PriceNetTotalFormatted = null;
     /**
+     * Product number
+     * @var string 
+     */
+    public $ProductNumber = null;
+    /**
      * Quantity
      * @var Int 
      */

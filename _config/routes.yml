@@ -1,0 +1,6 @@
+---
+Name: silvercart-voucher-routes
+---
+SilverStripe\Control\Director:
+  rules:
+    'sc/voucher/task//$Action/$ID/$OtherID': SilverCart\Voucher\Dev\Tasks\Task
