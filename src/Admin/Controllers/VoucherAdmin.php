@@ -43,6 +43,18 @@ class VoucherAdmin extends ModelAdmin
      */
     private static $menu_title = 'Vouchers';
     /**
+     * Menu icon
+     * 
+     * @var string
+     */
+    private static $menu_icon = null;
+    /**
+     * Menu icon CSS class
+     * 
+     * @var string
+     */
+    private static $menu_icon_class = 'font-icon-block-promo-2';
+    /**
      * Managed models
      *
      * @var array
