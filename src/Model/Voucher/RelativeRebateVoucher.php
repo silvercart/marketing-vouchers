@@ -56,6 +56,13 @@ class RelativeRebateVoucher extends Voucher
         'code',
         'valueInPercent',
     ];
+    /**
+     * Is true while @see self::getShoppingCartPositions() is called and not 
+     * finished yet.
+     * 
+     * @var bool
+     */
+    protected static $loadingShoppingCartPositionsInProgress = false;
 
     /**
      * Returns the translated plural name of the object. If no translation exists
@@ -106,14 +113,14 @@ class RelativeRebateVoucher extends Voucher
      * @param bool         $createForms                  Indicates wether the form objects should be created or not
      *
      * @return ArrayList
-     *
-     * @author Sebastian Diel <sdiel@pixeltricks.de>,
-     *         Sascha Koehler <skoehler@pixeltricks.de>
-     * @since 03.02.2015
      */
     public function getShoppingCartPositions(ShoppingCart $shoppingCart, bool $taxable = true, array $excludeShoppingCartPositions = [], bool $createForms = true) : ArrayList
     {
         $positions = ArrayList::create();
+        if (self::$loadingShoppingCartPositionsInProgress) {
+            return $positions;
+        }
+        self::$loadingShoppingCartPositionsInProgress = true;
         if (in_array($this->ID, $excludeShoppingCartPositions)) {
             return $positions;
         }
@@ -140,9 +147,10 @@ class RelativeRebateVoucher extends Voucher
             $position = VoucherPrice::create();
             $position->setVoucher($this);
             $position->ID                    = $this->ID;
-            $position->Name                  = "{$this->singular_name()} (Code: {$this->code})";
+            $position->Name                  = $this->VoucherTitle ? "{$this->VoucherTitle} (Code: {$this->code})" : "{$this->i18n_singular_name()} (Code: {$this->code})";
             $position->ShortDescription      = $this->renderWith(Voucher::class . '_ShortDescription');
-            $position->LongDescription       = '';
+            $position->LongDescription       = $this->Description;
+            $position->Image                 = $this->Image();
             $position->Currency              = Config::DefaultCurrency();
             $position->Price                 = $rebateAmount * -1;
             $position->PriceFormatted        = '-' . $rebate->Nice();
@@ -163,6 +171,7 @@ class RelativeRebateVoucher extends Voucher
                 $positions->push($position);
             }
         }
+        self::$loadingShoppingCartPositionsInProgress = false;
         return $positions;
     }
 

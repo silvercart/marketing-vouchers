@@ -18,6 +18,7 @@ de:
   SilverCart\Voucher\Model\Voucher:
     CODE: Gutscheincode
     CREATED: 'Erstellt am'
+    Description: Beschreibung
     ERRORMESSAGE-ALREADY_IN_SHOPPINGCART: 'Dieser Gutschein befindet sich schon in Ihrem Warenkorb.'
     ERRORMESSAGE-CODE_NOT_VALID: 'Dieser Gutscheincode ist nicht gültig.'
     ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY: 'Dieser Gutschein wurde vollständig eingelöst.'
@@ -65,9 +66,14 @@ de:
     ValidUntil: 'Gültig bis'
     ValidUntilDesc: 'Für unbegrenzte Gültigkeit leer lassen'
     VocherInvalid: 'Der Gutschein-Code {code} ist nicht mehr gültig und wurde entfernt.'
+    VoucherTitle: Bezeichnung
+    VoucherTranslations: Übersetzungen
   SilverCart\Voucher\Model\VoucherHistory:
     PLURALNAME: 'Gutschein Historien'
     SINGULARNAME: 'Gutschein Historie'
+  SilverCart\Voucher\Model\VoucherTranslation:
+    PLURALNAME: Übersetzungen
+    SINGULARNAME: Übersetzung
   SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucher:
     IS_BOUND_TO_CUSTOMER: 'Ist an Kunden gebunden'
     PLURALNAME: Geschenkgutscheine

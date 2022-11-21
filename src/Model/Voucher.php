@@ -2,6 +2,7 @@
 
 namespace SilverCart\Voucher\Model;
 
+use PageController;
 use SilverCart\Admin\Forms\GridField\GridFieldAddExistingAutocompleter;
 use SilverCart\Model\Customer\Customer;
 use SilverCart\Model\Order\Order;
@@ -10,9 +11,12 @@ use SilverCart\Model\Order\ShoppingCartPositionNotice;
 use SilverCart\Model\Pages\ProductGroupPage;
 use SilverCart\Model\Product\Product;
 use SilverCart\Model\Product\Tax;
+use SilverCart\Model\Translation\TranslatableDataObjectExtension;
 use SilverCart\ORM\DataObjectExtension;
+use SilverCart\ORM\ExtensibleDataObject;
 use SilverCart\ORM\FieldType\DBMoney;
 use SilverCart\Voucher\Security\VoucherValidator;
+use SilverStripe\Assets\Image;
 use SilverStripe\Control\Controller;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\GridField\GridField;
@@ -27,12 +31,15 @@ use SilverStripe\ORM\DB;
 use SilverStripe\ORM\FieldType\DBMoney as SilverStripeDBMoney;
 use SilverStripe\ORM\Filters\ExactMatchFilter;
 use SilverStripe\ORM\Filters\PartialMatchFilter;
+use SilverStripe\ORM\HasManyList;
+use SilverStripe\ORM\ManyManyList;
 use SilverStripe\ORM\SS_List;
 use SilverStripe\Security\Group;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\PermissionProvider;
 use SilverStripe\View\ArrayData;
+use function _t;
 
 /**
  * Basic voucher class.
@@ -43,40 +50,44 @@ use SilverStripe\View\ArrayData;
  * @author Sebastian Diel <sdiel@pixeltricks.de>
  * @since 14.05.2020
  * @copyright 2020 pixeltricks GmbH
- * @license see license file in modules root directory
- * 
- * @param string  $code                      Code
- * @param bool    $isActive                  is active
- * @param DBMoney $minimumShoppingCartValue  minimum shopping cart value
- * @param DBMoney $maximumShoppingCartValue  maximum shopping cart value
- * @param int     $quantity                  quantity
- * @param int     $quantityRedeemed          quantity redeemed
- * @param string  $ProductNumber             Product number
- * @param bool    $LimitToRestrictedProducts Limit To Restricted Products
- * @param string  $ValidFrom                 Valid from
- * @param string  $ValidUntil                Valid until
- * 
- * @method \SilverStripe\ORM\ManyManyList RestrictToMember()        Returns a list of related members to restrict this voucher to.
- * @method \SilverStripe\ORM\ManyManyList RestrictToGroup()         Returns a list of related groups to restrict this voucher to.
- * @method \SilverStripe\ORM\ManyManyList RestrictToProductGroups() Returns a list of related product groups to restrict this voucher to.
- * @method \SilverStripe\ORM\ManyManyList RestrictToProducts()      Returns a list of related products to restrict this voucher to.
- * @method \SilverStripe\ORM\ManyManyList VoucherHistory()          Returns a list of related voucher history objects.
- * @method \SilverStripe\ORM\ManyManyList Members()                 Returns a list of related members.
+ * @license see license file in modules root directory *
+ *
+ * @property string  $VoucherTitle              Title
+ * @property string  $Description               Description
+ * @property string  $code                      Code
+ * @property bool    $isActive                  is active
+ * @property DBMoney $minimumShoppingCartValue  minimum shopping cart value
+ * @property DBMoney $maximumShoppingCartValue  maximum shopping cart value
+ * @property int     $quantity                  quantity
+ * @property int     $quantityRedeemed          quantity redeemed
+ * @property string  $ProductNumber             Product number
+ * @property bool    $LimitToRestrictedProducts Limit To Restricted Products
+ * @property string  $ValidFrom                 Valid from
+ * @property string  $ValidUntil                Valid until
+ *
+ * @method HasManyList VoucherTranslation() Returns the related Voucher Translations.
+ *
+ * @method ManyManyList RestrictToMember()        Returns a list of related members to restrict this voucher to.
+ * @method ManyManyList RestrictToGroup()         Returns a list of related groups to restrict this voucher to.
+ * @method ManyManyList RestrictToProductGroups() Returns a list of related product groups to restrict this voucher to.
+ * @method ManyManyList RestrictToProducts()      Returns a list of related products to restrict this voucher to.
+ * @method ManyManyList VoucherHistory()          Returns a list of related voucher history objects.
+ * @method ManyManyList Members()                 Returns a list of related members.
  */
 class Voucher extends DataObject implements PermissionProvider
 {
-    use \SilverCart\ORM\ExtensibleDataObject;
-    
+    use ExtensibleDataObject;
+
     const PERMISSION_CREATE = 'SILVERCART_VOUCHER_CREATE';
     const PERMISSION_DELETE = 'SILVERCART_VOUCHER_DELETE';
     const PERMISSION_EDIT   = 'SILVERCART_VOUCHER_EDIT';
     const PERMISSION_VIEW   = 'SILVERCART_VOUCHER_VIEW';
-    
+
     /**
      * Returns a voucher with the given $code.
-     * 
+     *
      * @param string $code Voucher code
-     * 
+     *
      * @return Voucher|null
      */
     public static function getByCode(string $code) : ?Voucher
@@ -86,12 +97,12 @@ class Voucher extends DataObject implements PermissionProvider
 
     /**
      * Generates a single voucher code.
-     * 
+     *
      * @param string $prefix        Code prefix
      * @param int    $partCount     Code part count
      * @param int    $partLength    Code part length
      * @param string $partDelimiter Code part delimiter
-     * 
+     *
      * @return string
      */
     public static function generateCode(string $prefix = '', int $partCount = 0, int $partLength = 0, string $partDelimiter = null) : string
@@ -119,12 +130,12 @@ class Voucher extends DataObject implements PermissionProvider
         }
         return $code;
     }
-    
+
     /**
      * Generates voucher codes.
-     * 
+     *
      * @param int $count Count of voucher codes to generate
-     * 
+     *
      * @return string[]
      */
     public static function generateCodes(int $count = 1) : array
@@ -135,7 +146,7 @@ class Voucher extends DataObject implements PermissionProvider
         }
         return $codes;
     }
-    
+
     /**
      * Amount of code parts when using the generator.
      *
@@ -183,7 +194,8 @@ class Voucher extends DataObject implements PermissionProvider
      * @var array
      */
     private static $has_one = [
-        'Tax' => Tax::class,
+        'Tax'   => Tax::class,
+        'Image' => Image::class,
     ];
     /**
      * Has-many Relationships.
@@ -191,7 +203,8 @@ class Voucher extends DataObject implements PermissionProvider
      * @var array
      */
     private static $has_many = [
-        'VoucherHistory' => VoucherHistory::class,
+        'VoucherHistory'      => VoucherHistory::class,
+        'VoucherTranslations' => VoucherTranslation::class,
     ];
     /**
      * Many-many Relationships.
@@ -218,7 +231,17 @@ class Voucher extends DataObject implements PermissionProvider
      * @var array
      */
     private static $casting = [
-        'castedFormattedCreationDate' => 'VarChar(10)',
+        'VoucherTitle'                => 'Varchar',
+        'Description'                 => 'HTMLText',
+        'castedFormattedCreationDate' => 'VarChar(10)'
+    ];
+    /**
+     * Extensions.
+     * 
+     * @var string[]
+     */
+    private static $extensions = [
+        TranslatableDataObjectExtension::class,
     ];
     /**
      * Config property to enable or disable the voucher module.
@@ -226,10 +249,9 @@ class Voucher extends DataObject implements PermissionProvider
      * @var bool
      */
     private static $enable_voucher_module = true;
-    
     /**
      * Contains the affected shopping cart positions.
-     * 
+     *
      * @var ArrayList|null
      */
     protected $affectedShoppingCartPositions = null;
@@ -285,7 +307,7 @@ class Voucher extends DataObject implements PermissionProvider
 
     /**
      * Indicates wether the current user can view this object.
-     * 
+     *
      * @param Member $member Member to check permission for
      *
      * @return bool
@@ -295,10 +317,10 @@ class Voucher extends DataObject implements PermissionProvider
         return parent::canView($member)
             || Permission::checkMember($member, self::PERMISSION_VIEW);
     }
-    
+
     /**
      * Order should not be created via backend
-     * 
+     *
      * @param Member $member Member to check permission for
      *
      * @return bool
@@ -311,7 +333,7 @@ class Voucher extends DataObject implements PermissionProvider
 
     /**
      * Indicates wether the current user can edit this object.
-     * 
+     *
      * @param Member $member Member to check permission for
      *
      * @return bool
@@ -324,7 +346,7 @@ class Voucher extends DataObject implements PermissionProvider
 
     /**
      * Indicates wether the current user can delete this object.
-     * 
+     *
      * @param Member $member Member to check permission for
      *
      * @return bool
@@ -345,32 +367,33 @@ class Voucher extends DataObject implements PermissionProvider
     public function fieldLabels($includerelations = true) : array
     {
         return $this->defaultFieldLabels($includerelations, [
-            'code'                        => _t(self::class . '.CODE', 'Code'),
-            'isActive'                    => _t(self::class . '.ISACTIVE', 'Is active'),
-            'minimumShoppingCartValue'    => _t(self::class . '.MINIMUM_SHOPPINGCART_VALUE', 'Minimum shopping cart value'),
-            'maximumShoppingCartValue'    => _t(self::class . '.MAXIMUM_SHOPPINGCART_VALUE', 'Maximum shopping cart value'),
-            'OriginalValue'               => _t(self::class . '.ORIGINAL_VALUE', 'Original value'),
-            'quantity'                    => _t(self::class . '.QUANTITY', 'Quantity'),
-            'quantityRedeemed'            => _t(self::class . '.QUANTITY_REDEEMED', 'Quantity redeemed'),
-            'Tax'                         => Tax::singleton()->singular_name(),
-            'Redeem'                      => _t(self::class . '.LABEL-REDEEM', 'Redeem '),
-            'RedeemedVouchers'            => _t(self::class . '.REDEEMED_VOUCHERS', 'Redeemed vouchers: '),
-            'RemainingCredit'             => _t(self::class . '.REMAINING_CREDIT', 'Remaining credit'),
-            'RestrictToMember'            => _t(self::class . '.RESTRICT_TO_MEMBER', 'Restrict to customers'),
-            'RestrictToGroup'             => _t(self::class . '.RESTRICT_TO_GROUP', 'Restrict to groups'),
-            'RestrictToProductGroups'     => _t(self::class . '.RESTRICT_TO_PRODUCTGROUP', 'Restrict to product groups'),
-            'RestrictToProducts'          => _t(self::class . '.RESTRICT_TO_PRODUCT', 'Restrict to products'),
-            'VoucherHistory'              => VoucherHistory::singleton()->singular_name(),
-            'castedFormattedCreationDate' => _t(self::class . '.CREATED', 'Created'),
-            'ProductNumber'               => _t(self::class . '.PRODUCTNUMBER', 'Product number'),
-            'ErrorCodeNotValid'           => _t(self::class . '.ERRORMESSAGE-CODE_NOT_VALID', 'This voucher code is not valid.'),
-            'ErrorCustomerNotEligible'    => _t(self::class . '.ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE', 'You\'re not entitled to redeem this voucher.'),
-            'ErrorNotRedeemable'          => _t(self::class . '.ERRORMESSAGE-NOT_REDEEMABLE', 'This voucher can\'t be redeemed.'),
-            'ErrorAlreadyRedeemed'        => _t(self::class . '.ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY', 'This voucher is completely redeemed.'),
-            'ErrorAlreadyInCart'          => _t(self::class . '.ERRORMESSAGE-ALREADY_IN_SHOPPINGCART', 'This voucher is already in your shoppingcart.'),
-            'ErrorValueNotValid'          => _t(self::class . '.ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID', 'The shoppingcart value is not valid.'),
-            'ErrorItemsNotValid'          => _t(self::class . '.ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID', 'Your cart doesn\'t contain the appropriate products for this voucher.'),
-            'Value'                       => _t(self::class . '.VALUE', 'Value'),
+            'Image'                           => _t(self::class . '.Image', 'Image'),
+            'code'                            => _t(self::class . '.CODE', 'Code'),
+            'isActive'                        => _t(self::class . '.ISACTIVE', 'Is active'),
+            'minimumShoppingCartValue'        => _t(self::class . '.MINIMUM_SHOPPINGCART_VALUE', 'Minimum shopping cart value'),
+            'maximumShoppingCartValue'        => _t(self::class . '.MAXIMUM_SHOPPINGCART_VALUE', 'Maximum shopping cart value'),
+            'OriginalValue'                   => _t(self::class . '.ORIGINAL_VALUE', 'Original value'),
+            'quantity'                        => _t(self::class . '.QUANTITY', 'Quantity'),
+            'quantityRedeemed'                => _t(self::class . '.QUANTITY_REDEEMED', 'Quantity redeemed'),
+            'Tax'                             => Tax::singleton()->singular_name(),
+            'Redeem'                          => _t(self::class . '.LABEL-REDEEM', 'Redeem '),
+            'RedeemedVouchers'                => _t(self::class . '.REDEEMED_VOUCHERS', 'Redeemed vouchers: '),
+            'RemainingCredit'                 => _t(self::class . '.REMAINING_CREDIT', 'Remaining credit'),
+            'RestrictToMember'                => _t(self::class . '.RESTRICT_TO_MEMBER', 'Restrict to customers'),
+            'RestrictToGroup'                 => _t(self::class . '.RESTRICT_TO_GROUP', 'Restrict to groups'),
+            'RestrictToProductGroups'         => _t(self::class . '.RESTRICT_TO_PRODUCTGROUP', 'Restrict to product groups'),
+            'RestrictToProducts'              => _t(self::class . '.RESTRICT_TO_PRODUCT', 'Restrict to products'),
+            'VoucherHistory'                  => VoucherHistory::singleton()->singular_name(),
+            'castedFormattedCreationDate'     => _t(self::class . '.CREATED', 'Created'),
+            'ProductNumber'                   => _t(self::class . '.PRODUCTNUMBER', 'Product number'),
+            'ErrorCodeNotValid'               => _t(self::class . '.ERRORMESSAGE-CODE_NOT_VALID', 'This voucher code is not valid.'),
+            'ErrorCustomerNotEligible'        => _t(self::class . '.ERRORMESSAGE-CUSTOMER_NOT_ELIGIBLE', 'You\'re not entitled to redeem this voucher.'),
+            'ErrorNotRedeemable'              => _t(self::class . '.ERRORMESSAGE-NOT_REDEEMABLE', 'This voucher can\'t be redeemed.'),
+            'ErrorAlreadyRedeemed'            => _t(self::class . '.ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY', 'This voucher is completely redeemed.'),
+            'ErrorAlreadyInCart'              => _t(self::class . '.ERRORMESSAGE-ALREADY_IN_SHOPPINGCART', 'This voucher is already in your shoppingcart.'),
+            'ErrorValueNotValid'              => _t(self::class . '.ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID', 'The shoppingcart value is not valid.'),
+            'ErrorItemsNotValid'              => _t(self::class . '.ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID', 'Your cart doesn\'t contain the appropriate products for this voucher.'),
+            'Value'                           => _t(self::class . '.VALUE', 'Value'),
             self::PERMISSION_CREATE           => _t(self::class . '.' . self::PERMISSION_CREATE, 'Create Vouchers'),
             self::PERMISSION_CREATE . '_HELP' => _t(self::class . '.' . self::PERMISSION_CREATE . '_HELP', 'Allows an user to create new vouchers.'),
             self::PERMISSION_VIEW             => _t(self::class . '.' . self::PERMISSION_VIEW, 'View Vouchers'),
@@ -391,6 +414,7 @@ class Voucher extends DataObject implements PermissionProvider
     {
         return [
             'castedFormattedCreationDate' => $this->fieldLabel('castedFormattedCreationDate'),
+            'title'                       => $this->fieldLabel('title'),
             'code'                        => $this->fieldLabel('code'),
             'isActive'                    => $this->fieldLabel('isActive'),
             'quantity'                    => $this->fieldLabel('quantity'),
@@ -421,20 +445,52 @@ class Voucher extends DataObject implements PermissionProvider
         $this->extend('updateSearchableFields', $fields);
         return $fields;
     }
-    
+
     /**
      * Returns the title
-     * 
+     *
      * @return string
      */
     public function getTitle() : string
     {
-        return "{$this->singular_name()} (Code: {$this->code})";
+        return $this->VoucherTitle ? "{$this->VoucherTitle} (Code: {$this->code})" : "{$this->singular_name()} (Code: {$this->code})";
     }
     
     /**
-     * Returns the related tax.
+     * Returns the translated VoucherTitle.
+     *
+     * @return string
+     */
+    public function getVoucherTitle() : string
+    {
+        return (string) $this->getTranslationFieldValue('VoucherTitle');
+    }
+    
+    /**
+     * Returns the translated Description.
+     *
+     * @return string
+     */
+    public function getDescription() : string
+    {
+        return (string) $this->getTranslationFieldValue('Description');
+    }
+    
+    /**
+     * Returns the related Image with the voucher's title.
      * 
+     * @return Image
+     */
+    public function Image() : Image
+    {
+        $image = $this->getComponent('Image');
+        $image->Title = $this->Title;
+        return $image;
+    }
+
+    /**
+     * Returns the related tax.
+     *
      * @return Tax
      */
     public function Tax() : Tax
@@ -488,7 +544,7 @@ class Voucher extends DataObject implements PermissionProvider
      *     'messages' => string[],
      * ]
      * </code>
-     * 
+     *
      * @param Voucher      $voucher      the vouchers code
      * @param Member       $member       the member object to check against
      * @param ShoppingCart $shoppingCart the shopping cart to check against
@@ -606,7 +662,7 @@ class Voucher extends DataObject implements PermissionProvider
     /**
      * Performs checks related to the shopping cart entries to ensure that
      * the voucher is allowed to be placed in the cart.
-     * 
+     *
      * Returns:
      * <code>
      * [
@@ -650,13 +706,13 @@ class Voucher extends DataObject implements PermissionProvider
             'messages' => $messages
         ];
     }
-    
+
     /**
      * Returns whether this voucher's valid from date is before the given $timestamp.
      * If no $timestamp is given, the current time (@see time()) will be used.
-     * 
+     *
      * @param int $timestamp Timestampt to check validity for
-     * 
+     *
      * @return bool
      */
     public function isValidFrom(int $timestamp = null) : bool
@@ -668,13 +724,13 @@ class Voucher extends DataObject implements PermissionProvider
            || strtotime($this->ValidFrom) < $timestamp;
         return $is;
     }
-    
+
     /**
      * Returns whether this voucher's valid until date is after the given $timestamp.
      * If no $timestamp is given, the current time (@see time()) will be used.
-     * 
+     *
      * @param int $timestamp Timestampt to check validity for
-     * 
+     *
      * @return bool
      */
     public function isValidUntil(int $timestamp = null) : bool
@@ -776,14 +832,14 @@ class Voucher extends DataObject implements PermissionProvider
         }
         return false;
     }
-    
+
     /**
      * can be used to return if a voucher is already fully redeemd,
      * set error message in checkifAllowedInShoppingCart()
-     * 
+     *
      * @param Member $member    the member object
      * @param int    $voucherID id of the voucher
-     * 
+     *
      * @return bool
      */
     protected function isCompletelyRedeemedAlready(Member $member, int $voucherID) : bool
@@ -836,7 +892,7 @@ class Voucher extends DataObject implements PermissionProvider
 
     /**
      * Returns whether this voucher's value is limited to the restricted products.
-     * 
+     *
      * @return bool
      */
     public function isLimitedToRestrictedProducts() : bool
@@ -845,10 +901,10 @@ class Voucher extends DataObject implements PermissionProvider
             && ($this->RestrictToProducts()->exists()
              || $this->RestrictToProductGroups()->exists());
     }
-    
+
     /**
      * Returns the affected shopping cart positions.
-     * 
+     *
      * @return ArrayList
      */
     public function getAffectedShoppingCartPositions()
@@ -949,7 +1005,7 @@ class Voucher extends DataObject implements PermissionProvider
     /**
      * Checks if the voucher is active and if there are enough remaining
      * vouchers if the quantity is restricted.
-     * 
+     *
      * @param Member $member Member context
      *
      * @return bool
@@ -1007,7 +1063,7 @@ class Voucher extends DataObject implements PermissionProvider
      * @param ShoppingCart $shoppingCart The shopping cart object
      *
      * @return Voucher
-     * 
+     *
      * @deprecated
      */
     public function loadObjectForShoppingCart(ShoppingCart $shoppingCart) : Voucher
@@ -1054,6 +1110,7 @@ class Voucher extends DataObject implements PermissionProvider
      */
     public function ShoppingCartPositions(ShoppingCart $shoppingCart, Member $member = null, bool $taxable = true, array $excludeShoppingCartPositions = [], bool $createForms = true) : ArrayList
     {
+
         $positions   = ArrayList::create();
         $vhTableName = VoucherHistory::config()->table_name;
         $addedIDs    = [];
@@ -1201,7 +1258,7 @@ class Voucher extends DataObject implements PermissionProvider
         $actions    = ArrayList::create();
         $controller = Controller::curr();
         // Don't initialise when called from within the cms
-        if (!($controller instanceof \PageController)
+        if (!($controller instanceof PageController)
          || !$controller->hasMethod('AddVoucherCodeForm')
          || !Voucher::get()->filter('isActive', true)->exists()
         ) {
@@ -1281,12 +1338,13 @@ class Voucher extends DataObject implements PermissionProvider
                 $historyField->getConfig()->removeComponentsByType(GridFieldFilterHeader::class);
             }
         });
-        return DataObjectExtension::getCMSFields($this);
+
+        return DataObjectExtension::getCMSFields($this, 'code');
     }
-    
+
     /**
      * Returns the custom VoucherValidator to use for CMS field validation.
-     * 
+     *
      * @return VoucherValidator
      */
     public function getCMSValidator() : VoucherValidator
@@ -1298,7 +1356,7 @@ class Voucher extends DataObject implements PermissionProvider
     }
 
     /**
-     * Allows user code to hook into DataObject::getCMSValidator prior to 
+     * Allows user code to hook into DataObject::getCMSValidator prior to
      * updateCMSValidator being called on extensions.
      *
      * @param callable $callback The callback to execute
@@ -1307,10 +1365,10 @@ class Voucher extends DataObject implements PermissionProvider
     {
         $this->beforeExtending('updateCMSValidator', $callback);
     }
-    
+
     /**
      * On before write.
-     * 
+     *
      * @return void
      */
     protected function onBeforeWrite() : void

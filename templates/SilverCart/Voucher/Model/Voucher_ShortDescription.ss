@@ -1,3 +1,4 @@
+<% if $Description %>{$Description}<% end_if %>
 <% if $isLimitedToRestrictedProducts %>
     <% if $AffectedShoppingCartPositions.count == 1 %>
     <span class="text-blue-dark-85"><%t SilverCart\Voucher.LimitedToRestrictedProductsSingular 'This voucher is valid for the product <i><u>{title}</u></i>.' title=$AffectedShoppingCartPositions.first.Title %></span>

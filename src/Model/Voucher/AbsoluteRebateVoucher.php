@@ -28,7 +28,7 @@ use SilverStripe\Security\Member;
  * @since 14.05.2020
  * @copyright 2020 pixeltricks GmbH
  * @license see license file in modules root directory
- * 
+ *
  * @param DBMoney $value Value
  */
 class AbsoluteRebateVoucher extends Voucher
@@ -49,13 +49,13 @@ class AbsoluteRebateVoucher extends Voucher
     ];
     /**
      * IDs of positions that have already been handled
-     * 
+     *
      * @var array
      */
     public static $alreadyHandledPositionIDs = [];
     /**
      * The actual positions that have already been handled
-     * 
+     *
      * @var ArrayList[]
      */
     public static $alreadyHandledPositions = [];
@@ -142,7 +142,7 @@ class AbsoluteRebateVoucher extends Voucher
             if (in_array($this->ID, self::$alreadyHandledPositionIDs)) {
                 return self::$alreadyHandledPositions[$this->ID];
             }
-            $title            = "{$this->singular_name()} (Code: {$this->code})";
+            $title            = $this->VoucherTitle ? "{$this->VoucherTitle} (Code: {$this->code})" : "{$this->i18n_singular_name()} (Code: {$this->code})";
             $remainingVoucher = $shoppingCart->Member()->Vouchers()->byID($this->ID);
             if ($remainingVoucher instanceof Voucher) {
                 $priceGross = DBMoney::create()
@@ -211,17 +211,17 @@ class AbsoluteRebateVoucher extends Voucher
         }
         return $positions;
     }
-    
+
     /**
      * creates a VoucherPrice and returns it
-     * 
+     *
      * @param string  $title      Title of the object
      * @param DBMoney $priceGross gross price object
      * @param DBMoney $priceNet   net price object
      * @param float   $taxAmount  tax amount obj
-     * 
+     *
      * @return VoucherPrice
-     * 
+     *
      * @author Patrick Schneider <pschneider@pixeltricks.de>
      * @since 05.12.2012
      */
@@ -232,8 +232,9 @@ class AbsoluteRebateVoucher extends Voucher
         $voucherPriceObj->setVoucher($this);
         $voucherPriceObj->ID                     = $this->ID;
         $voucherPriceObj->Name                   = $title;
-        $voucherPriceObj->ShortDescription       = $this->code;
-        $voucherPriceObj->LongDescription        = $this->code;
+        $voucherPriceObj->ShortDescription       = $this->Description;
+        $voucherPriceObj->Image                  = $this->Image();
+        $voucherPriceObj->LongDescription        = $this->Description;
         $voucherPriceObj->Currency               = $priceGross->getCurrency();
         $voucherPriceObj->Price                  = $priceGross->getAmount();
         $voucherPriceObj->PriceFormatted         = $priceGross->Nice();
@@ -290,10 +291,10 @@ class AbsoluteRebateVoucher extends Voucher
         $fields->addFieldToTab('Root.Main', LiteralField::create('quantityRedeemed', "<br />{$this->fieldLabel('RedeemedVouchers')}" . ($this->quantityRedeemed ? $this->quantityRedeemed : '0')));
         return $fields;
     }
-    
+
     /**
      * Returns the custom VoucherValidator to use for CMS field validation.
-     * 
+     *
      * @return VoucherValidator
      */
     public function getCMSValidator() : VoucherValidator
@@ -307,7 +308,7 @@ class AbsoluteRebateVoucher extends Voucher
     /**
      * splits a value of a voucher to make sure a voucher can be used until it
      * has a value of 0
-     * 
+     *
      * @param float $currentRemainingAmount current remaining amount for customer <->member
      * @param float $amountToReduce         amount to reduce
      *
@@ -363,32 +364,32 @@ class AbsoluteRebateVoucher extends Voucher
             }
             $newRemainingAmount = $this->doSplitValue($currentRemainingAmount, $amountToReduce);
             $member->Vouchers()->add(
-                $originalVoucher, 
+                $originalVoucher,
                 ['remainingAmount' => $newRemainingAmount]
             );
         }
     }
-    
+
     /**
      * returns the relation object for given member and voucherID
      * null if it does not exist
-     * 
+     *
      * @param Member $member    member object to search on
      * @param int    $voucherID voucherID to search for
-     * 
+     *
      * @return Voucher|NULL
      */
     protected function getVoucherOnMember(Member $member, int $voucherID) : ?Voucher
     {
         return $member->Vouchers()->byID($voucherID);
     }
-    
+
     /**
      * can be used to return if a voucher is already fully redeemd,
      * set error message in checkifAllowedInShoppingCart()
-     * 
+     *
      * @param Member $member Member context
-     * 
+     *
      * @return bool
      */
     public function isRedeemable(Member $member = null) : bool
@@ -406,16 +407,16 @@ class AbsoluteRebateVoucher extends Voucher
         }
         return $isRedeemable;
     }
-    
+
     /**
      * can be used to return if a voucher is already fully redeemd,
      * set error message in checkifAllowedInShoppingCart()
-     * 
+     *
      * @param Member $member    the member object
      * @param int    $voucherID used voucher code to check for
-     * 
+     *
      * @return bool
-     * 
+     *
      * @author Patrick Schneider <pschneider@pixeltricks.de>
      * @since 06.12.2012
      */

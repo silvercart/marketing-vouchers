@@ -18,6 +18,7 @@ en:
   SilverCart\Voucher\Model\Voucher:
     CODE: 'Voucher code'
     CREATED: 'Created on'
+    Description: Description
     ERRORMESSAGE-ALREADY_IN_SHOPPINGCART: 'This voucher is already in your shoppingcart.'
     ERRORMESSAGE-CODE_NOT_VALID: 'This voucher code is not valid.'
     ERRORMESSAGE-COMPLETELY_REDEEMED_ALREADY: 'This voucher is completely redeemed.'
@@ -65,9 +66,14 @@ en:
     ValidUntil: 'Valid until'
     ValidUntilDesc: 'Leave empty for unlimited validity.'
     VocherInvalid: 'The voucher {code} is no more valid and was removed from your shopping cart.'
+    VoucherTitle: Title
+    VoucherTranslations: Translations
   SilverCart\Voucher\Model\VoucherHistory:
     PLURALNAME: 'Voucher histories'
     SINGULARNAME: 'Voucher history'
+  SilverCart\Voucher\Model\VoucherTranslation:
+    PLURALNAME: Translations
+    SINGULARNAME: Translation
   SilverCart\Voucher\Model\Voucher\AbsoluteRebateGiftVoucher:
     IS_BOUND_TO_CUSTOMER: 'Is bound to customer'
     PLURALNAME: 'Gift vouchers'
