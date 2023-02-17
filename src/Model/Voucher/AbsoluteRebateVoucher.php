@@ -338,18 +338,14 @@ class AbsoluteRebateVoucher extends Voucher
      * @param Member               $member               member object
      *
      * @return void
-     *
-     * @author Patrick Schneider <pschneider@pixeltricks.de>
-     * @since 03.12.2012
      */
     public function convert(ShoppingCart $shoppingCart, ShoppingCartPosition $shoppingCartPosition, Voucher $originalVoucher, Member $member) : void
     {
         if (Customer::currentRegisteredCustomer()) {
             // only do this for registered customers
-            $currentRemainingAmount = null;
-            $amountToReduce         = $shoppingCartPosition->Voucher()->value->getAmount();
-            $voucherOnMember        = $member->Vouchers()->find('ID', $shoppingCartPosition->VoucherID);
-            $pricePositions         = $this->ShoppingCartPositions($shoppingCart, $member);
+            $amountToReduce  = $shoppingCartPosition->Voucher()->value->getAmount();
+            $voucherOnMember = $this->getVoucherOnMember($member, $shoppingCartPosition->VoucherID);
+            $pricePositions  = $this->ShoppingCartPositions($shoppingCart, $member);
             if ($pricePositions->exists()) {
                 $pricePosition  = $pricePositions->first();
                 /* @var $pricePosition VoucherPrice */
@@ -357,16 +353,13 @@ class AbsoluteRebateVoucher extends Voucher
             }
             if (!$voucherOnMember) {
                 // this voucher is unused yet by this customer, connect to customer
-                $member->Vouchers()->add($originalVoucher);
-                $currentRemainingAmount = $originalVoucher->value->getAmount();
+                $member->Vouchers()->add(
+                    $originalVoucher,
+                    ['remainingAmount' => $this->doSplitValue($originalVoucher->value->getAmount(), $amountToReduce)]
+                );
             } else {
-                $currentRemainingAmount = $voucherOnMember->remainingAmount;
+                $this->updateRemainingAmount($member, $originalVoucher, $this->doSplitValue($voucherOnMember->remainingAmount, $amountToReduce));
             }
-            $newRemainingAmount = $this->doSplitValue($currentRemainingAmount, $amountToReduce);
-            $member->Vouchers()->add(
-                $originalVoucher,
-                ['remainingAmount' => $newRemainingAmount]
-            );
         }
     }
 
@@ -381,7 +374,31 @@ class AbsoluteRebateVoucher extends Voucher
      */
     protected function getVoucherOnMember(Member $member, int $voucherID) : ?Voucher
     {
-        return $member->Vouchers()->byID($voucherID);
+        $voucher = $member->Vouchers()->byID($voucherID);
+        $this->extend('updateVoucherOnMember', $voucherID, $voucher, $member);
+        return $voucher;
+    }
+    
+    /**
+     * Updates the $remainingAmount for the given $member and $voucher.
+     * 
+     * @param Member  $member          Member
+     * @param Voucher $voucher         Voucher
+     * @param float   $remainingAmount Remaining amount
+     * 
+     * @return void
+     */
+    protected function updateRemainingAmount(Member $member, Voucher $voucher, float $remainingAmount) : void
+    {
+        $voucher2 = $member->Vouchers()->byID($voucher->ID);
+        if ($voucher2 === null) {
+            $voucherID = $voucher->ID;
+            $this->extend('updateVoucherOnMemberContext', $voucherID, $member);
+        }
+        $member->Vouchers()->add(
+            $voucher,
+            ['remainingAmount' => $remainingAmount]
+        );
     }
 
     /**
@@ -398,7 +415,7 @@ class AbsoluteRebateVoucher extends Voucher
         if (!$isRedeemable
          && $member instanceof Member
         ) {
-            $voucherOnMember = $member->Vouchers()->byID($this->ID);
+            $voucherOnMember = $this->getVoucherOnMember($member, $this->ID);
             if ($voucherOnMember instanceof Voucher
              && $voucherOnMember->remainingAmount > 0
             ) {
@@ -416,15 +433,12 @@ class AbsoluteRebateVoucher extends Voucher
      * @param int    $voucherID used voucher code to check for
      *
      * @return bool
-     *
-     * @author Patrick Schneider <pschneider@pixeltricks.de>
-     * @since 06.12.2012
      */
     protected function isCompletelyRedeemedAlready(Member $member, int $voucherID) : bool
     {
         $isFullyRedeemedAlready = false;
         if (Customer::currentRegisteredCustomer()) {
-            $voucherOnMember = $member->Vouchers()->byID($voucherID);
+            $voucherOnMember = $this->getVoucherOnMember($member, $voucherID);
             if ($voucherOnMember instanceof Voucher
              && $voucherOnMember->remainingAmount == 0.0
             ) {

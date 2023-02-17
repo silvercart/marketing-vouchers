@@ -4,6 +4,7 @@ namespace SilverCart\Voucher\Model;
 
 use PageController;
 use SilverCart\Admin\Forms\GridField\GridFieldAddExistingAutocompleter;
+use SilverCart\Admin\Model\Config as SilverCartConfig;
 use SilverCart\Model\Customer\Customer;
 use SilverCart\Model\Order\Order;
 use SilverCart\Model\Order\ShoppingCart;
@@ -627,7 +628,7 @@ class Voucher extends DataObject implements PermissionProvider
             ) {
                 return;
             }
-            if (!$this->isRedeemable()) {
+            if (!$this->isRedeemable($member)) {
                 ShoppingCartPositionNotice::addAllowedNotice('voucher-invalid', _t(self::class . '.VocherInvalid', 'The voucher {code} is no more valid and was removed from your shopping cart.', ['code' => $this->code]), ShoppingCartPositionNotice::NOTICE_TYPE_DANGER, ShoppingCartPositionNotice::NOTICE_FA_EXCLAMATION_CIRCLE);
                 ShoppingCartPositionNotice::setNotice(0, 'voucher-invalid');
                 $position = ShoppingCartPosition::getVoucherShoppingCartPosition($shoppingCart->ID, $this->ID);
@@ -1438,5 +1439,18 @@ class Voucher extends DataObject implements PermissionProvider
             }
         }
         return $foundKey;
+    }
+    
+    /**
+     * Returns the remaining amount related to the belongs_many_many relation to
+     * Members.
+     * 
+     * @return SilverStripeDBMoney
+     */
+    public function RemainingAmountNice() : SilverStripeDBMoney
+    {
+        return SilverStripeDBMoney::create()
+                ->setAmount((float) $this->remainingAmount)
+                ->setCurrency(SilverCartConfig::DefaultCurrency());
     }
 }
