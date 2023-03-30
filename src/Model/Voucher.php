@@ -63,6 +63,7 @@ use function _t;
  * @property int     $quantityRedeemed          quantity redeemed
  * @property string  $ProductNumber             Product number
  * @property bool    $LimitToRestrictedProducts Limit To Restricted Products
+ * @property bool    $IsRedeemableMultipleTimes Is Redeemable Multiple Times
  * @property string  $ValidFrom                 Valid from
  * @property string  $ValidUntil                Valid until
  *
@@ -186,6 +187,7 @@ class Voucher extends DataObject implements PermissionProvider
         'quantityRedeemed'          => 'Int',
         'ProductNumber'             => 'Varchar(50)',
         'LimitToRestrictedProducts' => 'Boolean',
+        'IsRedeemableMultipleTimes' => 'Boolean',
         'ValidFrom'                 => 'Datetime',
         'ValidUntil'                => 'Datetime',
     ];

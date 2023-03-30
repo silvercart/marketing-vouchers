@@ -31,6 +31,8 @@ de:
     ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID: 'Der Warenkorbwert ist nicht passend.'
     ERRORMESSAGE-VOUCHER_ALREADY_OWNED: 'Dieser Gutschein wurde schon von einer anderen Person eingelöst.'
     ISACTIVE: 'Ist Aktiv'
+    IsRedeemableMultipleTimes: 'Ist mehrfach einlösbar'
+    IsRedeemableMultipleTimesDesc: 'Dieser Gutschein kann je Kunde mehrmals eingelöst werden.'
     LABEL-REDEEM: Einlösen
     LABEL-SHOPPINGCART_REMOVE: Entfernen
     LimitToRestrictedProducts: 'Gültigkeit dieses Gutscheins auf die daran gebundenen Artikel limitieren'

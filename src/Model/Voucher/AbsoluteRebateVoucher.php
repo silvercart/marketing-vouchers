@@ -437,7 +437,9 @@ class AbsoluteRebateVoucher extends Voucher
     protected function isCompletelyRedeemedAlready(Member $member, int $voucherID) : bool
     {
         $isFullyRedeemedAlready = false;
-        if (Customer::currentRegisteredCustomer()) {
+        if (!$this->IsRedeemableMultipleTimes
+         && Customer::currentRegisteredCustomer()
+        ) {
             $voucherOnMember = $this->getVoucherOnMember($member, $voucherID);
             if ($voucherOnMember instanceof Voucher
              && $voucherOnMember->remainingAmount == 0.0

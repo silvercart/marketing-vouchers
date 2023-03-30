@@ -31,6 +31,8 @@ en:
     ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID: 'The shoppingcart value is not valid.'
     ERRORMESSAGE-VOUCHER_ALREADY_OWNED: 'This voucher has already been redeemed by somebody else.'
     ISACTIVE: 'Is active'
+    IsRedeemableMultipleTimes: 'Is redeemable multiple times'
+    IsRedeemableMultipleTimesDesc: 'This voucher can be redeemed several times per customer.'
     LABEL-REDEEM: Redeem
     LABEL-SHOPPINGCART_REMOVE: Remove
     LimitToRestrictedProducts: 'Limit validity of this voucher to the restricted products.'
