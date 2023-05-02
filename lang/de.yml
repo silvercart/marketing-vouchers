@@ -86,6 +86,7 @@ de:
     SINGULARNAME: 'Geschenkgutschein Vorlage'
     VALUE: Wert
   SilverCart\Voucher\Model\Voucher\AbsoluteRebateVoucher:
+    MultipliesWithQuantity: 'Wird mit der Menge betroffener Artikel im Warenkorb multipliziert'
     PLURALNAME: Wertgutscheine
     SINGULARNAME: Wertgutschein
     VALUE: Wert

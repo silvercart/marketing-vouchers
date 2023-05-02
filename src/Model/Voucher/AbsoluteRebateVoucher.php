@@ -25,6 +25,7 @@ use SilverStripe\Security\Member;
  * @subpackage Voucher\Model\Voucher
  * @author Sascha Koehler <skoehler@pixeltricks.de>
  * @author Sebastian Diel <sdiel@pixeltricks.de>
+ * @author Ionut Lipciuc
  * @since 14.05.2020
  * @copyright 2020 pixeltricks GmbH
  * @license see license file in modules root directory
@@ -45,7 +46,8 @@ class AbsoluteRebateVoucher extends Voucher
      * @var array
      */
     private static $db = [
-        'value' => DBMoney::class,
+        'value'                  => DBMoney::class,
+        'MultipliesWithQuantity' => 'Boolean',
     ];
     /**
      * IDs of positions that have already been handled
@@ -98,7 +100,8 @@ class AbsoluteRebateVoucher extends Voucher
             parent::fieldLabels($includerelations),
             [
                 'value' => _t(self::class . '.VALUE', 'value'),
-            ]
+            ],
+            Tools::field_labels_for(self::class)
         );
     }
 
@@ -142,13 +145,15 @@ class AbsoluteRebateVoucher extends Voucher
             if (in_array($this->ID, self::$alreadyHandledPositionIDs)) {
                 return self::$alreadyHandledPositions[$this->ID];
             }
+            $rebate           = $this->getRebate($shoppingCart);
+            $rebateAmount     = $rebate->getAmount();
             $title            = $this->VoucherTitle ? "{$this->VoucherTitle} (Code: {$this->code})" : "{$this->i18n_singular_name()} (Code: {$this->code})";
             $remainingVoucher = $shoppingCart->Member()->Vouchers()->byID($this->ID);
             if ($remainingVoucher instanceof Voucher) {
                 $priceGross = DBMoney::create()
                         ->setAmount($remainingVoucher->remainingAmount)
                         ->setCurrency($this->value->getCurrency());
-                $originalAmount    = $this->value->getAmount();
+                $originalAmount    = $rebateAmount;
                 $originalAmountNet = round($originalAmount / (100 + $this->Tax()->Rate) * 100, 4);
                 $originalValue  = DBMoney::create()
                         ->setAmount($originalAmount)
@@ -158,7 +163,7 @@ class AbsoluteRebateVoucher extends Voucher
                         ->setCurrency($this->value->getCurrency());
             } else {
                 $priceGross = DBMoney::create()
-                        ->setAmount($this->value->getAmount())
+                        ->setAmount($rebateAmount)
                         ->setCurrency($this->value->getCurrency());
             }
             $priceNetAmount = round($priceGross->getAmount() / (100 + $this->Tax()->Rate) * 100, 4);
@@ -277,18 +282,79 @@ class AbsoluteRebateVoucher extends Voucher
     }
 
     /**
-     * Redefine input fields for the backend.
+     * Returns the rebate amount as a DBMoney object.
      *
-     * @param array $params Additional parameters
+     * @param ShoppingCart $shoppingCart The shoppingcart object
+     *
+     * @return DBMoney
+     */
+    public function getRebate(ShoppingCart $shoppingCart) : DBMoney
+    {
+        $rebateBase = 1;
+        if ($this->MultipliesWithQuantity
+         && $this->isLimitedToRestrictedProducts()
+        ) {
+            $rebateBase = 0;
+            foreach ($this->getAffectedCurrentShoppingCartPositions($shoppingCart) as $position) {
+                /* @var $position \SilverCart\Model\Order\ShoppingCartPosition */
+                $rebateBase += $position->Quantity;
+            }
+        }
+        return DBMoney::create()
+            ->setAmount($this->value->getAmount() * $rebateBase)
+            ->setCurrency($this->value->getCurrency());
+    }
+
+    /**
+     * Returns the affected shopping cart positions.
+     *
+     * @param ShoppingCart $shoppingCart The shoppingcart object
+     *
+     * @return ArrayList
+     */
+    public function getAffectedCurrentShoppingCartPositions(ShoppingCart $shoppingCart) : ArrayList
+    {
+        if ($this->affectedShoppingCartPositions === null) {
+            $this->affectedShoppingCartPositions = ArrayList::create();
+            $shoppingCartPositions               = $shoppingCart->ShoppingCartPositions();
+            if ($this->isLimitedToRestrictedProducts()) {
+                foreach ($this->RestrictToProducts() as $restrictedProduct) {
+                    $this->affectedShoppingCartPositions->merge(
+                        $shoppingCartPositions->filter(
+                            'ProductID', $restrictedProduct->ID
+                        )
+                    );
+                }
+                foreach ($this->RestrictToProductGroups() as $restrictedProductGroup) {
+                    $this->affectedShoppingCartPositions->merge(
+                        $shoppingCartPositions->filter(
+                            'Product.ProductGroupID',
+                            $restrictedProductGroup->ID
+                        )
+                    );
+                }
+            } else {
+                $this->affectedShoppingCartPositions = $shoppingCartPositions;
+            }
+        }
+        return $this->affectedShoppingCartPositions;
+    }
+
+    /**
+     * Redefine input fields for the backend.
      *
      * @return FieldList
      */
     public function getCMSFields() : FieldList
     {
         $fields = parent::getCMSFields();
-        $fields->removeByName('LimitToRestrictedProducts');
         $fields->removeByName('quantityRedeemed');
         $fields->addFieldToTab('Root.Main', LiteralField::create('quantityRedeemed', "<br />{$this->fieldLabel('RedeemedVouchers')}" . ($this->quantityRedeemed ? $this->quantityRedeemed : '0')));
+        if ($this->exists()) {
+            $fields->addFieldToTab('Root.RestrictToProducts', $fields->dataFieldByName('MultipliesWithQuantity'), 'RestrictToProducts');
+        } else {
+            $fields->removeByName('MultipliesWithQuantity');
+        }
         return $fields;
     }
 
@@ -378,14 +444,14 @@ class AbsoluteRebateVoucher extends Voucher
         $this->extend('updateVoucherOnMember', $voucherID, $voucher, $member);
         return $voucher;
     }
-    
+
     /**
      * Updates the $remainingAmount for the given $member and $voucher.
-     * 
+     *
      * @param Member  $member          Member
      * @param Voucher $voucher         Voucher
      * @param float   $remainingAmount Remaining amount
-     * 
+     *
      * @return void
      */
     protected function updateRemainingAmount(Member $member, Voucher $voucher, float $remainingAmount) : void

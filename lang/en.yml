@@ -86,6 +86,7 @@ en:
     SINGULARNAME: 'Gift voucher blueprint'
     VALUE: Amount
   SilverCart\Voucher\Model\Voucher\AbsoluteRebateVoucher:
+    MultipliesWithQuantity: 'Is multiplied by the quantity of affected items in the shopping cart'
     PLURALNAME: 'Absolute rebate vouchers'
     SINGULARNAME: 'Absolute rebate voucher'
     VALUE: Amount
