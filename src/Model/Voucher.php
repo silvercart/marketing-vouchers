@@ -517,7 +517,8 @@ class Voucher extends DataObject implements PermissionProvider
     {
         $old_locale = setlocale(LC_TIME, null);
         $new_locale = setlocale(LC_TIME, i18n::get_locale(), i18n::get_locale().'.utf8');
-        $date       = strftime("%x %X", strtotime($this->Created));
+        $formatter  = new IntlDateFormatter(Tools::current_locale(), IntlDateFormatter::SHORT, IntlDateFormatter::SHORT);
+        $date       = $formatter->format(strtotime($this->Created));
         setlocale(LC_TIME, $old_locale);
         return $date;
     }
