@@ -156,31 +156,31 @@ class Voucher extends DataObject implements PermissionProvider
      *
      * @var int
      */
-    private static $generator_code_part_count = 4;
+    private static int $generator_code_part_count = 4;
     /**
      * Delimiter to use between the code parts when using the generator.
      *
      * @var string
      */
-    private static $generator_code_part_delimiter = '-';
+    private static string $generator_code_part_delimiter = '-';
     /**
      * Length of a single code part when using the generator.
      *
      * @var int
      */
-    private static $generator_code_part_length = 5;
+    private static int $generator_code_part_length = 5;
     /**
      * Table name
      *
      * @var string
      */
-    private static $table_name = 'SilvercartVoucher';
+    private static string $table_name = 'SilvercartVoucher';
     /**
      * Attributes.
      *
      * @var array
      */
-    private static $db = [
+    private static array $db = [
         'code'                      => 'Varchar(50)',
         'isActive'                  => 'Boolean',
         'minimumShoppingCartValue'  => DBMoney::class,
@@ -198,7 +198,7 @@ class Voucher extends DataObject implements PermissionProvider
      *
      * @var array
      */
-    private static $has_one = [
+    private static array $has_one = [
         'Tax'   => Tax::class,
         'Image' => Image::class,
     ];
@@ -207,7 +207,7 @@ class Voucher extends DataObject implements PermissionProvider
      *
      * @var array
      */
-    private static $has_many = [
+    private static array $has_many = [
         'VoucherHistory'      => VoucherHistory::class,
         'VoucherTranslations' => VoucherTranslation::class,
     ];
@@ -216,7 +216,7 @@ class Voucher extends DataObject implements PermissionProvider
      *
      * @var array
      */
-    private static $many_many = [
+    private static array $many_many = [
         'RestrictToMember'        => Member::class,
         'RestrictToGroup'         => Group::class,
         'RestrictToProductGroups' => ProductGroupPage::class,
@@ -227,15 +227,15 @@ class Voucher extends DataObject implements PermissionProvider
      *
      * @var array
      */
-    private static $belongs_many_many = [
-        'Members' => Member::class,
+    private static array $belongs_many_many = [
+        'Members' => Member::class . '.Vouchers',
     ];
     /**
      * Casted fields
      *
      * @var array
      */
-    private static $casting = [
+    private static array $casting = [
         'VoucherTitle'                => 'Varchar',
         'Description'                 => 'HTMLText',
         'castedFormattedCreationDate' => 'VarChar(10)'
@@ -245,7 +245,7 @@ class Voucher extends DataObject implements PermissionProvider
      * 
      * @var string[]
      */
-    private static $extensions = [
+    private static array $extensions = [
         TranslatableDataObjectExtension::class,
     ];
     /**
@@ -253,7 +253,7 @@ class Voucher extends DataObject implements PermissionProvider
      *
      * @var bool
      */
-    private static $enable_voucher_module = true;
+    private static bool $enable_voucher_module = true;
     /**
      * Contains the affected shopping cart positions.
      *
