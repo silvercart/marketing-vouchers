@@ -45,7 +45,8 @@ class RelativeRebateVoucher extends Voucher
      * @var array
      */
     private static $db = [
-        'valueInPercent' => 'Int'
+        'valueInPercent'    => 'Int',
+        'notCombinable'     => 'Boolean'
     ];
     /**
      * Summary fields for the model admin table.
@@ -55,6 +56,7 @@ class RelativeRebateVoucher extends Voucher
     private static $summary_fields = [
         'code',
         'valueInPercent',
+        'notCombinable'
     ];
     /**
      * Is true while @see self::getShoppingCartPositions() is called and not 
@@ -98,7 +100,8 @@ class RelativeRebateVoucher extends Voucher
         return array_merge(
                 parent::fieldLabels($includerelations),
                 [
-                    'valueInPercent' => _t(Voucher::class . '.VALUE_IN_PERCENT', 'Rebate value in percent')
+                    'valueInPercent'    => _t(Voucher::class . '.VALUE_IN_PERCENT', 'Rebate value in percent'),
+                    'notCombinable'     => _t(Voucher::class . '.NOT_COMBINABLE', 'Voucher is not combinable')
                 ]
         );
     }

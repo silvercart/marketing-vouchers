@@ -29,6 +29,7 @@ en:
     ERRORMESSAGE-NOT_REDEEMABLE: 'This voucher can''t be redeemed.'
     ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID: 'Your cart doesn''t contain the appropriate products for this voucher.'
     ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID: 'The shoppingcart value is not valid.'
+    ERRORMESSAGE-ONLY_REDEEMABLE_INDIVIDUALLY: 'This voucher can not be combined with other vouchers.'
     ERRORMESSAGE-VOUCHER_ALREADY_OWNED: 'This voucher has already been redeemed by somebody else.'
     ISACTIVE: 'Is active'
     IsRedeemableMultipleTimes: 'Is redeemable multiple times'
@@ -38,6 +39,7 @@ en:
     LimitToRestrictedProducts: 'Limit validity of this voucher to the restricted products.'
     MAXIMUM_SHOPPINGCART_VALUE: 'Maximum shoppingcart amount'
     MINIMUM_SHOPPINGCART_VALUE: 'Minimum shoppingcart amount'
+    NOT_COMBINABLE: 'Voucher is not combinable'
     ORIGINAL_VALUE: 'Original value'
     PLURALNAME: Vouchers
     PRODUCTNUMBER: 'Item number'

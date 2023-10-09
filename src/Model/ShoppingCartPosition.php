@@ -116,6 +116,45 @@ class ShoppingCartPosition extends DataObject
     }
 
     /**
+     * Checks if the given shoppingCartID has not Combinable Vouchers
+     *
+     * @param int $shoppingCartID
+     *
+     * @return bool
+     *
+     * @author Jan Lehmann <jlehmann@pixeltricks.de>
+     * @since 09.10.2023
+     */
+    public static function notCombinableVoucherInShoppingCart(int $shoppingCartID) : bool
+    {
+        $notCombinableVoucherInShoppingCart = false;
+        $shoppingCartPositions = self::get()->filter([
+            'ShoppingCartID' => $shoppingCartID,
+        ]);
+        foreach ($shoppingCartPositions as $key => $shoppingCartPosition) {
+            if($shoppingCartPosition->Voucher->notCombinable) {
+                $notCombinableVoucherInShoppingCart = true;
+            }
+        }
+        return $notCombinableVoucherInShoppingCart;
+    }
+
+    /**
+     * Checks if a record with the given shoppingCartID exists.
+     *
+     * @param int $shoppingCartID
+     *
+     * @return bool
+     *
+     * @author Jan Lehmann <jlehmann@pixeltricks.de>
+     * @since 09.10.2023
+     */
+    public static function shoppingCartHasVouchers (int $shoppingCartID) : bool
+    {
+        return self::get()->filter(['ShoppingCartID' => $shoppingCartID])->exists();
+    }
+
+    /**
      * Returns the asked for object if it exists in the database.
      *
      * @param int $shoppingCartID The ID of the shopping cart record

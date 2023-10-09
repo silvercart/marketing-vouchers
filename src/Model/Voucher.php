@@ -398,6 +398,7 @@ class Voucher extends DataObject implements PermissionProvider
             'ErrorAlreadyInCart'              => _t(self::class . '.ERRORMESSAGE-ALREADY_IN_SHOPPINGCART', 'This voucher is already in your shoppingcart.'),
             'ErrorValueNotValid'              => _t(self::class . '.ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID', 'The shoppingcart value is not valid.'),
             'ErrorItemsNotValid'              => _t(self::class . '.ERRORMESSAGE-SHOPPINGCARTITEMS_NOT_VALID', 'Your cart doesn\'t contain the appropriate products for this voucher.'),
+            'ErrorOnlyRedeemableIndividually' => _t(self::class . '.ERRORMESSAGE-ONLY_REDEEMABLE_INDIVIDUALLY', 'This voucher is only redeemable individually.'),
             'Value'                           => _t(self::class . '.VALUE', 'Value'),
             self::PERMISSION_CREATE           => _t(self::class . '.' . self::PERMISSION_CREATE, 'Create Vouchers'),
             self::PERMISSION_CREATE . '_HELP' => _t(self::class . '.' . self::PERMISSION_CREATE . '_HELP', 'Allows an user to create new vouchers.'),
@@ -585,6 +586,9 @@ class Voucher extends DataObject implements PermissionProvider
             } elseif ($this->isInShoppingCartAlready($shoppingCart)) {
                 $error      = true;
                 $messages[] = $this->fieldLabel('ErrorAlreadyInCart');
+            } elseif ($this->isOnlyRedeemableIndividually($shoppingCart)) {
+                $error      = true;
+                $messages[] = $this->fieldLabel('ErrorOnlyRedeemableIndividually');
             }
         }
         return [
@@ -772,6 +776,24 @@ class Voucher extends DataObject implements PermissionProvider
     public function isInShoppingCartAlready(ShoppingCart $shoppingCart) : bool
     {
         return ShoppingCartPosition::combinationExists($shoppingCart->ID, $this->ID);
+    }
+
+        /**
+     * Checks if the given voucher code is only redeemable individually
+     *
+     * @param ShoppingCart $shoppingCart the shopping cart object
+     *
+     * @return bool
+     */
+    public function isOnlyRedeemableIndividually(ShoppingCart $shoppingCart) : bool 
+    {
+        if($this->notCombinable && ShoppingCartPosition::shoppingCartHasVouchers($shoppingCart->ID)) {
+            return true;
+        }
+        elseif (ShoppingCartPosition::notCombinableVoucherInShoppingCart($shoppingCart->ID)) {
+            return true;
+        }
+        return false;
     }
 
     /**
