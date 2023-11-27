@@ -31,6 +31,7 @@ en:
     ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID: 'The shoppingcart value is not valid.'
     ERRORMESSAGE-ONLY_REDEEMABLE_INDIVIDUALLY: 'This voucher can not be combined with other vouchers.'
     ERRORMESSAGE-VOUCHER_ALREADY_OWNED: 'This voucher has already been redeemed by somebody else.'
+    EXCLUDE_FROM_PRODUCTGROUP: 'exclude from productgroups(s)'
     ISACTIVE: 'Is active'
     IsRedeemableMultipleTimes: 'Is redeemable multiple times'
     IsRedeemableMultipleTimesDesc: 'This voucher can be redeemed several times per customer.'

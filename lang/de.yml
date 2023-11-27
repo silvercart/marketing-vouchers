@@ -31,6 +31,7 @@ de:
     ERRORMESSAGE-SHOPPINGCARTVALUE_NOT_VALID: 'Der Warenkorbwert ist nicht passend.'
     ERRORMESSAGE-ONLY_REDEEMABLE_INDIVIDUALLY: 'Dieser Gutschein darf nicht mit anderen Gutscheinen kombiniert werden.'
     ERRORMESSAGE-VOUCHER_ALREADY_OWNED: 'Dieser Gutschein wurde schon von einer anderen Person eingelöst.'
+    EXCLUDE_FROM_PRODUCTGROUP: 'Von Warengruppe(n) ausschließen'
     ISACTIVE: 'Ist Aktiv'
     IsRedeemableMultipleTimes: 'Ist mehrfach einlösbar'
     IsRedeemableMultipleTimesDesc: 'Dieser Gutschein kann je Kunde mehrmals eingelöst werden.'

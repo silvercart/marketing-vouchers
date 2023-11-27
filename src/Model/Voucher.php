@@ -71,12 +71,13 @@ use function _t;
  *
  * @method HasManyList VoucherTranslation() Returns the related Voucher Translations.
  *
- * @method ManyManyList RestrictToMember()        Returns a list of related members to restrict this voucher to.
- * @method ManyManyList RestrictToGroup()         Returns a list of related groups to restrict this voucher to.
- * @method ManyManyList RestrictToProductGroups() Returns a list of related product groups to restrict this voucher to.
- * @method ManyManyList RestrictToProducts()      Returns a list of related products to restrict this voucher to.
- * @method ManyManyList VoucherHistory()          Returns a list of related voucher history objects.
- * @method ManyManyList Members()                 Returns a list of related members.
+ * @method ManyManyList RestrictToMember()          Returns a list of related members to restrict this voucher to.
+ * @method ManyManyList RestrictToGroup()           Returns a list of related groups to restrict this voucher to.
+ * @method ManyManyList RestrictToProductGroups()   Returns a list of related product groups to restrict this voucher to.
+ * @method ManyManyList ExcludeFromProductGroups()  Returns a list of related product groups to restrict this voucher to.
+ * @method ManyManyList RestrictToProducts()        Returns a list of related products to restrict this voucher to.
+ * @method ManyManyList VoucherHistory()            Returns a list of related voucher history objects.
+ * @method ManyManyList Members()                   Returns a list of related members.
  */
 class Voucher extends DataObject implements PermissionProvider
 {
@@ -217,10 +218,11 @@ class Voucher extends DataObject implements PermissionProvider
      * @var array
      */
     private static array $many_many = [
-        'RestrictToMember'        => Member::class,
-        'RestrictToGroup'         => Group::class,
-        'RestrictToProductGroups' => ProductGroupPage::class,
-        'RestrictToProducts'      => Product::class,
+        'RestrictToMember'          => Member::class,
+        'RestrictToGroup'           => Group::class,
+        'RestrictToProductGroups'   => ProductGroupPage::class,
+        'RestrictToProducts'        => Product::class,
+        'ExcludeFromProductGroups'  => ProductGroupPage::class,
     ];
     /**
      * Belongs-many-many Relationships.
@@ -387,6 +389,7 @@ class Voucher extends DataObject implements PermissionProvider
             'RestrictToMember'                => _t(self::class . '.RESTRICT_TO_MEMBER', 'Restrict to customers'),
             'RestrictToGroup'                 => _t(self::class . '.RESTRICT_TO_GROUP', 'Restrict to groups'),
             'RestrictToProductGroups'         => _t(self::class . '.RESTRICT_TO_PRODUCTGROUP', 'Restrict to product groups'),
+            'ExcludeFromProductGroups'        => _t(self::class . '.EXCLUDE_FROM_PRODUCTGROUP', 'Exclude from product groups'),
             'RestrictToProducts'              => _t(self::class . '.RESTRICT_TO_PRODUCT', 'Restrict to products'),
             'VoucherHistory'                  => VoucherHistory::singleton()->singular_name(),
             'castedFormattedCreationDate'     => _t(self::class . '.CREATED', 'Created'),
@@ -974,10 +977,11 @@ class Voucher extends DataObject implements PermissionProvider
     {
         $cacheKey = (string) implode('_', $shoppingCartPositions->map('ID', 'ID')->toArray());
         if (!array_key_exists($cacheKey, $this->isValidForShoppingCartItems)) {
-            $isValidByUndefinedProduct      = false;
-            $isValidByProduct               = false;
-            $isValidByUndefinedProductGroup = false;
-            $isValidByProductGroup          = false;
+            $isValidByUndefinedProduct              = false;
+            $isValidByProduct                       = false;
+            $isValidByUndefinedProductGroup         = false;
+            $isValidByProductGroup                  = false;
+            $isValidByExludedProductGroup           = true;
             if ($this->RestrictToProducts()->exists()) {
                 foreach ($this->RestrictToProducts() as $restrictedProduct) {
                     foreach ($shoppingCartPositions as $shoppingCartPosition) {
@@ -1002,14 +1006,32 @@ class Voucher extends DataObject implements PermissionProvider
             } else {
                 $isValidByUndefinedProductGroup = true;
             }
-            $isValid = ($isValidByProduct
-                     && $isValidByProductGroup)
-                    || ($isValidByUndefinedProduct
-                     && $isValidByUndefinedProductGroup)
-                    || (!$isValidByProductGroup
-                     && $isValidByProduct)
-                    || (!$isValidByProduct
-                     && $isValidByProductGroup);
+
+            if ($this->ExcludeFromProductGroups()->exists()) {
+                foreach ($this->ExcludeFromProductGroups() as $excludedProductGroup) {
+                    foreach ($shoppingCartPositions as $shoppingCartPosition) {
+                        if ($shoppingCartPosition->Product()->ProductGroup()->ID == $excludedProductGroup->ID) {
+                            $isValidByExludedProductGroup = false;
+                            break(2);
+                        }
+                        $parent = $shoppingCartPosition->Product()->ProductGroup()->Parent();
+                        while ($parent->exists()) {
+                            if ($parent->ID == $excludedProductGroup->ID) {
+                                $isValidByExludedProductGroup = false;
+                                break(2);
+                            }
+                            $parent = $parent->Parent();
+                        }
+                    }
+                }
+            }
+
+            $isValid = ($isValidByProduct          && $isValidByProductGroup )
+                    || ($isValidByUndefinedProduct && $isValidByUndefinedProductGroup)
+                    || (!$isValidByProductGroup    && $isValidByProduct)
+                    || (!$isValidByProduct         && $isValidByProductGroup);
+            $isValid = ($isValidByExludedProductGroup && $isValid);
+
             $this->extend('updateIsValidForShoppingCartItems', $isValid, $shoppingCartPositions, $message);
             $this->isValidForShoppingCartItems[$cacheKey] = $isValid;
         }
@@ -1438,7 +1460,7 @@ class Voucher extends DataObject implements PermissionProvider
      *
      * @param ShoppingCart $shoppingCart the shoppingcart object
      *
-     * @return SS_List
+     * @return ArrayList
      */
     public function getShoppingCartPositions(ShoppingCart $shoppingCart, bool $taxable = true, array $excludeShoppingCartPositions = [], bool $createForms = true) : ArrayList
     {
