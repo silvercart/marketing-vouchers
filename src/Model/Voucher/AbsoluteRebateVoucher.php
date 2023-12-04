@@ -153,6 +153,7 @@ class AbsoluteRebateVoucher extends Voucher
              && $remainingVoucher instanceof Voucher
             ) {
                 $shoppingCart->Member()->Vouchers()->remove($remainingVoucher);
+                $remainingVoucher = null;
             }
             if ($remainingVoucher instanceof Voucher) {
                 $priceGross = DBMoney::create()
