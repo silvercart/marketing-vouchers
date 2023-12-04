@@ -149,6 +149,11 @@ class AbsoluteRebateVoucher extends Voucher
             $rebateAmount     = $rebate->getAmount();
             $title            = $this->VoucherTitle ? "{$this->VoucherTitle} (Code: {$this->code})" : "{$this->i18n_singular_name()} (Code: {$this->code})";
             $remainingVoucher = $shoppingCart->Member()->Vouchers()->byID($this->ID);
+            if ($this->IsRedeemableMultipleTimes
+             && $remainingVoucher instanceof Voucher
+            ) {
+                $shoppingCart->Member()->Vouchers()->remove($remainingVoucher);
+            }
             if ($remainingVoucher instanceof Voucher) {
                 $priceGross = DBMoney::create()
                         ->setAmount($remainingVoucher->remainingAmount)
