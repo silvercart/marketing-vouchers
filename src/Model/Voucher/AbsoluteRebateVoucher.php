@@ -133,6 +133,9 @@ class AbsoluteRebateVoucher extends Voucher
         if (!($controller instanceof \PageController)) {
             return $positions;
         }
+        if (!$this->isValidForShoppingCartItems($shoppingCart->ShoppingCartPositions())) {
+            return $positions;
+        }
         $tax = $this->Tax();
         if ((!$taxable
           && !$tax)
