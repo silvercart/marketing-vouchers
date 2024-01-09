@@ -2,13 +2,16 @@
 
 namespace SilverCart\Voucher\Extensions\Model\Security;
 
+use SilverCart\Voucher\Model\ShoppingCartPosition;
 use SilverCart\Voucher\Model\Voucher;
+use SilverCart\Voucher\Model\VoucherHistory;
 use SilverStripe\Forms\FieldList;
-use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
 use SilverStripe\Forms\GridField\GridFieldAddNewButton;
 use SilverStripe\Forms\GridField\GridFieldDataColumns;
 use SilverStripe\ORM\DataExtension;
+use SilverStripe\ORM\DB;
+use SilverStripe\Security\Member;
 
 /**
  * Extends the member object with voucher specific fields and methods.
@@ -20,6 +23,8 @@ use SilverStripe\ORM\DataExtension;
  * @since 14.05.2020
  * @copyright 2020 pixeltricks GmbH
  * @license see license file in modules root directory
+ * 
+ * @property Member $owner Owner
  */
 class MemberExtension extends DataExtension
 {
@@ -84,5 +89,22 @@ class MemberExtension extends DataExtension
         $labels = array_merge($labels, [
             'Vouchers' => Voucher::singleton()->i18n_plural_name(),
         ]);
+    }
+
+    /**
+     * Adds voucher support to @see Customer::moveShoppingCartTo(Member $customer).
+     * 
+     * @param Member $customer Customer
+     * 
+     * @return void
+     */
+    public function updateMoveShoppingCartTo(Member $customer) : void
+    {
+        $ownerCart    = $this->owner->getCart();
+        $customerCart = $customer->getCart();
+        $vhTableName  = VoucherHistory::config()->table_name;
+        $spTableName  = ShoppingCartPosition::config()->table_name;
+        DB::query("UPDATE {$vhTableName} SET ShoppingCartID = {$customerCart->ID}, MemberID = {$customer->ID} WHERE ShoppingCartID = {$ownerCart->ID}");
+        DB::query("UPDATE {$spTableName} SET ShoppingCartID = {$customerCart->ID} WHERE ShoppingCartID = {$ownerCart->ID}");
     }
 }
